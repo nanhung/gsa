@@ -1,0 +1,104 @@
+#-------------------------------------------------------------------------------
+# APAP.setpoint_v2.in
+# 
+# Set points simulation input file for APAP
+# 
+# 
+# A set of parameter values, recorded in APAP.setpoint.dat
+# 
+# Output:
+# - masses of substances in micromoles
+# - concentrations of substances in microM
+#
+#-------------------------------------------------------------------------------
+
+Integrate(Lsodes, 1e-5, 0.3e-8 , 1)
+SetPoints (
+"apap_setpoint.csv", 
+"apap_setpoint.dat", 
+0, 
+lnTg, 
+lnTp, 
+lnCYP_Km, 
+lnCYP_VmaxC, 
+lnSULT_Km_apap, 
+lnSULT_Ki, 
+lnSULT_Km_paps, 
+lnSULT_VmaxC, 
+lnUGT_Km, 
+lnUGT_Ki, 
+lnUGT_Km_GA, 
+lnUGT_VmaxC, 
+lnKm_AG,
+lnVmax_AG, 
+lnKm_AS, 
+lnVmax_AS, 
+lnkGA_syn, 
+lnkPAPS_syn, 
+lnCLC_APAP, 
+lnCLC_AG, 
+lnCLC_AS,
+lnQCC, 
+lnVFC, 
+lnVKC, 
+lnVGC, 
+lnVLC, 
+lnVMC, 
+lnVBLAC,
+lnVBLVC,
+lnVSC,
+#lnVRC,
+lnQFC,         
+lnQKC,          
+lnQGC,         
+lnQLBC,         
+lnQMC,         
+lnQSC,            
+#lnQRC,          
+lnBP_APAP,    
+lnPF_APAP,  
+lnPG_APAP, 
+lnPK_APAP,  
+lnPL_APAP, 
+lnPM_APAP, 
+lnPR_APAP,  
+lnPS_APAP,  
+lnPF_AS, 
+lnPG_AS, 
+lnPK_AS,
+lnPL_AS,
+lnPM_AS,
+lnPR_AS,
+lnPS_AS,
+lnPF_AG,
+lnPG_AG,
+lnPK_AG,
+lnPL_AG,
+lnPM_AG,
+lnPR_AG,
+lnPS_AG
+);
+
+#---------------------------------------------------------
+# Simulation scenario 
+#---------------------------------------------------------
+
+Simulation { # 1:
+  # Example with mg dose
+  #=====================
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.75);
+  OralDur_APAP = 0.75;
+  OralDose_APAP_mg = 1000.0;
+  lnOralDose_APAP_mg = 6.907755;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1, 1.5, 2 ,4, 6, 8, 12);
+}
+
+END.
