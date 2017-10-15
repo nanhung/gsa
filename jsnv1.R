@@ -5,7 +5,6 @@ if(!require(EnvStats)) {
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)}
 
-
 Tg<-0.332
 Tp<-0.0476
 CYP_Km <- 123
@@ -32,7 +31,6 @@ CLC_AS <- 0.138
 lwr<- -1.2
 upr<- 1.2
 
-  
 # Define prior
 set.seed(250); pri_Tg <- rtri(1000, Tg*exp(lwr), Tg*exp(upr), Tg)
 set.seed(250); pri_Tp <- rtri(1000, Tp*exp(lwr), Tp*exp(upr), Tp)
@@ -187,7 +185,7 @@ save(apap.mj.df.1.1, apap.mj.df.1.2, apap.mj.df.1.3, apap.mj.df.1.4,
      apap.tj.df.3.5, apap.tj.df.3.6, apap.tj.df.3.7, apap.tj.df.3.8,
      file = "jsnv1.rda")
 
-
+load("jsnv1.rda")
 if(!require(gplots)) {
   install.packages("gplots"); require(gplots)} #heatmap.2
 
@@ -212,12 +210,7 @@ colnames(main1)<-c("APAP_0.5h", "APAP_1h", "APAP_1.5h", "APAP_2h",
                    "APAP-S_0.5h", "APAP-S_1h", "APAP-S_1.5h", "APAP-S_2h",
                    "APAP-S_4h", "APAP-S_6h", "APAP-S_8h", "APAP-S_12h")
 
-rownames(main1)<-c("Tg","Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
-                   "SULT_Km_paps","SULT_VmaxC","UGT_Km","UGT_Ki",
-                   "UGT_Km_GA","UGT_VmaxC","Km_AG","Vmax_AG","Km_AS",
-                   "Vmax_AS","kGA_syn","kPAPS_syn","CLC_APAP","CLC_AG","CLC_AS")
-
-rownames(totl1)<-rownames(main1)
+rownames(main1)<-rownames(totl1)<-Parameter
 colnames(totl1)<-colnames(main1)
 
 
