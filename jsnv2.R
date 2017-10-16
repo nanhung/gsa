@@ -226,8 +226,7 @@ J.X.df <- function(n){
 }
 
 X1 <- J.X.df(16000); X2 <- J.X.df(16000);
-J.S <- soboljansen(NULL, X1, X2, conf = 0.95, nboot = 1000)
-J.S$X <- log(J.S$X)
+J.S <- soboljansen(NULL, log(X1), log(X2), conf = 0.95, nboot = 1000)
 J.S.APAP.df <- cbind(1, J.S$X)
 write.table(J.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.apap.pbpk_v2 apap.setpoint_v2.in")
