@@ -79,8 +79,7 @@ J.X.df <- function(n){
 }
 
 X1 <- J.X.df(16000); X2 <- J.X.df(16000);
-J.S <- soboljansen(NULL, X1, X2, conf = 0.95, nboot = 1000)
-J.S$X <- log(J.S$X)
+J.S <- soboljansen(NULL, log(X1), log(X2), conf = 0.95, nboot = 1000)
 J.S.APAP.df <- cbind(1, J.S$X)
 write.table(J.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.apap.pbpk_v2 apap.setpoint_v1.in")
@@ -223,13 +222,14 @@ T0<-totl2[,1:24]
 M1<-as.matrix(scale(M0))
 T1<-as.matrix(scale(T0))
 
-
 heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           cellnote=round(M1, digits = 1),
           notecol="black")
 
+pdf(file="jsnv1.pdf", width = 12, height = 8)
 heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           cellnote=round(T1, digits = 1),
           notecol="black")
+dev.off()

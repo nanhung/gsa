@@ -9,25 +9,23 @@ own<-function(n, nboot){
   O.S.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
   tell(O.S, O.S.APAP.mcsim.df[,23])
 }
+
 o.s.100<-own(100, 100)
 
-
 o.s.4000<-own(4000, 1000)
-#Read 92000 rows and 46 (of 46) columns from 0.032 GB file in 00:00:03
-j.s.8000<-jsn(8000, 1000)
-#Read 184000 rows and 46 (of 46) columns from 0.064 GB file in 00:00:05
-j.s.16000<-jsn(16000, 1000)
-#Read 368000 rows and 46 (of 46) columns from 0.128 GB file in 00:00:10
+o.s.8000<-own(8000, 1000)
+o.s.16000<-own(16000, 1000)
+#Read 1040000 rows and 46 (of 46) columns from 0.360 GB file in 00:01:57
 
 
 max(j.s.4000$S[,5]-j.s.4000$S[,4]) # 0.08688998
 max(j.s.8000$S[,5]-j.s.8000$S[,4]) # 0.05786181
-max(j.s.16000$S[,5]-j.s.16000$S[,4]) # 0.04303337
+max(o.s.16000$S[,5]-o.s.16000$S[,4]) # 0.04303337
 
 
 max(j.s.4000$T[,5]-j.s.4000$T[,4]) # 0.06668348
 max(j.s.8000$T[,5]-j.s.8000$T[,4]) # 0.04303337
-max(j.s.16000$T[,5]-j.s.16000$T[,4]) # 0.03406756
+max(o.s.16000$T[,5]-o.s.16000$T[,4]) # 0.03406756
 
 
 
