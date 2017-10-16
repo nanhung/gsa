@@ -1,8 +1,7 @@
 # OWNN V1 -----
 own<-function(n, nboot){
   X1 <- O.X.df(n); X2 <- O.X.df(n); X3 <- O.X.df(n);
-  O.S <- sobolowen(NULL, X1, X2, X3, conf = 0.95, nboot = nboot)
-  O.S$X <- log(O.S$X)
+  O.S <- sobolowen(NULL, log(X1), log(X2), log(X3), conf = 0.95, nboot = nboot)
   O.S.APAP.df <- cbind(1, O.S$X)
   write.table(O.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
   system("./mcsim.apap.pbpk_v2 apap.setpoint_v1.in")
@@ -14,20 +13,21 @@ o.s.100<-own(100, 100)
 
 o.s.4000<-own(4000, 1000)
 o.s.8000<-own(8000, 1000)
+# Read 520000 rows and 46 (of 46) columns from 0.180 GB file in 00:00:14
 o.s.16000<-own(16000, 1000)
-#Read 1040000 rows and 46 (of 46) columns from 0.360 GB file in 00:01:57
+# Read 1040000 rows and 46 (of 46) columns from 0.361 GB file in 00:00:30
+o.s.32000<-own(32000, 1000)
+# Read 2080000 rows and 46 (of 46) columns from 0.723 GB file in 00:00:57
 
+max(o.s.4000$S[,5]-o.s.4000$S[,4]) # 0.08742466
+max(o.s.8000$S[,5]-o.s.8000$S[,4]) # 0.06424069
+max(o.s.16000$S[,5]-o.s.16000$S[,4]) # 0.04608141
+max(o.s.32000$S[,5]-o.s.32000$S[,4]) # 0.03097051
 
-max(j.s.4000$S[,5]-j.s.4000$S[,4]) # 0.08688998
-max(j.s.8000$S[,5]-j.s.8000$S[,4]) # 0.05786181
-max(o.s.16000$S[,5]-o.s.16000$S[,4]) # 0.04303337
-
-
-max(j.s.4000$T[,5]-j.s.4000$T[,4]) # 0.06668348
-max(j.s.8000$T[,5]-j.s.8000$T[,4]) # 0.04303337
-max(o.s.16000$T[,5]-o.s.16000$T[,4]) # 0.03406756
-
-
+max(o.s.4000$T[,5]-o.s.4000$T[,4]) # 0.1260876
+max(o.s.8000$T[,5]-o.s.8000$T[,4]) # 0.0892922
+max(o.s.16000$T[,5]-o.s.16000$T[,4]) # 0.06114639
+max(o.s.32000$T[,5]-o.s.32000$T[,4]) # 0.04468308
 
 # JSN V1 -----
 jsn<-function(n, nboot){
