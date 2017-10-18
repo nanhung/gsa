@@ -12,12 +12,22 @@ own<-function(n, nboot){
 o.s.100<-own(100, 100)
 
 o.s.4000<-own(4000, 1000)
-o.s.8000<-own(8000, 1000)
-# Read 520000 rows and 46 (of 46) columns from 0.180 GB file in 00:00:14
+system.time(o.s.8000<-own(8000, 1000))
+#Read 520000 rows and 46 (of 46) columns from 0.180 GB file in 00:00:14
+#user  system elapsed 
+#1521.54    1.71 1825.84 
+
 o.s.16000<-own(16000, 1000)
 # Read 1040000 rows and 46 (of 46) columns from 0.361 GB file in 00:00:30
 o.s.32000<-own(32000, 1000)
 # Read 2080000 rows and 46 (of 46) columns from 0.723 GB file in 00:00:57
+
+
+plot(o.s.4000)
+(o.s.4000$S[1,5]-o.s.4000$S[1,4])/max(o.s.4000$S[1,1]) #0.1117078
+
+plot(o.s.8000)
+(o.s.8000$S[1,5]-o.s.8000$S[1,4])/max(o.s.8000$S[1,1]) #0.08593507
 
 max(o.s.4000$S[,5]-o.s.4000$S[,4]) # 0.08742466
 max(o.s.8000$S[,5]-o.s.8000$S[,4]) # 0.06424069
@@ -28,6 +38,7 @@ max(o.s.4000$T[,5]-o.s.4000$T[,4]) # 0.1260876
 max(o.s.8000$T[,5]-o.s.8000$T[,4]) # 0.0892922
 max(o.s.16000$T[,5]-o.s.16000$T[,4]) # 0.06114639
 max(o.s.32000$T[,5]-o.s.32000$T[,4]) # 0.04468308
+
 
 # JSN V1 -----
 jsn<-function(n, nboot){
@@ -41,8 +52,14 @@ jsn<-function(n, nboot){
   tell(J.S, J.S.APAP.mcsim.df[,23])
 }
 
-j.s.2000<-jsn(2000, 1000)
-
+system.time(j.s.1000<-jsn(1000, 1000))
+#Wrote results to "apap_setpoint.csv"
+#user  system elapsed 
+#2.27    0.12   16.14 
+system.time(j.s.2000<-jsn(2000, 1000))
+#Wrote results to "apap_setpoint.csv"
+#user  system elapsed 
+#4.62    0.12   31.90 
 j.s.4000<-jsn(4000, 1000)
 #Read 92000 rows and 46 (of 46) columns from 0.032 GB file in 00:00:03
 j.s.8000<-jsn(8000, 1000)
@@ -51,15 +68,30 @@ j.s.16000<-jsn(16000, 1000)
 #Read 368000 rows and 46 (of 46) columns from 0.128 GB file in 00:00:10
 
 
-max(j.s.2000$S[,5]-j.s.2000$S[,4]) # 0.1146028
-max(j.s.4000$S[,5]-j.s.4000$S[,4]) # 0.08688998
-max(j.s.8000$S[,5]-j.s.8000$S[,4]) # 0.05786181
-max(j.s.16000$S[,5]-j.s.16000$S[,4]) # 0.04303337
+# Max 10%
+plot(j.s.1000)
+(j.s.1000$S[1,5]-j.s.1000$S[1,4])/max(j.s.1000$S[1,1]) # 0.1296221
 
-max(j.s.2000$T[,5]-j.s.2000$T[,4]) # 0.09758974
-max(j.s.4000$T[,5]-j.s.4000$T[,4]) # 0.06668348
-max(j.s.8000$T[,5]-j.s.8000$T[,4]) # 0.04303337
-max(j.s.16000$T[,5]-j.s.16000$T[,4]) # 0.03406756
+plot(j.s.2000)
+(j.s.2000$S[1,5]-j.s.2000$S[1,4])/max(j.s.2000$S[1,1]) # 0.1057983
+
+plot(j.s.4000)
+(j.s.4000$S[1,5]-j.s.4000$S[1,4])/max(j.s.4000$S[1,1]) # 0.05842513
+
+plot(j.s.8000)
+(j.s.8000$S[1,5]-j.s.8000$S[1,4])/max(j.s.8000$S[1,1]) #0.04689278
+
+plot(j.s.16000)
+(j.s.16000$S[1,5]-j.s.16000$S[1,4])/max(j.s.16000$S[1,1]) #0.03374033
+
+# All 5%
+#max(j.s.4000$S[,5]-j.s.4000$S[,4]) # 0.08688998
+#max(j.s.8000$S[,5]-j.s.8000$S[,4]) # 0.05786181
+#max(j.s.16000$S[,5]-j.s.16000$S[,4]) # 0.04303337
+
+#max(j.s.4000$T[,5]-j.s.4000$T[,4]) # 0.06668348
+#max(j.s.8000$T[,5]-j.s.8000$T[,4]) # 0.04303337
+#max(j.s.16000$T[,5]-j.s.16000$T[,4]) # 0.03406756
 
 
 # V2 -----
