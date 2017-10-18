@@ -9,11 +9,11 @@ Tg<-0.332
 Tp<-0.0476
 CYP_Km <- 123
 CYP_VmaxC <- 2.57
-SULT_Km_apap <- 1.2e3
+SULT_Km_apap <- 300 # prior (post: 1.2e3)
 SULT_Ki <- 478
 SULT_Km_paps <- 0.345
 SULT_VmaxC <- 467
-UGT_Km <- 6.14e3
+UGT_Km <- 6.0e3 # prior (post: 6.14e3)
 UGT_Ki <- 4.99e4
 UGT_Km_GA <- 0.343
 UGT_VmaxC <- 5.21e3
