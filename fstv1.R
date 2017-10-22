@@ -5,54 +5,50 @@ if(!require(EnvStats)) {
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)}
 
-Tg<-0.332
-Tp<-0.0476
-CYP_Km <- 123
-CYP_VmaxC <- 2.57
-SULT_Km_apap <- 1.2e3
-SULT_Ki <- 478
-SULT_Km_paps <- 0.345
-SULT_VmaxC <- 467
-UGT_Km <- 6.14e3
-UGT_Ki <- 4.99e4
-UGT_Km_GA <- 0.343
-UGT_VmaxC <- 5.21e3
-Km_AG <- 1.75e4
-Vmax_AG <- 3.54e4
-Km_AS <- 2.23e4
-Vmax_AS <- 1.4e7
-kGA_syn <- 3.6e4
-kPAPS_syn <- 3.66e3
-CLC_APAP <- 0.0123
-CLC_AG <- 0.155
-CLC_AS <- 0.138
+#Nominal value
+Tg <- log(0.23)
+Tp <- log(0.033)
+CYP_Km <- log(130)
+SULT_Km_apap <- log(300)
+SULT_Ki <- log(526)
+SULT_Km_paps <- log(0.5)
+UGT_Km <- log(6.0e3)
+UGT_Ki <- log(5.8e4)
+UGT_Km_GA <-log(0.5)
+Km_AG <- log(1.99e4)
+Km_AS <- log(2.29e4)
+
+r = 2.0
 
 #
-r <- 1.2
+q <- c("qtri","qtri","qtri","qunif",
+       "qtri","qtri","qtri","qunif",
+       "qtri","qtri","qtri","qunif",
+       "qtri","qunif","qtri","qunif",
+       "qunif","qunif","qunif","qunif","qunif")
+q.arg <-list(list(Tg-r, Tg+r, Tg),
+             list(Tp-r, Tp+r, Tp),
+             list(CYP_Km-r, CYP_Km+r, CYP_Km),
+             list(-2., 5.),
+             list(SULT_Km_apap-r, SULT_Km_apap+r, SULT_Km_apap),
+             list(SULT_Ki-r, SULT_Ki+r, SULT_Ki),
+             list(SULT_Km_paps-r, SULT_Km_paps+r, SULT_Km_paps),
+             list(0, 10), #U(0.15)
+             list(UGT_Km-r, UGT_Km+r, UGT_Km),
+             list(UGT_Ki-r, UGT_Ki+r, UGT_Ki),
+             list(UGT_Km_GA-r, UGT_Km_GA+r, UGT_Km_GA),
+             list(0, 10), #U(0.15)
+             list(Km_AG-r, Km_AG+r, Km_AG),
+             list(7., 15),
+             list(Km_AS-r, Km_AS+r, Km_AS),
+             list(7., 15),
+             list(0., 13),
+             list(0., 13),
+             list(-6., 1),
+             list(-6., 1),
+             list(-6., 1))
 
-q <- rep("qtri", 21)
-q.arg <-list(list(log(Tg) - r, log(Tg) + r, log(Tg)),
-             list(log(Tp) - r, log(Tp) + r, log(Tp)),
-             list(log(CYP_Km) - r, log(CYP_Km) + r, log(CYP_Km)),
-             list(log(CYP_VmaxC) - r, log(CYP_VmaxC) + r, log(CYP_VmaxC)),
-             list(log(SULT_Km_apap) - r, log(SULT_Km_apap) + r, log(SULT_Km_apap)),
-             list(log(SULT_Ki) - r, log(SULT_Ki) + r, log(SULT_Ki)),
-             list(log(SULT_Km_paps) - r, log(SULT_Km_paps) + r, log(SULT_Km_paps)),
-             list(log(SULT_VmaxC) - r, log(SULT_VmaxC) + r, log(SULT_VmaxC)),
-             list(log(UGT_Km) - r, log(UGT_Km) + r, log(UGT_Km)),
-             list(log(UGT_Ki) - r, log(UGT_Ki) + r, log(UGT_Ki)),
-             list(log(UGT_Km_GA) - r, log(UGT_Km_GA) + r, log(UGT_Km_GA)),
-             list(log(UGT_VmaxC) - r, log(UGT_VmaxC) + r, log(UGT_VmaxC)),
-             list(log(Km_AG) - r, log(Km_AG) + r, log(Km_AG)),
-             list(log(Vmax_AG) - r, log(Vmax_AG) + r, log(Vmax_AG)),
-             list(log(Km_AS) - r, log(Km_AS) + r, log(Km_AS)),
-             list(log(Vmax_AS) - r, log(Vmax_AS) + r, log(Vmax_AS)),
-             list(log(kGA_syn) - r, log(kGA_syn) + r, log(kGA_syn)),
-             list(log(kPAPS_syn) - r, log(kPAPS_syn) + r, log(kPAPS_syn)),
-             list(log(CLC_APAP) - r, log(CLC_APAP) + r, log(CLC_APAP)),
-             list(log(CLC_AG) - r, log(CLC_AG) + r, log(CLC_AG)),
-             list(log(CLC_AS) - r, log(CLC_AS) + r, log(CLC_AS)))
-n = 2000
+n=4000
 eFAST <- fast99(model = NULL, factors = 21, n = n, M = 4, q = q, q.arg = q.arg)
 eFAST.APAP.df <- cbind(1, eFAST$X)
 write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
@@ -92,14 +88,14 @@ Parameter <- c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
 # Create the eFAST data frame for use
 eFAST_main <- function(data){
   data.frame(
-    "Parameter" = names(eFA.APAP.mcsim.df[2:22]),
+    "Parameter" = Parameter,
     "original" = print(data)[1:21]
   )
 }
 
 eFAST_totl <- function(data){
   data.frame(
-    "Parameter" = names(eFA.APAP.mcsim.df[2:22]),
+    "Parameter" = Parameter,
     "original" = print(data)[22:42]
   )
 }

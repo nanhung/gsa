@@ -336,6 +336,7 @@ save(apap.mj.df.1.1, apap.mj.df.1.2, apap.mj.df.1.3, apap.mj.df.1.4,
      apap.tj.df.3.5, apap.tj.df.3.6, apap.tj.df.3.7, apap.tj.df.3.8,
      file = "jsnv2.rda")
 
+load(file = "jsnv2.rda")
 if(!require(gplots)) {
   install.packages("gplots"); require(gplots)} #heatmap.2
 
