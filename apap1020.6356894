@@ -1,0 +1,560 @@
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c07.out.kernel"
+Wrote results to "apap21.c07.out"
+
+real	723m50.571s
+user	723m48.230s
+sys	0m5.360s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c05.out.kernel"
+Wrote results to "apap21.c05.out"
+
+real	724m8.605s
+user	724m4.071s
+sys	0m5.899s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c06.out.kernel"
+Wrote results to "apap21.c06.out"
+
+real	724m23.027s
+user	724m22.114s
+sys	0m4.915s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c08.out.kernel"
+Wrote results to "apap21.c08.out"
+
+real	725m32.265s
+user	2897m46.010s
+sys	0m19.525s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c04.out.kernel"
+Wrote results to "apap21.c04.out"
+
+real	725m59.433s
+user	725m59.332s
+sys	0m4.605s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c02.out.kernel"
+Wrote results to "apap21.c02.out"
+
+real	726m3.305s
+user	726m3.735s
+sys	0m5.116s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c03.out.kernel"
+Wrote results to "apap21.c03.out"
+
+real	727m41.077s
+user	727m41.768s
+sys	0m4.820s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      8.7536482088528
+Warning: DoOneExperiment failed
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      9.2752364486998
+Warning: DoOneExperiment failed
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928274660, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928544487, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928544487, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3586928544487, r2=      0.0000000000000
+lsodes-- above warning has been issued i1 times.  
+         it will not be issued again for this problem
+ in above message, i1=        10
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      9.3591009984833
+Warning: DoOneExperiment failed
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298751539, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298828206, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.9868298828206, r2=      0.0000000000000
+lsodes-- above warning has been issued i1 times.  
+         it will not be issued again for this problem
+ in above message, i1=        10
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      9.9873666645946
+Warning: DoOneExperiment failed
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.5223630975756, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.5223630975756, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.5223630975756, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.5223630975756, r2=      0.0000000000000
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      9.5252504963814
+Warning: DoOneExperiment failed
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      8.7777605495266, r2=      0.0000000000000
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      8.9443694367458
+Warning: DoOneExperiment failed
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.7818606818628, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.7818606818628, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.7818606818629, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.7818606818629, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.7818606818629, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.7818606818629, r2=      0.0000000000000
+lsodes-- at current t (=r1), mxstep (=i1) steps   
+         taken on this call before reaching tout     
+ in above message, i1=       500
+ in above message, r1=      9.8347919011653
+Warning: DoOneExperiment failed
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172891590, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172895101, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172895101, r2=      0.0000000000000
+lsodes-- warning..internal t (=r1) and h (=r2) are
+         such that in the machine, t + h = t on the next step  
+         (h = step size). solver will continue anyway
+ in above message, r1=      9.3880172895101, r2=      0.0000000000000
+lsodes-- above warning has been issued i1 times.  
+         it will not be issued again for this problem
+ in above message, i1=        10
+
+Wrote kernel SDs to "apap21.c01.out.kernel"
+Wrote results to "apap21.c01.out"
+
+real	754m41.529s
+user	754m39.057s
+sys	0m4.720s

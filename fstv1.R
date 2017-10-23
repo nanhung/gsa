@@ -18,7 +18,7 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-r = 2.0
+r = 3.0
 
 #
 q <- c("qtri","qtri","qtri","qunif",
