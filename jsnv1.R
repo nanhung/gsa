@@ -18,7 +18,7 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-r = 3.0
+r = 2.3
 
 J.X.df <- function(n){
   data.frame(X1 = rtri(n, Tg-r, Tg+r, Tg),
@@ -44,7 +44,7 @@ J.X.df <- function(n){
              X21 = runif(n, -6., 1))
 }
 
-n <- 4000
+n <- 8192
 X1 <- J.X.df(n); X2 <- J.X.df(n);
 J.S <- soboljansen(NULL, X1, X2, conf = 0.95, nboot = 1000)
 J.S.APAP.df <- cbind(1, J.S$X)
