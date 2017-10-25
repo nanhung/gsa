@@ -1,7 +1,7 @@
 Integrate(Lsodes, 1.0e-5, 3.09e-7, 1);
-MCMC("apap09.c01.out", 
+MCMC("apap14.c01.out", 
 "", "", 
-80000, 0, 80, 80000, 1111);  #c(1111,2222,3333,4444)
+100000, 0, 100, 100000, 1111); # Full calibration
 
 
 Level { # Population Level
@@ -13,13 +13,15 @@ Level { # Population Level
 # Remove the ... and fill these in
 # ======================================
 
-lnTp = -1.469676;
-lnCYP_Km = 4.867534;
-lnCYP_VmaxC = -1.966113;
+lnTp = -3.401;
+lnCYP_Km = 4.867;
+lnCYP_VmaxC = -2.;
 lnSULT_Ki = 6.265301;
 lnSULT_Km_paps = -0.6931472;
 lnUGT_Ki = 10.9682;
 lnUGT_Km_GA = -0.6931472;
+#lnKm_AG = 9.903;
+#lnKm_AS = 10.039;
 
 Distrib(M_lnTg, TruncNormal, -1.4552, 0.5, -2.5, 0.0);
 #Distrib(M_lnTp, TruncNormal, -3.401, 0.5, -4.5, -2.5);
@@ -27,23 +29,23 @@ Distrib(M_lnTg, TruncNormal, -1.4552, 0.5, -2.5, 0.0);
 #Distrib(M_lnCYP_Km, TruncNormal, 4.867, 1., 4.1431, 5.347);
 #Distrib(M_lnCYP_VmaxC, Uniform, -2., 5.); 
 
-Distrib(M_lnSULT_Km_apap, TruncNormal, 5.703, 1.0, 4.24, 7.166); 
+Distrib(M_lnSULT_Km_apap, TruncNormal, 5.703, 1.0, 4.24, 8.0); 
 #Distrib(M_lnSULT_Ki, TruncNormal, 6.265, 0.5, 5.4337, 6.7129);
 #Distrib(M_lnSULT_Km_paps, TruncNormal, -0.6931, 0.5, -3., 0.);
-Distrib(M_lnSULT_VmaxC, Uniform, 0 15); 
+Distrib(M_lnSULT_VmaxC, Uniform, 0., 15); 
 
 Distrib(M_lnUGT_Km, TruncNormal, 8.6995, 1., 7.6009, 9.3926); 
 #Distrib(M_lnUGT_Ki, TruncNormal, 10.968, 0.5, 9.998, 11.451);
 #Distrib(M_lnUGT_Km_GA, TruncNormal, -0.6931, 0.5, -3., 0.);
-Distrib(M_lnUGT_VmaxC, Uniform, 0 15); 
+Distrib(M_lnUGT_VmaxC, Uniform, 0., 15); 
 
 Distrib(M_lnKm_AG, TruncNormal, 9.903, 0.3, 8.071, 10.513); 
 Distrib(M_lnVmax_AG, Uniform, 7., 15.); 
 Distrib(M_lnKm_AS, TruncNormal, 10.039, 0.22, 8.974, 10.5427); 
 Distrib(M_lnVmax_AS, Uniform, 7., 15.); 
 
-Distrib(M_lnkGA_syn, Uniform, 0 13);
-Distrib(M_lnkPAPS_syn, Uniform, 0 13);
+Distrib(M_lnkGA_syn, Uniform, 0., 13);
+Distrib(M_lnkPAPS_syn, Uniform, 0., 13);
 
 Distrib(M_lnCLC_APAP, Uniform, -6., 1);
 Distrib(M_lnCLC_AG, Uniform, -6., 1);

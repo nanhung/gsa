@@ -1,0 +1,160 @@
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap14.c01.out.kernel"
+Wrote results to "apap14.c01.out"
+
+real	564m55.245s
+user	492m57.935s
+sys	0m20.330s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap14.c03.out.kernel"
+Wrote results to "apap14.c03.out"
+
+real	566m58.899s
+user	494m17.118s
+sys	0m19.933s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap14.c02.out.kernel"
+Wrote results to "apap14.c02.out"
+
+real	567m7.429s
+user	494m20.495s
+sys	0m18.294s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap14.c04.out.kernel"
+Wrote results to "apap14.c04.out"
+
+real	570m16.120s
+user	1979m2.045s
+sys	1m17.490s

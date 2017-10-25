@@ -30,54 +30,14 @@ Simulation 7 - depth 4, instance 1
 New level - depth 3, instance 8
 Simulation 8 - depth 4, instance 1
 
-Doing 80000 Metropolis within Gibbs simulations
+Doing 100000 Metropolis within Gibbs simulations
 
-Wrote kernel SDs to "apap09.c05.out.kernel"
-Wrote results to "apap09.c05.out"
+Wrote kernel SDs to "apap21.c06.out.kernel"
+Wrote results to "apap21.c06.out"
 
-real	411m24.205s
-user	393m6.652s
-sys	0m0.801s
-
-________________________________________
-
-MCSim v5.6.5
-
-Copyright (c) 1993-2015 Free Software Foundation, Inc.
-
-MCSim comes with ABSOLUTELY NO WARRANTY;
-This is free software, and you are welcome to redistribute it
-under certain conditions; see the GNU General Public License.
-
-* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
-
-New level - depth 1, instance 1
-New level - depth 2, instance 1
-New level - depth 3, instance 1
-Simulation 1 - depth 4, instance 1
-New level - depth 3, instance 2
-Simulation 2 - depth 4, instance 1
-New level - depth 3, instance 3
-Simulation 3 - depth 4, instance 1
-New level - depth 3, instance 4
-Simulation 4 - depth 4, instance 1
-New level - depth 3, instance 5
-Simulation 5 - depth 4, instance 1
-New level - depth 3, instance 6
-Simulation 6 - depth 4, instance 1
-New level - depth 3, instance 7
-Simulation 7 - depth 4, instance 1
-New level - depth 3, instance 8
-Simulation 8 - depth 4, instance 1
-
-Doing 80000 Metropolis within Gibbs simulations
-
-Wrote kernel SDs to "apap09.c06.out.kernel"
-Wrote results to "apap09.c06.out"
-
-real	413m50.051s
-user	395m26.423s
-sys	0m0.822s
+real	1102m31.081s
+user	748m55.617s
+sys	0m5.171s
 
 ________________________________________
 
@@ -110,54 +70,14 @@ Simulation 7 - depth 4, instance 1
 New level - depth 3, instance 8
 Simulation 8 - depth 4, instance 1
 
-Doing 80000 Metropolis within Gibbs simulations
+Doing 100000 Metropolis within Gibbs simulations
 
-Wrote kernel SDs to "apap09.c07.out.kernel"
-Wrote results to "apap09.c07.out"
+Wrote kernel SDs to "apap21.c05.out.kernel"
+Wrote results to "apap21.c05.out"
 
-real	413m52.097s
-user	393m42.982s
-sys	0m1.020s
-
-________________________________________
-
-MCSim v5.6.5
-
-Copyright (c) 1993-2015 Free Software Foundation, Inc.
-
-MCSim comes with ABSOLUTELY NO WARRANTY;
-This is free software, and you are welcome to redistribute it
-under certain conditions; see the GNU General Public License.
-
-* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
-
-New level - depth 1, instance 1
-New level - depth 2, instance 1
-New level - depth 3, instance 1
-Simulation 1 - depth 4, instance 1
-New level - depth 3, instance 2
-Simulation 2 - depth 4, instance 1
-New level - depth 3, instance 3
-Simulation 3 - depth 4, instance 1
-New level - depth 3, instance 4
-Simulation 4 - depth 4, instance 1
-New level - depth 3, instance 5
-Simulation 5 - depth 4, instance 1
-New level - depth 3, instance 6
-Simulation 6 - depth 4, instance 1
-New level - depth 3, instance 7
-Simulation 7 - depth 4, instance 1
-New level - depth 3, instance 8
-Simulation 8 - depth 4, instance 1
-
-Doing 80000 Metropolis within Gibbs simulations
-
-Wrote kernel SDs to "apap09.c08.out.kernel"
-Wrote results to "apap09.c08.out"
-
-real	418m17.285s
-user	1576m10.337s
-sys	0m7.594s
+real	1102m46.717s
+user	749m51.106s
+sys	0m5.383s
 
 ________________________________________
 
@@ -190,54 +110,14 @@ Simulation 7 - depth 4, instance 1
 New level - depth 3, instance 8
 Simulation 8 - depth 4, instance 1
 
-Doing 80000 Metropolis within Gibbs simulations
+Doing 100000 Metropolis within Gibbs simulations
 
-Wrote kernel SDs to "apap09.c03.out.kernel"
-Wrote results to "apap09.c03.out"
+Wrote kernel SDs to "apap21.c07.out.kernel"
+Wrote results to "apap21.c07.out"
 
-real	419m14.347s
-user	393m39.513s
-sys	0m4.540s
-
-________________________________________
-
-MCSim v5.6.5
-
-Copyright (c) 1993-2015 Free Software Foundation, Inc.
-
-MCSim comes with ABSOLUTELY NO WARRANTY;
-This is free software, and you are welcome to redistribute it
-under certain conditions; see the GNU General Public License.
-
-* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
-
-New level - depth 1, instance 1
-New level - depth 2, instance 1
-New level - depth 3, instance 1
-Simulation 1 - depth 4, instance 1
-New level - depth 3, instance 2
-Simulation 2 - depth 4, instance 1
-New level - depth 3, instance 3
-Simulation 3 - depth 4, instance 1
-New level - depth 3, instance 4
-Simulation 4 - depth 4, instance 1
-New level - depth 3, instance 5
-Simulation 5 - depth 4, instance 1
-New level - depth 3, instance 6
-Simulation 6 - depth 4, instance 1
-New level - depth 3, instance 7
-Simulation 7 - depth 4, instance 1
-New level - depth 3, instance 8
-Simulation 8 - depth 4, instance 1
-
-Doing 80000 Metropolis within Gibbs simulations
-
-Wrote kernel SDs to "apap09.c02.out.kernel"
-Wrote results to "apap09.c02.out"
-
-real	420m19.422s
-user	394m39.850s
-sys	0m4.482s
+real	1107m2.952s
+user	750m16.927s
+sys	0m4.870s
 
 ________________________________________
 
@@ -270,14 +150,14 @@ Simulation 7 - depth 4, instance 1
 New level - depth 3, instance 8
 Simulation 8 - depth 4, instance 1
 
-Doing 80000 Metropolis within Gibbs simulations
+Doing 100000 Metropolis within Gibbs simulations
 
-Wrote kernel SDs to "apap09.c01.out.kernel"
-Wrote results to "apap09.c01.out"
+Wrote kernel SDs to "apap21.c04.out.kernel"
+Wrote results to "apap21.c04.out"
 
-real	423m6.439s
-user	404m22.547s
-sys	0m0.492s
+real	1111m26.839s
+user	749m35.705s
+sys	0m5.375s
 
 ________________________________________
 
@@ -310,59 +190,131 @@ Simulation 7 - depth 4, instance 1
 New level - depth 3, instance 8
 Simulation 8 - depth 4, instance 1
 
-Doing 80000 Metropolis within Gibbs simulations
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115171, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115171, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115171, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115171, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115681, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115681, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115681, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115681, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115681, r2=      0.0000000000000
-lsodes-- warning..internal t (=r1) and h (=r2) are
-         such that in the machine, t + h = t on the next step  
-         (h = step size). solver will continue anyway
- in above message, r1=      8.8840576115681, r2=      0.0000000000000
-lsodes-- above warning has been issued i1 times.  
-         it will not be issued again for this problem
- in above message, i1=        10
-lsodes-- at current t (=r1), mxstep (=i1) steps   
-         taken on this call before reaching tout     
- in above message, i1=       500
- in above message, r1=      8.8840577447305
-Warning: DoOneExperiment failed
+Doing 100000 Metropolis within Gibbs simulations
 
-Wrote kernel SDs to "apap09.c04.out.kernel"
-Wrote results to "apap09.c04.out"
+Wrote kernel SDs to "apap21.c08.out.kernel"
+Wrote results to "apap21.c08.out"
 
-real	431m24.112s
-user	407m39.528s
-sys	0m3.948s
+real	1111m41.171s
+user	3748m55.554s
+sys	0m25.970s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c03.out.kernel"
+Wrote results to "apap21.c03.out"
+
+real	1113m53.611s
+user	747m52.680s
+sys	0m5.897s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c02.out.kernel"
+Wrote results to "apap21.c02.out"
+
+real	1118m18.389s
+user	751m43.163s
+sys	0m5.807s
+
+________________________________________
+
+MCSim v5.6.5
+
+Copyright (c) 1993-2015 Free Software Foundation, Inc.
+
+MCSim comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the GNU General Public License.
+
+* Using `apap.pbpk_v2.model' model in file "model.c" created by mod v5.6.5
+
+New level - depth 1, instance 1
+New level - depth 2, instance 1
+New level - depth 3, instance 1
+Simulation 1 - depth 4, instance 1
+New level - depth 3, instance 2
+Simulation 2 - depth 4, instance 1
+New level - depth 3, instance 3
+Simulation 3 - depth 4, instance 1
+New level - depth 3, instance 4
+Simulation 4 - depth 4, instance 1
+New level - depth 3, instance 5
+Simulation 5 - depth 4, instance 1
+New level - depth 3, instance 6
+Simulation 6 - depth 4, instance 1
+New level - depth 3, instance 7
+Simulation 7 - depth 4, instance 1
+New level - depth 3, instance 8
+Simulation 8 - depth 4, instance 1
+
+Doing 100000 Metropolis within Gibbs simulations
+
+Wrote kernel SDs to "apap21.c01.out.kernel"
+Wrote results to "apap21.c01.out"
+
+real	1118m22.109s
+user	751m52.102s
+sys	0m5.666s
