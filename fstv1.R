@@ -18,7 +18,9 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-r = 3.0
+r = 2.6 # exp(2.3)/exp(-2.3) ~ 100
+#r = 2.0 # exp(2.0)/exp(-2.0) ~ 54.6
+#r = 1.8 # exp(1.8)/exp(-1.8) ~ 36.6
 
 #
 q <- c("qtri","qtri","qtri","qunif",
@@ -48,7 +50,7 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(-6., 1),
              list(-6., 1))
 
-n=4000
+n <- 8192
 eFAST <- fast99(model = NULL, factors = 21, n = n, M = 4, q = q, q.arg = q.arg)
 eFAST.APAP.df <- cbind(1, eFAST$X)
 write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
