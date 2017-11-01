@@ -3,10 +3,10 @@ if(!require(readr)) {
 }
 
 # 21 Original parameters
-APAP_21.1 <- as.data.frame(read_table2("apap21.c02.out"))
-APAP_21.2 <- as.data.frame(read_table2("apap21.c03.out"))
-APAP_21.3 <- as.data.frame(read_table2("apap21.c04.out"))
-APAP_21.4 <- as.data.frame(read_table2("apap21.c05.out"))
+APAP_21.1 <- as.data.frame(read_table2("apap21.c01.out"))
+APAP_21.2 <- as.data.frame(read_table2("apap21.c02.out"))
+APAP_21.3 <- as.data.frame(read_table2("apap21.c03.out"))
+APAP_21.4 <- as.data.frame(read_table2("apap21.c04.out"))
 
 # 14 Sensitivity parameters
 APAP_14.1 <- as.data.frame(read_table2("apap14.c01.out"))
@@ -15,10 +15,10 @@ APAP_14.3 <- as.data.frame(read_table2("apap14.c03.out"))
 APAP_14.4 <- as.data.frame(read_table2("apap14.c04.out"))
 
 # 21 Sensitivity parameters
-APAP_21s.1 <- as.data.frame(read_table2("apap21s.c01.out"))
-APAP_21s.2 <- as.data.frame(read_table2("apap21s.c02.out"))
-APAP_21s.3 <- as.data.frame(read_table2("apap21s.c03.out"))
-APAP_21s.4 <- as.data.frame(read_table2("apap21s.c04.out"))
+APAP_19s.1 <- as.data.frame(read_table2("apap19s.c01.out"))
+APAP_19s.2 <- as.data.frame(read_table2("apap19s.c02.out"))
+APAP_19s.3 <- as.data.frame(read_table2("apap19s.c03.out"))
+APAP_19s.4 <- as.data.frame(read_table2("apap19s.c04.out"))
 
 org21.1<-APAP_21.1[902:1001, c(2,6,9,10,13,14,15,16,17,18,19,20,21,22,5,216)]
 org21.2<-APAP_21.2[902:1001, c(2,6,9,10,13,14,15,16,17,18,19,20,21,22,5,216)]
@@ -32,22 +32,23 @@ sen14.3<-APAP_14.3[902:1001, c(c(2:15),146)]
 sen14.4<-APAP_14.4[902:1001, c(c(2:15),146)]
 sen14.tot <- do.call(rbind, list(sen14.1,sen14.2,sen14.3,sen14.4))
 
-sen21s.1<-APAP_21s.1[902:1001, c(c(2:22),216)]
-sen21s.2<-APAP_21s.2[902:1001, c(c(2:22),216)]
-sen21s.3<-APAP_21s.3[902:1001, c(c(2:22),216)]
-sen21s.4<-APAP_21s.4[902:1001, c(c(2:22),216)]
-sen21s.tot <- do.call(rbind, list(sen21s.1,sen21s.2,sen21s.3,sen21s.4))
+sen19s.1<-APAP_19s.1[902:1001, c(c(2:20),196)]
+sen19s.2<-APAP_19s.2[902:1001, c(c(2:20),196)]
+sen19s.3<-APAP_19s.3[902:1001, c(c(2:20),196)]
+sen19s.4<-APAP_19s.4[902:1001, c(c(2:20),196)]
+sen19s.tot <- do.call(rbind, list(sen19s.1,sen19s.2,sen19s.3,sen19s.4))
 
 distplt<-function(main, n, yup){
   plot(density(org21.tot[,n]),col="blue",lwd = 2, xlab = " ",ylab = " ", main=main, ylim=c(0,yup))
   lines(density(sen14.tot[,n]),col="red", lwd = 2)
-  lines(density(sen21s.tot[,n]),col="green", lwd = 2)
+  lines(density(sen19s.tot[,n]),col="green", lwd = 2)
 }
 
 
-distplt2<-function(main,n,yup, v, xlim){
-  plot(density(sen21s.tot[,n]),col="green",lwd = 2, xlab = " ",ylab = " ", main=main, 
-       xlim=xlim, ylim=c(0,yup))
+distplt2<-function(main,n,yup, v){
+  plot(density(sen19s.tot[,n]),col="green",lwd = 2, xlab = " ",ylab = " ", main=main, 
+       #xlim=xlim, 
+       ylim=c(0,yup))
   #lines(density(all.2.tot[,n]),col="darkgreen", lwd = 2)
   abline(v = v, col="blue")
 }
@@ -89,14 +90,14 @@ distplt("lnCLC_AS", 14, 4)
 plot.new()
 text(0.5,0.5,"Additional parmeters",cex=1.5,font=2)
 
-distplt("lnCYP_VmaxC", 15, 2.5)
-distplt2("lnQCC", 16, 2.5, 2.785011, c(2,4))
-distplt2("lnBP_APAP", 17, 2.5, -0.1053605, c(-1,0.1))
-distplt2("lnPF_APAP", 18, 2.5, -0.8051967, c(-1,1))
-distplt2("lnPL_APAP", 19, 2.5, -0.3410828, c(-1,2))
-distplt2("lnPM_APAP", 20, 2.5, -0.375421, c(-1,1))
-distplt2("lnPS_APAP", 21, 2.5, -0.5008753, c(-2,1.5))
+distplt2("lnQCC", 15, 2.5, 2.785011)
+distplt2("lnBP_APAP", 16, 2.5, -0.1053605)
+distplt2("lnPF_APAP", 17, 2.5, -0.8051967)
+distplt2("lnPL_APAP", 18, 2.5, -0.3410828)
+distplt2("lnPM_APAP", 19, 2.5, -0.375421)
 
+plot.new()
+plot.new()
 
 par(mar=c(4,5,2,1))
 plot(density(org21.tot[,16]),col="blue",lwd = 2, main="", 
@@ -104,7 +105,7 @@ plot(density(org21.tot[,16]),col="blue",lwd = 2, main="",
      cex.lab=1.5, font.lab=2) # size and bold
 axis(side = 1)
 lines(density(sen14.tot[,15]),col="red", lwd = 2)
-lines(density(sen21s.tot[,22]),col="green", lwd = 2)
+lines(density(sen19s.tot[,20]),col="green", lwd = 2)
 
 text(50,0.06,"Original sensitive parmeters",cex=1.2, col="red")
 text(110,0.06,"Original all parmeters",cex=1.2, col="blue")
