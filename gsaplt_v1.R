@@ -23,7 +23,15 @@ colnames(main1)<-c("APAP_0.5h", "APAP_1h", "APAP_1.5h", "APAP_2h",
                    "APAP-S_0.5h", "APAP-S_1h", "APAP-S_1.5h", "APAP-S_2h",
                    "APAP-S_4h", "APAP-S_6h", "APAP-S_8h", "APAP-S_12h")
 
-rownames(main1)<-rownames(totl1)<-Parameter
+#https://stackoverflow.com/questions/32573733/how-to-color-a-group-of-labels-or-branches-in-heatmap-2-in-r
+colRows <-  c("grey60","grey60","grey60","black",
+              "grey60","grey60","grey60","black",
+              "grey60","grey60","grey60","black",
+              "grey60","black","grey60","black",
+              "black","black","black","black","black")
+colCols <-  c(rep("grey60",8),rep("red",8),rep("maroon",8))
+
+rownames(main1)<-rownames(totl1)<-apap.mf.df.1.1[,1]
 colnames(totl1)<-colnames(main1)
 
 
@@ -33,17 +41,32 @@ totl2 <- as.data.frame(totl1)
 M0<-main2[,1:24]
 T0<-totl2[,1:24]
 
-M1<-as.matrix(scale(M0))
-T1<-as.matrix(scale(T0))
+#M1<-as.matrix(scale(M0, center = F, scale =F))
+#T1<-as.matrix(scale(T0, center = F, scale =F))
 
-#heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
-#          density.info = 'histogram', scale = "none", keysize = 1.2, 
-#          cellnote=round(M1, digits = 1),
-#          notecol="black")
+M0<-as.matrix(M0)
+M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
+T0<-as.matrix(T0)
+T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
 
-pdf(file="fstv1.pdf", width = 12, height = 8)
+M1<-(M0 - mean(M0)) / sd(M0)
+T0<-as.matrix(T0)
+T1<-(T0 - mean(T0)) / sd(T0)
+
+pdf(file="fstv1M.pdf", width = 12, height = 8)
+#png(file="fstv1M.png",width=4000,height=2800,res=250)
+heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
+          density.info = 'histogram', scale = "none", keysize = 1.2, 
+          colRow = colRows, colCol =  colCols,
+          cellnote=round(M1, digits = 1),
+          notecol="black")
+dev.off()
+
+pdf(file="fstv1T.pdf", width = 12, height = 8)
+#png(file="fstv1T.png",width=4000,height=2800,res=250)
 heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
+          colRow = colRows, colCol =  colCols,
           cellnote=round(T1, digits = 1),
           notecol="black")
 dev.off()
