@@ -28,15 +28,6 @@ rownames(Mmu1)<-rownames(sig1)<-apap.Mmu.df.1.1[,1]
 Mu2<-as.matrix(Mmu1)
 Mu3<-(Mmu1 - mean(Mmu1)) / sd(Mmu1)
 
-lm_eqn <- function(df){
-  m <- lm(y ~ x, df);
-  eq <- substitute(italic(y) == b * italic(x) + a, 
-                   list(a = format(coef(m)[1], digits = 2), 
-                        b = format(coef(m)[2], digits = 2)))
-  as.character(as.expression(eq));                 
-}
-
-
 # load("fstv1.rda") ----
 if(!require(gplots)) {
   install.packages("gplots"); require(gplots)} #heatmap.2
@@ -88,27 +79,10 @@ M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
 T0<-as.matrix(T0)
 T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
 
+M0<-as.matrix(M0)
 M1<-(M0 - mean(M0)) / sd(M0)
 T0<-as.matrix(T0)
 T1<-(T0 - mean(T0)) / sd(T0)
-
-#
-x<-as.numeric(T1)
-y<-as.numeric(T0)
-df<-data.frame(x,y)
-
-x<-as.numeric(Mu2)
-y<-as.numeric(Mu3)
-df1<-data.frame(x,y)
-
-
-p <- ggplot(data = df1, aes(x = x, y = y)) +
-  geom_point()+theme_bw()
-
-p + geom_text(x = 5, y = 0.1, label = lm_eqn(df), parse = TRUE)
-
-
-
 
 pdf(file="fstv1M.pdf", width = 12, height = 8)
 #png(file="fstv1M.png",width=4000,height=2800,res=250)

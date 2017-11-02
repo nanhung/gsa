@@ -248,7 +248,12 @@ colnames(Mmu1)<-colnames(sig1)<-c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
 rownames(Mmu1)<-rownames(sig1)<-apap.Mmu.df.1.1[,1]
 
 M1<-as.matrix(scale(Mmu1))
-S1<-as.matrix(scale(sig1))
+
+M0<-as.matrix(Mmu1)
+M1<-(Mmu1 - mean(Mmu1)) / sd(Mmu1)
+S0<-as.matrix(sig1)
+S1<-(sig1 - mean(sig1)) / sd(sig1)
+
 
 #
 if(!require(dplyr)) {
@@ -259,6 +264,8 @@ if(!require(tidyr)) {
   install.packages("tidyr"); require(tidyr)} #gather
 if(!require(ggplot2)) {
   install.packages("ggplot2"); require(ggplot2)}
+if(!require(gplots)) {
+  install.packages("gplots"); require(gplots)} #heatmap.2
 
 Mmu4 <- as.data.frame(Mmu1) %>%
   rownames_to_column('Var1') %>%
@@ -292,12 +299,6 @@ p11<-ggplot(mor, aes(Var1, Var2)) +
   scale_fill_gradient(low = "white", high = "blue") +
   labs(title="", x="Parameters", y="Datasets")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "right", legend.title=element_blank())
-
-#
-
-if(!require(gplots)) {
-  install.packages("gplots"); require(gplots)} #heatmap.2
-
 
 colRows <-  c("grey60","grey60","grey60","black",
               "grey60","grey60","grey60","black",
