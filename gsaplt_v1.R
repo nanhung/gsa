@@ -1,3 +1,42 @@
+if(!require(ggplot2)) {
+  install.packages("ggplot2"); require(ggplot2)}
+
+#load("morv1.rda") ----
+
+Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2], apap.Mmu.df.1.2[,2], apap.Mmu.df.1.3[,2], apap.Mmu.df.1.4[,2],
+                          apap.Mmu.df.1.5[,2], apap.Mmu.df.1.6[,2], apap.Mmu.df.1.7[,2], apap.Mmu.df.1.8[,2],
+                          apap.Mmu.df.2.1[,2], apap.Mmu.df.2.2[,2], apap.Mmu.df.2.3[,2], apap.Mmu.df.2.4[,2],
+                          apap.Mmu.df.2.5[,2], apap.Mmu.df.2.6[,2], apap.Mmu.df.2.7[,2], apap.Mmu.df.2.8[,2],
+                          apap.Mmu.df.3.1[,2], apap.Mmu.df.3.2[,2], apap.Mmu.df.3.3[,2], apap.Mmu.df.3.4[,2],
+                          apap.Mmu.df.3.5[,2], apap.Mmu.df.3.6[,2], apap.Mmu.df.3.7[,2], apap.Mmu.df.3.8[,2]
+))
+sig1<-do.call(cbind, list(apap.sig.df.1.1[,2], apap.sig.df.1.2[,2], apap.sig.df.1.3[,2], apap.sig.df.1.4[,2],
+                          apap.sig.df.1.5[,2], apap.sig.df.1.6[,2], apap.sig.df.1.7[,2], apap.sig.df.1.8[,2],
+                          apap.sig.df.2.1[,2], apap.sig.df.2.2[,2], apap.sig.df.2.3[,2], apap.sig.df.2.4[,2],
+                          apap.sig.df.2.5[,2], apap.sig.df.2.6[,2], apap.sig.df.2.7[,2], apap.sig.df.2.8[,2],
+                          apap.sig.df.3.1[,2], apap.sig.df.3.2[,2], apap.sig.df.3.3[,2], apap.sig.df.3.4[,2],
+                          apap.sig.df.3.5[,2], apap.sig.df.3.6[,2], apap.sig.df.3.7[,2], apap.sig.df.3.8[,2]))
+
+colnames(Mmu1)<-colnames(sig1)<-c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
+                                  "APAP_4h","APAP_6h","APAP_8h","APAP_12h",
+                                  "APAP-G_0.5h","APAP-G_1h", "APAP-G_1.5h","APAP-G_2h",
+                                  "APAP-G_4h","APAP-G_6h", "APAP-G_8h","APAP-G_12h",
+                                  "APAP-S_0.5h", "APAP-S_1h", "APAP-S_1.5h","APAP-S_2h",
+                                  "APAP-S_4h", "APAP-S_6h", "APAP-S_8h","APAP-S_12h")
+rownames(Mmu1)<-rownames(sig1)<-apap.Mmu.df.1.1[,1]
+
+Mu2<-as.matrix(Mmu1)
+Mu3<-(Mmu1 - mean(Mmu1)) / sd(Mmu1)
+
+lm_eqn <- function(df){
+  m <- lm(y ~ x, df);
+  eq <- substitute(italic(y) == b * italic(x) + a, 
+                   list(a = format(coef(m)[1], digits = 2), 
+                        b = format(coef(m)[2], digits = 2)))
+  as.character(as.expression(eq));                 
+}
+
+
 # load("fstv1.rda") ----
 if(!require(gplots)) {
   install.packages("gplots"); require(gplots)} #heatmap.2
@@ -52,6 +91,24 @@ T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
 M1<-(M0 - mean(M0)) / sd(M0)
 T0<-as.matrix(T0)
 T1<-(T0 - mean(T0)) / sd(T0)
+
+#
+x<-as.numeric(T1)
+y<-as.numeric(T0)
+df<-data.frame(x,y)
+
+x<-as.numeric(Mu2)
+y<-as.numeric(Mu3)
+df1<-data.frame(x,y)
+
+
+p <- ggplot(data = df1, aes(x = x, y = y)) +
+  geom_point()+theme_bw()
+
+p + geom_text(x = 5, y = 0.1, label = lm_eqn(df), parse = TRUE)
+
+
+
 
 pdf(file="fstv1M.pdf", width = 12, height = 8)
 #png(file="fstv1M.png",width=4000,height=2800,res=250)
