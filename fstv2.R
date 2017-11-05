@@ -317,13 +317,13 @@ M0<-main2[,1:24]
 T0<-totl2[,1:24]
 
 M0<-as.matrix(M0)
-M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
+#M1<-scale(M0)
+#M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
 T0<-as.matrix(T0)
-T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
+#T1<-scale(T0)
+#T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
 
-M0<-as.matrix(M0)
 M1<-(M0 - mean(M0)) / sd(M0)
-T0<-as.matrix(T0)
 T1<-(T0 - mean(T0)) / sd(T0)
 
 
