@@ -66,7 +66,7 @@ ggplot(df.b, aes(Obs, prd.val)) +
   theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
   theme(legend.position="top") +
   scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x),
-              labels = trans_format("log10", math_format(10^.x))) +
+                labels = trans_format("log10", math_format(10^.x))) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
                 labels = trans_format("log10", math_format(10^.x)))+
   geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.1) +

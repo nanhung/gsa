@@ -74,21 +74,31 @@ T0<-totl2[,1:24]
 #M1<-as.matrix(scale(M0, center = F, scale =F))
 #T1<-as.matrix(scale(T0, center = F, scale =F))
 
-M0<-as.matrix(M0)
-M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
-T0<-as.matrix(T0)
-T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
+M1<-as.matrix(scale(M0))
+T1<-as.matrix(scale(T0))
+              
+#M0<-as.matrix(M0)
+#M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
+#T0<-as.matrix(T0)
+#T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
 
-M0<-as.matrix(M0)
-M1<-(M0 - mean(M0)) / sd(M0)
-T0<-as.matrix(T0)
-T1<-(T0 - mean(T0)) / sd(T0)
+#M0<-as.matrix(M0)
+#M1<-(M0 - mean(M0)) / sd(M0)
+#T0<-as.matrix(T0)
+#T1<-(T0 - mean(T0)) / sd(T0)
+
+lmat = rbind(3:4,2:1)
+lwid = c(1,4)
+lhei = c(1,4)
 
 pdf(file="fstv1M.pdf", width = 12, height = 8)
 #png(file="fstv1M.png",width=4000,height=2800,res=250)
 heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           colRow = colRows, colCol =  colCols,
+          dendrogram="row", # remove column cluster
+          Colv=FALSE,
+          lmat=lmat, lwid = lwid, lhei = lhei,
           cellnote=round(M1, digits = 1),
           notecol="black")
 dev.off()
@@ -98,6 +108,9 @@ pdf(file="fstv1T.pdf", width = 12, height = 8)
 heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           colRow = colRows, colCol =  colCols,
+          dendrogram="row", # remove column cluster
+          Colv=FALSE,
+          lmat=lmat, lwid = lwid, lhei = lhei,
           cellnote=round(T1, digits = 1),
           notecol="black")
 dev.off()

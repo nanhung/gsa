@@ -308,11 +308,20 @@ colRows <-  c("grey60","grey60","grey60","black",
 colCols <-  c(rep("grey60",8),rep("red",8),rep("maroon",8))
 
 
+# https://stackoverflow.com/questions/15351575/moving-color-key-in-r-heatmap-2-function-of-gplots-package
+
+lmat = rbind(3:4,2:1)
+lwid = c(1,4)
+lhei = c(1,4)
+
 
 pdf(file="mor_mu_v1.pdf", width = 12, height = 8)
 heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
-          density.info = 'histogram', scale = "none", keysize = 1.2, 
-          cellnote=round(M1, digits = 1),
+          density.info = 'histogram', scale = "none", keysize = 1,
+          cellnote=round(M1, digits = 1), 
+          dendrogram="row", 
+          Colv=FALSE,
+          lmat=lmat, lwid = lwid, lhei = lhei,
           colRow = colRows, colCol =  colCols,
           notecol="black")
 dev.off()
@@ -321,6 +330,9 @@ pdf(file="mor_sig_v1.pdf", width = 12, height = 8)
 heatmap.2(S1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           cellnote=round(M1, digits = 1),
-          colRow = colRows, colCol =  colCols,
+          dendrogram="row", # remove column cluster
+          Colv=FALSE,
+          lmat=lmat, lwid = lwid, lhei = lhei,
+          colRow = colRows, colCol =  colCols, # color text
           notecol="black")
 dev.off()
