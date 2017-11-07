@@ -342,11 +342,18 @@ colCols <-  c(rep("grey60",8),rep("red",8),rep("maroon",8))
 #          cellnote=round(M1, digits = 1),
 #          notecol="black")
 
+lmat = rbind(3:4,2:1)
+lwid = c(1,4)
+lhei = c(1,4)
+
 pdf(file="fstv2.pdf", width = 12, height = 12)
 heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           cellnote=round(T1, digits = 1),
           colRow = colRows, colCol =  colCols,
+          dendrogram="row", 
+          Colv=FALSE,
+          lmat=lmat, lwid = lwid, lhei = lhei,
           notecol="black")
 dev.off()
 

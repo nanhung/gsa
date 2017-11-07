@@ -248,11 +248,11 @@ colnames(Mmu1)<-colnames(sig1)<-c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
 rownames(Mmu1)<-rownames(sig1)<-apap.Mmu.df.1.1[,1]
 
 M1<-as.matrix(scale(Mmu1))
-
-M0<-as.matrix(Mmu1)
-M1<-(Mmu1 - mean(Mmu1)) / sd(Mmu1)
-S0<-as.matrix(sig1)
-S1<-(sig1 - mean(sig1)) / sd(sig1)
+S1<-as.matrix(scale(sig1))
+#M0<-as.matrix(Mmu1)
+#M1<-(Mmu1 - mean(Mmu1)) / sd(Mmu1)
+#S0<-as.matrix(sig1)
+#S1<-(sig1 - mean(sig1)) / sd(sig1)
 
 
 #
