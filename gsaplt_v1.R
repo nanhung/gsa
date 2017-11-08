@@ -88,7 +88,7 @@ T1<-as.matrix(T0)
 #T1<-(T0 - mean(T0)) / sd(T0)
 
 M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
-T1<-T1[ order(apply(T1, 1, mean), decreasing = T), ]
+T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
 
 
 for(i in 1:24){
@@ -96,10 +96,9 @@ for(i in 1:24){
 }
 
 for(i in 1:24){
-  print(sum(T1[1:15,i])/sum(T1[,i])) 
+  print(sum(T1[1:18,i])/sum(T1[,i])) 
 }
 
-sum(T1[1:13,24])/sum(T1[,24])
 
 lmat = rbind(c(2,3),c(4,1))
 lwid = c(1.5,3.5)
@@ -107,8 +106,8 @@ lhei = c(1,5)
 
 
 
-pdf(file="fstv1M.pdf", width = 14, height = 8)
-#png(file="fstv1M.png",width=4000,height=2800,res=250)
+#pdf(file="fstv1M.pdf", width = 14, height = 8)
+png(file="fstv1M.png",width=4000,height=2800,res=250)
 heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.5, 
           #colRow = colRows, 
@@ -121,8 +120,8 @@ heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), mar
           notecol="black")
 dev.off()
 
-pdf(file="fstv1T.pdf", width = 14, height = 8)
-#png(file="fstv1T.png",width=4000,height=2800,res=250)
+#pdf(file="fstv1T.pdf", width = 14, height = 8)
+png(file="fstv1T.png",width=4000,height=2800,res=250)
 heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           #colRow = colRows, 

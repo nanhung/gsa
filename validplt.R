@@ -19,7 +19,8 @@ levels(df.9$exp) <- c("Group A, 325 mg",
                       "Group G, 20 mg/kg",
                       "Group H, 80 mg/kg")
 
-pdf(file="EXP.pdf", width = 16, height = 9)
+#pdf(file="EXP.pdf", width = 16, height = 9)
+png(file="EXP.png",width=4000,height=1600,res=250)
 ggplot(df.9)+ 
   labs(x="Time, hr",
        y=expression("Plasma concentration, "~mu*g/L)) +
@@ -60,7 +61,8 @@ prd_fit<-do.call(rbind, list(org_prd_fit, sen_prd_fit, add_prd_fit, all_prd_fit)
 df.b <-cbind(na.omit(df.a), prd_fit)
 
 
-pdf(file="valid.pdf", width = 7, height = 7)
+#pdf(file="valid.pdf", width = 7, height = 7)
+png(file="calib.png",width=2000,height=2000,res=250)
 ggplot(df.b, aes(Obs, prd.val)) + 
   xlab("in-vivo observation") + ylab("in-silico prediction") +
   theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
