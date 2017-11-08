@@ -316,16 +316,22 @@ totl2 <- as.data.frame(totl1)
 M0<-main2[,1:24]
 T0<-totl2[,1:24]
 
-M0<-as.matrix(M0)
+M1<-as.matrix(M0)
 #M1<-scale(M0)
 #M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
-T0<-as.matrix(T0)
+T1<-as.matrix(T0)
 #T1<-scale(T0)
 #T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
 
-M1<-(M0 - mean(M0)) / sd(M0)
-T1<-(T0 - mean(T0)) / sd(T0)
+#M1<-(M0 - mean(M0)) / sd(M0)
+#T1<-(T0 - mean(T0)) / sd(T0)
 
+M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
+T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
+
+for(i in 1:24){
+  print(sum(T1[1:42,i])/sum(T1[,i])) 
+}
 
 colRows <-  c("grey60","grey60","grey60","black",
               "grey60","grey60","grey60","black",
@@ -342,17 +348,19 @@ colCols <-  c(rep("grey60",8),rep("red",8),rep("maroon",8))
 #          cellnote=round(M1, digits = 1),
 #          notecol="black")
 
-lmat = rbind(3:4,2:1)
-lwid = c(1,4)
-lhei = c(1,4)
+lmat = rbind(c(2,3),c(4,1))
+lwid = c(1.5,3.5)
+lhei = c(1,5)
 
-pdf(file="fstv2.pdf", width = 12, height = 12)
-heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
+pdf(file="fstv2.pdf", width = 14, height = 12)
+heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
-          cellnote=round(T1, digits = 1),
-          colRow = colRows, colCol =  colCols,
-          dendrogram="row", 
-          Colv=FALSE,
+          cellnote=round(T1, digits = 2),
+          #colRow = colRows, 
+          colCol =  colCols,
+          dendrogram="none", 
+          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Total)", key.ylab = "",
+          key.par=list(mar=c(8,4,4,4)),
           lmat=lmat, lwid = lwid, lhei = lhei,
           notecol="black")
 dev.off()
