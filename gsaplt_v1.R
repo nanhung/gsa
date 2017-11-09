@@ -76,6 +76,7 @@ T0<-totl2[,1:24]
 
 M1<-as.matrix(M0)
 T1<-as.matrix(T0)
+I1<-as.matrix(T0)-as.matrix(M0)
               
 #M0<-as.matrix(M0)
 #M1<-scale(M0, center = rep(mean(M0), 24), scale = rep(sd(M0), 24))
@@ -89,7 +90,7 @@ T1<-as.matrix(T0)
 
 M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
 T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
-
+I1<-I1[ order(apply(I1, 1, max), decreasing = T), ]
 
 for(i in 1:24){
   print(sum(M1[1:10,i])/sum(M1[,i])) 
@@ -116,7 +117,7 @@ heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), mar
           Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Main)", key.ylab = "",
           lmat=lmat, lwid = lwid, lhei = lhei,
           key.par=list(mar=c(8,4,4,4)),
-          cellnote=round(M1, digits = 2),
+          cellnote=round(M1, digits = 3),
           notecol="black")
 dev.off()
 
@@ -130,6 +131,20 @@ heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), mar
           Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Total)", key.ylab = "",
           lmat=lmat, lwid = lwid, lhei = lhei,
           cellnote=round(T1, digits = 2),
+          key.par=list(mar=c(8,4,4,4)),
+          notecol="black")
+dev.off()
+
+#pdf(file="fstv1I.pdf", width = 14, height = 8)
+png(file="fstv1I.png",width=4000,height=2800,res=250)
+heatmap.2(I1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
+          density.info = 'histogram', scale = "none", keysize = 1.2, 
+          #colRow = colRows, 
+          colCol =  colCols,
+          dendrogram="none", # remove column cluster
+          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Interaction)", key.ylab = "",
+          lmat=lmat, lwid = lwid, lhei = lhei,
+          cellnote=round(I1, digits = 3),
           key.par=list(mar=c(8,4,4,4)),
           notecol="black")
 dev.off()
