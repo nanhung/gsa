@@ -65,12 +65,12 @@ PR_AG = log(0.364)
 PS_AG = log(0.351)
 
 r <- 2.0 # narrow down the range to prevent calculation error
-r_QCC<- 1.2
+r_QCC<- 1.2 # exp(1.2)/exp(-1.2) ~ 11
 r_phy<- 0.08
 r_pc <- 1.2 # Use the small range to improve converge
 
-#r<-1.3
-#name<-Tg
+#r<-1.0
+#name<-UGT_Km
 #cat(name, sd(rtri(1000, name-r, name+r, name)), name-r, name+r)
 
 

@@ -18,7 +18,7 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-r = 2.3
+r = 2.0
 
 J.X.df <- function(n){
   data.frame(X1 = rtri(n, Tg-r, Tg+r, Tg),
