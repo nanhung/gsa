@@ -322,12 +322,14 @@ M1<-as.matrix(M0)
 T1<-as.matrix(T0)
 #T1<-scale(T0)
 #T1<-scale(M0, center = rep(mean(T0), 24), scale = rep(sd(T0), 24))
+I1<-T1-M1
 
 #M1<-(M0 - mean(M0)) / sd(M0)
 #T1<-(T0 - mean(T0)) / sd(T0)
 
 M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
 T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
+I1<-I1[ order(apply(I1, 1, max), decreasing = T), ]
 
 for(i in 1:24){
   print(sum(T1[1:27,i])/sum(T1[,i])) 
@@ -352,11 +354,11 @@ lmat = rbind(c(2,3),c(4,1))
 lwid = c(1.5,3.5)
 lhei = c(1,5)
 
-#pdf(file="fstv2.pdf", width = 14, height = 12)
-png(file="fstv2T.png",width=4000,height=4000,res=250)
+pdf(file="fstv2T.pdf", width = 18, height = 12)
+#png(file="fstv2T.png",width=4000,height=4000,res=250)
 heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
           density.info = 'histogram', scale = "none", keysize = 1.2, 
-          cellnote=round(T1, digits = 2),
+          cellnote=round(T1, digits = 3),
           #colRow = colRows, 
           colCol =  colCols,
           dendrogram="none", 
@@ -367,3 +369,30 @@ heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), mar
 dev.off()
 
 
+pdf(file="fstv2M.pdf", width = 18, height = 12)
+#png(file="fstv2T.png",width=4000,height=4000,res=250)
+heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
+          density.info = 'histogram', scale = "none", keysize = 1.2, 
+          cellnote=round(M1, digits = 3),
+          #colRow = colRows, 
+          colCol =  colCols,
+          dendrogram="none", 
+          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Main)", key.ylab = "",
+          key.par=list(mar=c(8,4,4,4)),
+          lmat=lmat, lwid = lwid, lhei = lhei,
+          notecol="black")
+dev.off()
+
+pdf(file="fstv2I.pdf", width = 18, height = 12)
+#png(file="fstv2T.png",width=4000,height=4000,res=250)
+heatmap.2(I1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
+          density.info = 'histogram', scale = "none", keysize = 1.2, 
+          cellnote=round(I1, digits = 3),
+          #colRow = colRows, 
+          colCol =  colCols,
+          dendrogram="none", 
+          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Interaction)", key.ylab = "",
+          key.par=list(mar=c(8,4,4,4)),
+          lmat=lmat, lwid = lwid, lhei = lhei,
+          notecol="black")
+dev.off()
