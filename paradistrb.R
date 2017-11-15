@@ -33,7 +33,6 @@ APAP_58.1 <- as.data.frame(read_table2("apap58.c01.out"))
 #APAP_58.4 <- as.data.frame(read_table2("apap58.c04.out"))
 
 org21.1<-APAP_21.1[902:1001, c(2,6,9,13,15,17,18,19,20,21,22,216)]
-
 sen11.1<-APAP_11.1[902:1001, c(c(2:12),116)]
 
 
@@ -124,13 +123,13 @@ plot.new()
 plot.new()
 
 par(mar=c(4,5,2,1))
-plot(density(org21.tot[,12]),col="blue",lwd = 2, main="", 
+plot(density(org21.1[,12]),col="blue",lwd = 2, main="", 
      ylim=c(0,0.08), xlim=c(0,250), ylab="Density", xlab="LnData", frame.plot = FALSE,
      cex.lab=1.5, font.lab=2) # size and bold
 axis(side = 1)
-lines(density(sen11.tot[,12]),col="red", lwd = 2)
+lines(density(sen11.1[,12]),col="red", lwd = 2)
 #lines(density(sen19.tot[,20]),col="green", lwd = 2)
-lines(density(all58.tot[,12]),col="darkgreen", lwd = 2)
+lines(density(all58.1[,12]),col="darkgreen", lwd = 2)
 
 text(60,0.06,"Original sensitive parmeters",cex=1.2, col="red")
 text(110,0.06,"Original all parmeters",cex=1.2, col="blue")
