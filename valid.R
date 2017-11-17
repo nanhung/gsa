@@ -7,6 +7,9 @@
 if(!require(readr)) {
   install.packages("readr"); require(readr)
 }
+if(!require(data.table)) {
+  install.packages("data.table"); require(data.table)
+}
 
 # 21 Original parameters
 APAP_21.1 <- as.data.frame(read_table2("apap21.c01.out"))
@@ -14,17 +17,17 @@ APAP_21.2 <- as.data.frame(read_table2("apap21.c02.out"))
 APAP_21.3 <- as.data.frame(read_table2("apap21.c03.out"))
 APAP_21.4 <- as.data.frame(read_table2("apap21.c04.out"))
 
-# 14 Sensitivity parameters
-APAP_14.1 <- as.data.frame(read_table2("apap14.c01.out"))
-APAP_14.2 <- as.data.frame(read_table2("apap14.c02.out"))
-APAP_14.3 <- as.data.frame(read_table2("apap14.c03.out"))
-APAP_14.4 <- as.data.frame(read_table2("apap14.c04.out"))
+# 11 Sensitivity parameters
+APAP_11.1 <- as.data.frame(read_table2("apap11s.c01.out"))
+APAP_11.2 <- as.data.frame(read_table2("apap11s.c02.out"))
+APAP_11.3 <- as.data.frame(read_table2("apap11s.c03.out"))
+APAP_11.4 <- as.data.frame(read_table2("apap11s.c04.out"))
 
-# 21 Sensitivity parameters
-APAP_19.1 <- as.data.frame(read_table2("apap19s.c01.out"))
-APAP_19.2 <- as.data.frame(read_table2("apap19s.c04.out"))
-APAP_19.3 <- as.data.frame(read_table2("apap19s.c06.out"))
-APAP_19.4 <- as.data.frame(read_table2("apap19s.c08.out"))
+# 20 Sensitivity parameters
+APAP_20.1 <- as.data.frame(read_table2("apap20d.c01.out"))
+APAP_20.2 <- as.data.frame(read_table2("apap20d.c02.out"))
+APAP_20.3 <- as.data.frame(read_table2("apap20d.c03.out"))
+APAP_20.4 <- as.data.frame(read_table2("apap20d.c04.out"))
 
 # 58  parameters
 APAP_58.1 <- as.data.frame(read_table2("apap58.c01.out"))
@@ -44,8 +47,8 @@ if(!require(PerformanceAnalytics)) { #kurtosis
   install.packages("PerformanceAnalytics"); require(PerformanceAnalytics)}
 
 org<-rbind(tail(APAP_21.1, 25), tail(APAP_21.2, 25), tail(APAP_21.3, 25), tail(APAP_21.4, 25))
-sen<-rbind(tail(APAP_14.1, 25), tail(APAP_14.2, 25), tail(APAP_14.3, 25), tail(APAP_14.4, 25))
-add<-rbind(tail(APAP_19.1, 25), tail(APAP_19.2, 25), tail(APAP_19.3, 25), tail(APAP_19.4, 25))
+sen<-rbind(tail(APAP_11.1, 25), tail(APAP_11.2, 25), tail(APAP_11.3, 25), tail(APAP_11.4, 25))
+add<-rbind(tail(APAP_20.1, 25), tail(APAP_20.2, 25), tail(APAP_20.3, 25), tail(APAP_20.4, 25))
 all<-rbind(tail(APAP_58.1, 25), tail(APAP_58.2, 25), tail(APAP_58.3, 25), tail(APAP_58.4, 25))
 
 setpt21.df<-function(data, par1st, parlast){
@@ -78,7 +81,7 @@ org.8<-setpt21.df(org, "lnTg(1.8)","lnCLC_AS(1.8)") # Do analysis
 org.8.1<-org.8[which(colnames(org.8)=="lnCPL_APAP_mcgL_8.1"):which(colnames(org.8)=="lnCPL_AS_mcgL_8.11")] # Extract output
 
 #
-setpt14.df<-function(data, par1st, parlast){
+setpt11.df<-function(data, par1st, parlast){
   sim.str<-which(colnames(data)==par1st)
   sim.end<-which(colnames(data)==parlast)
   j<-sim.str:sim.end
@@ -86,29 +89,29 @@ setpt14.df<-function(data, par1st, parlast){
   df0<-data.frame(data[,j])
   
   write.table(df0, file="apap.setpt.dat", row.names=TRUE, sep="\t")
-  system("./mcsim.apap.pbpk_v2 apap.setpt14s.in")
-  data.frame(fread(("apap.setpt14s.out")))
+  system("./mcsim.apap.pbpk_v2 apap.setpt11s.in")
+  data.frame(fread(("apap.setpt11s.out")))
 }
 
-sen.1<-setpt14.df(sen, "lnTg(1.1)","lnCLC_AS(1.1)") # Do analysis
+sen.1<-setpt11.df(sen, "lnTg(1.1)","lnCLC_AS(1.1)") # Do analysis
 sen.1.1<-sen.1[which(colnames(sen.1)=="lnCPL_APAP_mcgL_1.1"):which(colnames(sen.1)=="lnCPL_AS_mcgL_1.10")] # Extract output
-sen.2<-setpt14.df(sen, "lnTg(1.2)","lnCLC_AS(1.2)") # Do analysis
+sen.2<-setpt11.df(sen, "lnTg(1.2)","lnCLC_AS(1.2)") # Do analysis
 sen.2.1<-sen.2[which(colnames(sen.2)=="lnCPL_APAP_mcgL_2.1"):which(colnames(sen.2)=="lnCPL_AS_mcgL_2.11")] # Extract output
-sen.3<-setpt14.df(sen, "lnTg(1.3)","lnCLC_AS(1.3)") # Do analysis
+sen.3<-setpt11.df(sen, "lnTg(1.3)","lnCLC_AS(1.3)") # Do analysis
 sen.3.1<-sen.3[which(colnames(sen.3)=="lnCPL_APAP_mcgL_3.1"):which(colnames(sen.3)=="lnCPL_AS_mcgL_3.8")] # Extract output
-sen.4<-setpt14.df(sen, "lnTg(1.4)","lnCLC_AS(1.4)") # Do analysis
+sen.4<-setpt11.df(sen, "lnTg(1.4)","lnCLC_AS(1.4)") # Do analysis
 sen.4.1<-sen.4[which(colnames(sen.4)=="lnCPL_APAP_mcgL_4.1"):which(colnames(sen.4)=="lnCPL_AS_mcgL_4.10")] # Extract output
-sen.5<-setpt14.df(sen, "lnTg(1.5)","lnCLC_AS(1.5)") # Do analysis
+sen.5<-setpt11.df(sen, "lnTg(1.5)","lnCLC_AS(1.5)") # Do analysis
 sen.5.1<-sen.5[which(colnames(sen.5)=="lnCPL_APAP_mcgL_5.1"):which(colnames(sen.5)=="lnCPL_AS_mcgL_5.10")] # Extract output
-sen.6<-setpt14.df(sen, "lnTg(1.6)","lnCLC_AS(1.6)") # Do analysis
+sen.6<-setpt11.df(sen, "lnTg(1.6)","lnCLC_AS(1.6)") # Do analysis
 sen.6.1<-sen.6[which(colnames(sen.6)=="lnCPL_APAP_mcgL_6.1"):which(colnames(sen.6)=="lnCPL_AS_mcgL_6.10")] # Extract output
-sen.7<-setpt14.df(sen, "lnTg(1.7)","lnCLC_AS(1.7)") # Do analysis
+sen.7<-setpt11.df(sen, "lnTg(1.7)","lnCLC_AS(1.7)") # Do analysis
 sen.7.1<-sen.7[which(colnames(sen.7)=="lnCPL_APAP_mcgL_7.1"):which(colnames(sen.7)=="lnCPL_AS_mcgL_7.12")] # Extract output
-sen.8<-setpt14.df(sen, "lnTg(1.8)","lnCLC_AS(1.8)") # Do analysis
+sen.8<-setpt11.df(sen, "lnTg(1.8)","lnCLC_AS(1.8)") # Do analysis
 sen.8.1<-sen.8[which(colnames(sen.8)=="lnCPL_APAP_mcgL_8.1"):which(colnames(sen.8)=="lnCPL_AS_mcgL_8.11")] # Extract output
 
 #
-setpt19.df<-function(data, par1st, parlast){
+setpt20.df<-function(data, par1st, parlast){
   sim.str<-which(colnames(data)==par1st)
   sim.end<-which(colnames(data)==parlast)
   j<-sim.str:sim.end
@@ -116,25 +119,25 @@ setpt19.df<-function(data, par1st, parlast){
   df0<-data.frame(data[,j])
   
   write.table(df0, file="apap.setpt.dat", row.names=TRUE, sep="\t")
-  system("./mcsim.apap.pbpk_v2 apap.setpt19s.in")
-  data.frame(fread(("apap.setpt19s.out")))
+  system("./mcsim.apap.pbpk_v2 apap.setpt20d.in")
+  data.frame(fread(("apap.setpt20d.out")))
 }
 
-add.1<-setpt19.df(add, "lnTg(1.1)","lnPM_APAP(1.1)") # Do analysis
+add.1<-setpt20.df(add, "lnTg(1.1)","lnPM_APAP(1.1)") # Do analysis
 add.1.1<-add.1[which(colnames(add.1)=="lnCPL_APAP_mcgL_1.1"):which(colnames(add.1)=="lnCPL_AS_mcgL_1.10")] # Extract output
-add.2<-setpt19.df(add, "lnTg(1.2)","lnPM_APAP(1.2)") # Do analysis
+add.2<-setpt20.df(add, "lnTg(1.2)","lnPM_APAP(1.2)") # Do analysis
 add.2.1<-add.2[which(colnames(add.2)=="lnCPL_APAP_mcgL_2.1"):which(colnames(add.2)=="lnCPL_AS_mcgL_2.11")] # Extract output
-add.3<-setpt19.df(add, "lnTg(1.3)","lnPM_APAP(1.3)") # Do analysis
+add.3<-setpt20.df(add, "lnTg(1.3)","lnPM_APAP(1.3)") # Do analysis
 add.3.1<-add.3[which(colnames(add.3)=="lnCPL_APAP_mcgL_3.1"):which(colnames(add.3)=="lnCPL_AS_mcgL_3.8")] # Extract output
-add.4<-setpt19.df(add, "lnTg(1.4)","lnPM_APAP(1.4)") # Do analysis
+add.4<-setpt20.df(add, "lnTg(1.4)","lnPM_APAP(1.4)") # Do analysis
 add.4.1<-add.4[which(colnames(add.4)=="lnCPL_APAP_mcgL_4.1"):which(colnames(add.4)=="lnCPL_AS_mcgL_4.10")] # Extract output
-add.5<-setpt19.df(add, "lnTg(1.5)","lnPM_APAP(1.5)") # Do analysis
+add.5<-setpt20.df(add, "lnTg(1.5)","lnPM_APAP(1.5)") # Do analysis
 add.5.1<-add.5[which(colnames(add.5)=="lnCPL_APAP_mcgL_5.1"):which(colnames(add.5)=="lnCPL_AS_mcgL_5.10")] # Extract output
-add.6<-setpt19.df(add, "lnTg(1.6)","lnPM_APAP(1.6)") # Do analysis
+add.6<-setpt20.df(add, "lnTg(1.6)","lnPM_APAP(1.6)") # Do analysis
 add.6.1<-add.6[which(colnames(add.6)=="lnCPL_APAP_mcgL_6.1"):which(colnames(add.6)=="lnCPL_AS_mcgL_6.10")] # Extract output
-add.7<-setpt19.df(add, "lnTg(1.7)","lnPM_APAP(1.7)") # Do analysis
+add.7<-setpt20.df(add, "lnTg(1.7)","lnPM_APAP(1.7)") # Do analysis
 add.7.1<-add.7[which(colnames(add.7)=="lnCPL_APAP_mcgL_7.1"):which(colnames(add.7)=="lnCPL_AS_mcgL_7.12")] # Extract output
-add.8<-setpt19.df(add, "lnTg(1.8)","lnPM_APAP(1.8)") # Do analysis
+add.8<-setpt20.df(add, "lnTg(1.8)","lnPM_APAP(1.8)") # Do analysis
 add.8.1<-add.8[which(colnames(add.8)=="lnCPL_APAP_mcgL_8.1"):which(colnames(add.8)=="lnCPL_AS_mcgL_8.11")] # Extract output
 
 #
@@ -243,8 +246,8 @@ df.9<-do.call(rbind, list(df.1,df.2,df.3,df.4,df.5,df.6,df.7,df.8))
 # 
 options(digits=3)
 R2(obs.1$value, as.numeric(prd.o.1)) # .868
-R2(obs.1$value, as.numeric(prd.s.1)) # .864
-R2(obs.1$value, as.numeric(prd.d.1)) # .95
+R2(obs.1$value, as.numeric(prd.s.1)) # .8529
+R2(obs.1$value, as.numeric(prd.d.1)) # .9495
 R2(obs.1$value, as.numeric(prd.a.1)) # .962
 #R2(obs.1.1$value, as.numeric(prd.o.1.1)) 
 

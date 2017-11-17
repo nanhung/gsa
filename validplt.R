@@ -72,13 +72,13 @@ ggplot(df.b, aes(Obs, prd.val)) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
                 labels = trans_format("log10", math_format(10^.x)))+
   geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.1) +
-  scale_fill_manual(values =c("blue", "red", "green", "darkgreen")) + 
+  scale_fill_manual(values =c("darkblue", "red", "green", "darkgreen")) + 
   guides(fill=FALSE) + # remove "fill" legend 
   geom_point(aes(colour = prd.typ), alpha = 0.6)+
-  scale_color_manual(values=c("blue", "red", "green", "darkgreen"),
+  scale_color_manual(values=c("darkblue", "red", "green", "darkgreen"),
                      name="",
                      breaks=c("prd.o", "prd.s", "prd.d", "prd.a"),
-                     labels=c("Original all parameters (21)", "Original sensitive parameters (14)", "All sensitive parameters (19)","All model parameters (58)")) + 
+                     labels=c("Original all parameters (21)", "Original sensitive parameters (11)", "All sensitive parameters (20)","All model parameters (58)")) + 
   theme(legend.justification=c(1,0), legend.position=c(1,0), legend.background = element_rect(fill=alpha('white', 0.1)))
 dev.off()
 
