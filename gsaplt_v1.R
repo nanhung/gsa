@@ -105,21 +105,41 @@ lmat = rbind(c(2,3),c(4,1))
 lwid = c(1.5,3.5)
 lhei = c(1,5)
 
+M2 <- M1
+M2[M2 < 0.05] <- NA
+I2 <- I1
+I2[I2 < 0.05] <- NA
 
-
-#pdf(file="fstv1M.pdf", width = 14, height = 8)
-png(file="fstv1M.png",width=4000,height=2800,res=250)
-heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
-          density.info = 'histogram', scale = "none", keysize = 1.5, 
+pdf(file="fstv1M.pdf", width = 14, height = 6)
+#png(file="fstv1M.png",width=4000,height=2800,res=250)
+heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9), srtCol=35,
+          density.info = 'histogram', scale = "none", keysize = 1.5, trace="none",
           #colRow = colRows, 
           colCol =  colCols,
           dendrogram="none", # remove column cluster
           Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Main)", key.ylab = "",
           lmat=lmat, lwid = lwid, lhei = lhei,
           key.par=list(mar=c(8,4,4,4)),
-          cellnote=round(M1, digits = 3),
+          breaks=seq(0, 1, length.out=101),
+          cellnote=round(M2, digits = 2),
           notecol="black")
 dev.off()
+
+pdf(file="fstv1I.pdf", width = 14, height = 6)
+#png(file="fstv1I.png",width=4000,height=2800,res=250)
+heatmap.2(I1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
+          density.info = 'histogram', scale = "none", keysize = 1.2, 
+          #colRow = colRows, 
+          colCol =  colCols,
+          dendrogram="none", # remove column cluster
+          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Interaction)", key.ylab = "",
+          lmat=lmat, lwid = lwid, lhei = lhei,
+          cellnote=round(I2, digits = 2),
+          breaks=seq(0, 1, length.out=101),
+          key.par=list(mar=c(8,4,4,4)),
+          notecol="black")
+dev.off()
+
 
 #pdf(file="fstv1T.pdf", width = 14, height = 8)
 png(file="fstv1T.png",width=4000,height=2800,res=250)
@@ -134,21 +154,6 @@ heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), mar
           key.par=list(mar=c(8,4,4,4)),
           notecol="black")
 dev.off()
-
-#pdf(file="fstv1I.pdf", width = 14, height = 8)
-png(file="fstv1I.png",width=4000,height=2800,res=250)
-heatmap.2(I1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
-          density.info = 'histogram', scale = "none", keysize = 1.2, 
-          #colRow = colRows, 
-          colCol =  colCols,
-          dendrogram="none", # remove column cluster
-          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Interaction)", key.ylab = "",
-          lmat=lmat, lwid = lwid, lhei = lhei,
-          cellnote=round(I1, digits = 3),
-          key.par=list(mar=c(8,4,4,4)),
-          notecol="black")
-dev.off()
-
 
 #load("jsnv1.rda") ----
 if(!require(gplots)) {
