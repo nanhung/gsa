@@ -25,7 +25,7 @@ p1<-ggplot(df.9)+
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
   facet_grid(variable~exp) + theme_bw() + xlim(0, 13) +
-  theme(text = element_text(size=16)) + 
+  theme(text = element_text(size=14)) + 
   geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "blue") + 
   geom_line(aes(x = Time, y = exp(prd.s)/1000), size = 0.6, color = "red", linetype = "dashed") +
   geom_line(aes(x = Time, y = exp(prd.d)/1000), size = 0.6, color = "green") +
@@ -77,7 +77,7 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
                      labels=c("Original all parameters (21)", "Original sensitive parameters (11)", "All sensitive parameters (20)","All model parameters (58)")) + 
   theme(legend.justification=c(0,1), 
         legend.position=c(0,1), 
-        text = element_text(size=16),
+        text = element_text(size=14),
         legend.background = element_rect(fill=alpha('white', 0.1)),
         panel.grid.minor = element_blank()) # Hide the minor grid lines because they don't align with the ticks
 
@@ -92,7 +92,7 @@ png(file="calib.png",width=2000,height=2000,res=250)
 p2
 dev.off()
 
-pdf(file="fig6.pdf", width = 12, height = 15)
+pdf(file="fig6.pdf", width = 14, height = 18)
 grid.arrange(p1,p2, ncol=1, heights=c(1,2))
 dev.off()
 

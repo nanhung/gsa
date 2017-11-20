@@ -284,6 +284,14 @@ save(apap.mf.df.1.1, apap.mf.df.1.2, apap.mf.df.1.3, apap.mf.df.1.4,
 # load("fstv2.rda") ----
 if(!require(gplots)) {
   install.packages("gplots"); require(gplots)} #heatmap.2
+if(!require(tidyr)) {
+  install.packages("tidyr"); require(tidyr)}
+if(!require(dplyr)) {
+  install.packages("dplyr"); require(dplyr)}
+if(!require(tibble)) {
+  install.packages("tibble"); require(tibble)}
+if(!require(ggplot2)) {
+  install.packages("ggplot2"); require(ggplot2)}
 
 main1<-do.call(cbind, list(apap.mf.df.1.1[,2], apap.mf.df.1.2[,2], apap.mf.df.1.3[,2], apap.mf.df.1.4[,2],
                            apap.mf.df.1.5[,2], apap.mf.df.1.6[,2], apap.mf.df.1.7[,2], apap.mf.df.1.8[,2],
@@ -330,6 +338,13 @@ inte4 <- as.data.frame(inte1) %>%
     Var1 = factor(Var1, level=row.names(inte1)),
     Var2 = factor(gsub("V", "", Var2), level=colnames(inte1))
   )
+totl4 <- as.data.frame(totl1) %>%
+  rownames_to_column('Var1') %>%
+  gather(Var2, value, -Var1) %>%
+  mutate(
+    Var1 = factor(Var1, level=row.names(totl1)),
+    Var2 = factor(gsub("V", "", Var2), level=colnames(totl1))
+  )
 
 main4$order<-"Main"
 totl4$order<-"Total"
@@ -369,10 +384,11 @@ Var4<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
                            "APAP-S_0.5h","APAP-S_1h","APAP-S_1.5h","APAP-S_2h",
                            "APAP-S_4h","APAP-S_6h","APAP-S_8h","APAP-S_12h")) 
 
+mt<-rbind(main4, totl4)
 mt1<-cbind(mt, Var4)
 
 mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
-mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
+mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
 mt1$value2[mt1$value2 < 0.01] <- NA

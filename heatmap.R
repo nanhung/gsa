@@ -203,7 +203,7 @@ p12<-ggplot(mt1, aes(Var4, Var1)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, color=colCols), 
         legend.position = "top", legend.title=element_blank())
 
-pdf(file="fig3.pdf", width = 14, height = 10)
+pdf(file="fig3.pdf", width = 14, height = 12)
 p12
 dev.off()
 
@@ -234,7 +234,7 @@ p11<-ggplot(mor, aes(Var2, Var1)) +
 
 
 #png(file="fig2.png",width=3200,height=3200,res=250)
-pdf(file="fig2.pdf", width = 12, height = 5)
+pdf(file="fig2.pdf", width = 12, height = 6)
 p11
 dev.off()
 
