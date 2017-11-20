@@ -181,11 +181,11 @@ Var4<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
                            "APAP-S_0.5h","APAP-S_1h","APAP-S_1.5h","APAP-S_2h",
                            "APAP-S_4h","APAP-S_6h","APAP-S_8h","APAP-S_12h")) 
 
-mt<-rbind(main4,inte4)
+mt<-rbind(main4, totl4)
 mt1<-cbind(mt, Var4)
 
 mt1$Var1 = with(mt1, factor(Var1, levels = rev(levels(Var1))))
-mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
+mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
 mt1$value2[mt1$value2 < 0.05] <- NA
