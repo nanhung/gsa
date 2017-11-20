@@ -88,9 +88,9 @@ I1<-as.matrix(T0)-as.matrix(M0)
 #T0<-as.matrix(T0)
 #T1<-(T0 - mean(T0)) / sd(T0)
 
-M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
-T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
-I1<-I1[ order(apply(I1, 1, max), decreasing = T), ]
+#M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
+#T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
+#I1<-I1[ order(apply(I1, 1, max), decreasing = T), ]
 
 for(i in 1:24){
   print(sum(M1[1:10,i])/sum(M1[,i])) 
@@ -112,7 +112,8 @@ I2[I2 < 0.05] <- NA
 
 pdf(file="fstv1M.pdf", width = 14, height = 6)
 #png(file="fstv1M.png",width=4000,height=2800,res=250)
-heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9), srtCol=35,
+heatmap.2(M1, cexRow=1.2, cexCol=1.2, margins=c(6,9), srtCol=35,
+          col = colorpanel(100, "white", "red"), 
           density.info = 'histogram', scale = "none", keysize = 1.5, trace="none",
           #colRow = colRows, 
           colCol =  colCols,
@@ -127,7 +128,8 @@ dev.off()
 
 pdf(file="fstv1I.pdf", width = 14, height = 6)
 #png(file="fstv1I.png",width=4000,height=2800,res=250)
-heatmap.2(I1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
+heatmap.2(I1, cexRow=1.2, cexCol=1.2,  margins=c(6,9),trace="none",srtCol=35,
+          col = colorpanel(100, "white", "red"),
           density.info = 'histogram', scale = "none", keysize = 1.2, 
           #colRow = colRows, 
           colCol =  colCols,

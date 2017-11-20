@@ -74,95 +74,16 @@ PR_AG = 0.364
 PS_AG = 0.351
 
 #
-lwr <- -1.2
-upr <- 1.2
-lwr_QCC <- -0.8
-upr_QCC <- 0.8
+lwr <- -2.0
+upr <- 2.0
+lwr_QCC <- -1.2
+upr_QCC <- 1.2
 lwr_phy <- -0.08
 upr_phy <- 0.08
-lwr_p <- -2.0
-upr_p <- 2.0
+lwr_p <- -1.2
+upr_p <- 1.2
 
-# Define prior
-set.seed(250); pri_Tg <- rtri(1000, Tg*exp(lwr), Tg*exp(upr), Tg)
-set.seed(250); pri_Tp <- rtri(1000, Tp*exp(lwr), Tp*exp(upr), Tp)
-set.seed(250); pri_CYP_Km <- rtri(1000, CYP_Km*exp(lwr), CYP_Km*exp(upr), CYP_Km)
-set.seed(250); pri_CYP_VmaxC <- rtri(1000, CYP_VmaxC*exp(lwr), CYP_VmaxC*exp(upr), CYP_VmaxC)
-set.seed(250); pri_SULT_Km_apap <- rtri(1000, SULT_Km_apap*exp(lwr), SULT_Km_apap*exp(upr), SULT_Km_apap)
-set.seed(250); pri_SULT_Ki <- rtri(1000, SULT_Ki*exp(lwr), SULT_Ki*exp(upr), SULT_Ki)
-set.seed(250); pri_SULT_Km_paps <- rtri(1000, SULT_Km_paps*exp(lwr), SULT_Km_paps*exp(upr), SULT_Km_paps)
-set.seed(250); pri_SULT_VmaxC <- rtri(1000, SULT_VmaxC*exp(lwr), SULT_VmaxC*exp(upr), SULT_VmaxC)
-set.seed(250); pri_UGT_Km <- rtri(1000, UGT_Km*exp(lwr), UGT_Km*exp(upr), UGT_Km)
-set.seed(250); pri_UGT_Ki <- rtri(1000, UGT_Ki*exp(lwr), UGT_Ki*exp(upr), UGT_Ki)
-set.seed(250); pri_UGT_Km_GA <- rtri(1000, UGT_Km_GA*exp(lwr), UGT_Km_GA*exp(upr), UGT_Km_GA)
-set.seed(250); pri_UGT_VmaxC <- rtri(1000, UGT_VmaxC*exp(lwr), UGT_VmaxC*exp(upr), UGT_VmaxC)
-set.seed(250); pri_Km_AG <- rtri(1000, Km_AG*exp(lwr), Km_AG*exp(upr), Km_AG)
-set.seed(250); pri_Vmax_AG <- rtri(1000, Vmax_AG*exp(lwr), Vmax_AG*exp(upr), Vmax_AG)
-set.seed(250); pri_Km_AS <- rtri(1000, Km_AS*exp(lwr), Km_AS*exp(upr), Km_AS)
-set.seed(250); pri_Vmax_AS <- rtri(1000, Vmax_AS*exp(lwr), Vmax_AS*exp(upr), Vmax_AS)
-set.seed(250); pri_kGA_syn <- rtri(1000, kGA_syn*exp(lwr), kGA_syn*exp(upr), kGA_syn)
-set.seed(250); pri_kPAPS_syn <- rtri(1000, kPAPS_syn*exp(lwr), kPAPS_syn*exp(upr), kPAPS_syn)
-set.seed(250); pri_CLC_APAP <- rtri(1000, CLC_APAP*exp(lwr), CLC_APAP*exp(upr), CLC_APAP)
-set.seed(250); pri_CLC_AG <- rtri(1000, CLC_AG*exp(lwr), CLC_AG*exp(upr), CLC_AG)
-set.seed(250); pri_CLC_AS <- rtri(1000, CLC_AS*exp(lwr), CLC_AS*exp(upr), CLC_AS)
-
-### Physiological parameters (17) ----
-set.seed(250); pri_QCC <- rtri(1000, QCC*exp(lwr_QCC), QCC*exp(upr_QCC), QCC) # Cardiac output
-#set.seed(250); lnQCC<-rnormTrunc(1000, 0.0, 2.785, -2.785, 2.785)
-
-# Fractional volumes (fraction of body weight).
-set.seed(250); pri_VFC <- rtri(1000, VFC*exp(lwr_phy), VFC*exp(upr_phy), VFC)
-set.seed(250); pri_VKC <- rtri(1000, VKC*exp(lwr_phy), VKC*exp(upr_phy), VKC)
-set.seed(250); pri_VGC <- rtri(1000, VGC*exp(lwr_phy), VGC*exp(upr_phy), VGC)
-set.seed(250); pri_VLC <- rtri(1000, VLC*exp(lwr_phy), VLC*exp(upr_phy), VLC)
-set.seed(250); pri_VMC <- rtri(1000, VMC*exp(lwr_phy), VMC*exp(upr_phy), VMC)
-set.seed(250); pri_VBLAC <- rtri(1000, VBLAC*exp(lwr_phy), VBLAC*exp(upr_phy), VBLAC)
-set.seed(250); pri_VBLVC <- rtri(1000, VBLVC*exp(lwr_phy), VBLVC*exp(upr_phy), VBLVC)
-set.seed(250); pri_VSC <- rtri(1000, VSC*exp(lwr_phy), VSC*exp(upr_phy), VSC)
-pri_VRC <- 1-pri_VFC-pri_VKC-pri_VGC-pri_VLC-pri_VMC-pri_VBLAC-pri_VBLVC-pri_VSC
-#hist(pri_VRC) # to make sure there is no negative value  
-
-
-# Fractional blood flows (fraction of cardiac output).
-set.seed(250); pri_QFC  <- rtri(1000, QFC*exp(lwr_phy), QFC*exp(upr_phy), QFC)  # Fat
-set.seed(250); pri_QKC  <- rtri(1000, QKC*exp(lwr_phy), QKC*exp(upr_phy), QKC)  # Kidney
-set.seed(250); pri_QGC  <- rtri(1000, QGC*exp(lwr_phy), QGC*exp(upr_phy), QGC)  # Gut
-set.seed(250); pri_QLBC <- rtri(1000, QLBC*exp(lwr_phy), QLBC*exp(upr_phy), QLBC)  # Hepatic artery
-set.seed(250); pri_QMC  <- rtri(1000, QMC*exp(lwr_phy), QMC*exp(upr_phy), QMC)  # Muscle
-set.seed(250); pri_QSC  <- rtri(1000, QSC*exp(lwr_phy), QSC*exp(upr_phy), QSC) # Slowly Perfused
-pri_QRC <- 1-pri_QFC-pri_QKC-pri_QGC-pri_QLBC-pri_QMC-pri_QSC
-#hist(pri_QRC) # to make sure there is no negative value 
-
-
-### Substance-specific parameter (23) ----
-
-set.seed(250); pri_BP_APAP = rtri(1000, 0.1, 1, BP_APAP)
-
-# Partition Coefficients
-set.seed(250); pri_PF_APAP <- rtri(1000, PF_APAP*exp(lwr_p), PF_APAP*exp(upr_p), PF_APAP) # Fat:blood
-set.seed(250); pri_PG_APAP <- rtri(1000, PG_APAP*exp(lwr_p), PG_APAP*exp(upr_p), PG_APAP) # Gut:blood
-set.seed(250); pri_PK_APAP <- rtri(1000, PK_APAP*exp(lwr_p), PK_APAP*exp(upr_p), PK_APAP) # Kidney:blood
-set.seed(250); pri_PL_APAP <- rtri(1000, PL_APAP*exp(lwr_p), PL_APAP*exp(upr_p), PL_APAP) # Liver:blood
-set.seed(250); pri_PM_APAP <- rtri(1000, PM_APAP*exp(lwr_p), PM_APAP*exp(upr_p), PM_APAP) # Muscle:blood
-set.seed(250); pri_PR_APAP <- rtri(1000, PR_APAP*exp(lwr_p), PR_APAP*exp(upr_p), PR_APAP) # rapidly perfused:blood [brain, lung, spleen]
-set.seed(250); pri_PS_APAP <- rtri(1000, PS_APAP*exp(lwr_p), PS_APAP*exp(upr_p), PS_APAP) # slowly perfused:blood [bone, heart, skin]
-
-set.seed(250); pri_PF_AS <- rtri(1000, PF_AS*exp(lwr_p), PF_AS*exp(upr_p), PF_AS) 
-set.seed(250); pri_PG_AS <- rtri(1000, PG_AS*exp(lwr_p), PG_AS*exp(upr_p), PG_AS) 
-set.seed(250); pri_PK_AS <- rtri(1000, PK_AS*exp(lwr_p), PK_AS*exp(upr_p), PK_AS)
-set.seed(250); pri_PL_AS <- rtri(1000, PL_AS*exp(lwr_p), PL_AS*exp(upr_p), PL_AS)
-set.seed(250); pri_PM_AS <- rtri(1000, PM_AS*exp(lwr_p), PM_AS*exp(upr_p), PM_AS)     
-set.seed(250); pri_PR_AS <- rtri(1000, PR_AS*exp(lwr_p), PR_AS*exp(upr_p), PR_AS)
-set.seed(250); pri_PS_AS <- rtri(1000, PS_AS*exp(lwr_p), PS_AS*exp(upr_p), PS_AS)
-
-set.seed(250); pri_PF_AG <- rtri(1000, PF_AG*exp(lwr_p), PF_AG*exp(upr_p), PF_AG)  
-set.seed(250); pri_PG_AG <- rtri(1000, PG_AG*exp(lwr_p), PG_AG*exp(upr_p), PG_AG)
-set.seed(250); pri_PK_AG <- rtri(1000, PK_AG*exp(lwr_p), PK_AG*exp(upr_p), PK_AG)
-set.seed(250); pri_PL_AG <- rtri(1000, PL_AG*exp(lwr_p), PL_AG*exp(upr_p), PL_AG)
-set.seed(250); pri_PM_AG <- rtri(1000, PM_AG*exp(lwr_p), PM_AG*exp(upr_p), PM_AG)  
-set.seed(250); pri_PR_AG <- rtri(1000, PR_AG*exp(lwr_p), PR_AG*exp(upr_p), PR_AG)
-set.seed(250); pri_PS_AG <- rtri(1000, PS_AG*exp(lwr_p), PS_AG*exp(upr_p), PS_AG)
-
+#
 J.X.df <- function(n){
   data.frame(X1 = rtri(n, Tg*exp(lwr), Tg*exp(upr), Tg),
              X2 = rtri(n, Tp*exp(lwr), Tp*exp(upr), Tp),
@@ -225,7 +146,7 @@ J.X.df <- function(n){
              )
 }
 
-X1 <- J.X.df(16000); X2 <- J.X.df(16000);
+X1 <- J.X.df(16384); X2 <- J.X.df(16384);
 J.S <- soboljansen(NULL, log(X1), log(X2), conf = 0.95, nboot = 1000)
 J.S.APAP.df <- cbind(1, J.S$X)
 write.table(J.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")

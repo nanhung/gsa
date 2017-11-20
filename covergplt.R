@@ -67,7 +67,7 @@ dft$linetype<-c(rep("2",4), rep("1",4), rep("2",4), rep("1",4),
 dft$color<-c(rep("2",16), rep("3",16), rep("4",8))
 levels(dft$Model) <- c("Original 21 Parameters", "All 58 parameters")
 
-pdf(file="fig2.pdf", width = 10, height = 7)
+pdf(file="fig1.pdf", width = 10, height = 7)
 #png(file="fig2.png",width=2000,height=1200,res=250)
 p1<-ggplot(dft, aes(x = n, y = ind)) + facet_grid(Model~.) + 
   geom_line(aes(color = color, linetype = linetype), size = 0.8) +

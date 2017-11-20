@@ -79,8 +79,8 @@ distplt3<-function(main,n, yup, v){
   abline(v = v, col="grey20")
 }
 
-#pdf(file="paradistrb.pdf", width = 12, height = 8)
-png(file="paradistrb.png",width=3000,height=2400,res=250)
+pdf(file="fig5.pdf", width = 10, height = 10)
+#png(file="paradistrb.png",width=3000,height=2400,res=250)
 layout(matrix(c(1,1,1,1,1,
                 2,3,4,5,6,
                 7,8,9,10,11,

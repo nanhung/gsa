@@ -4,8 +4,8 @@ load("jsnv1.rda")
 load("ownv1.rda")
 
 
-if(!require(gridExtra)) {
-  install.packages("gridExtra"); require(gridExtra)}
+#if(!require(gridExtra)) {
+#  install.packages("gridExtra"); require(gridExtra)}
 if(!require(tidyr)) {
   install.packages("tidyr"); require(tidyr)}
 if(!require(dplyr)) {
@@ -115,6 +115,14 @@ totl4 <- as.data.frame(totl1) %>%
     Var2 = factor(gsub("V", "", Var2), level=colnames(totl1))
   )
 
+inte1<-totl1-main1
+inte4 <- as.data.frame(inte1) %>%
+  rownames_to_column('Var1') %>%
+  gather(Var2, value, -Var1) %>%
+  mutate(
+    Var1 = factor(Var1, level=row.names(inte1)),
+    Var2 = factor(gsub("V", "", Var2), level=colnames(inte1))
+  )
 
 Mmu4 <- as.data.frame(Mmu1) %>%
   rownames_to_column('Var1') %>%
@@ -135,11 +143,11 @@ sig4 <- as.data.frame(sig1) %>%
 # Remove mean and combind main and total
 main4$order<-"Main"
 totl4$order<-"Total"
+inte4$order<-"Interaction"
+
 main4$est<-c(rep("eFAST", 504), rep("Jasen", 504), rep("Owen", 504))
-
 totl4$est<-c(rep("eFAST", 504), rep("Jasen", 504), rep("Owen", 504))
-
-mt<-rbind(main4,totl4)
+inte4$est<-c(rep("eFAST", 504), rep("Jasen", 504), rep("Owen", 504))
 
 Var3<-c(rep("APAP_0.5h", 21),
         rep("APAP_1h", 21),
@@ -173,39 +181,64 @@ Var4<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
                            "APAP-S_0.5h","APAP-S_1h","APAP-S_1.5h","APAP-S_2h",
                            "APAP-S_4h","APAP-S_6h","APAP-S_8h","APAP-S_12h")) 
 
+mt<-rbind(main4,inte4)
 mt1<-cbind(mt, Var4)
 
+mt1$Var1 = with(mt1, factor(Var1, levels = rev(levels(Var1))))
+mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
+
+mt1$value2 <- mt1$value
+mt1$value2[mt1$value2 < 0.05] <- NA
+
+colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
+
+
+### ----
+p12<-ggplot(mt1, aes(Var4, Var1)) +
+  geom_tile(aes(fill = value)) + 
+  facet_grid(est~order) +
+  geom_text(aes(label = round(value2, 2)), size=2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(-0.05,1.00)) +
+  labs(title="", x="Datasets", y="Parameters")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, color=colCols), 
+        legend.position = "top", legend.title=element_blank())
+
+pdf(file="fig3.pdf", width = 14, height = 10)
+p12
+dev.off()
+
+
+#
 Mmu4$est<-"Morris"
 sig4$est<-"Morris"
 Mmu4$order<-"mu*"
 sig4$order<-"sigma"
 mor<-rbind(Mmu4, sig4)
 
-mor$Var2 = with(mor, factor(Var2, levels = rev(levels(Var2)))) # revert order
-mt1$Var4 = with(mor, factor(Var4, levels = rev(levels(Var4))))
 
-p11<-ggplot(mor, aes(Var1, Var2)) +
+mor$Var1 = with(mor, factor(Var1, levels = rev(levels(Var1)))) # revert order
+
+mor$value2 <- mor$value
+mor$value2[mor$value2 < 1] <- NA
+
+colCols <-  c(rep("cadetblue2",8),rep("cadetblue3",8),rep("cadetblue4",8))
+
+p11<-ggplot(mor, aes(Var2, Var1)) +
   geom_tile(aes(fill = value)) + 
-  facet_grid(est~order) +
-  #geom_text(aes(label = round(value, 1)), size=2) +
+  facet_grid(.~order) +
+  geom_text(aes(label = round(value2, 1)), size=2.5) +
   scale_fill_gradient(low = "white", high = "blue") +
-  labs(title="", x="Parameters", y="Datasets")+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "right", legend.title=element_blank())
-
-p12<-ggplot(mt1, aes(Var1, Var4)) +
-  geom_tile(aes(fill = value)) + 
-  facet_grid(est~order) +
-  #geom_text(aes(label = round(value, 1)), size=2) +
-  scale_fill_gradient(low = "white", high = "red") +
-  labs(title="", x="Parameters", y="Datasets")+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "right", legend.title=element_blank())
+  labs(title="", x="Datasets", y="Parameters")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=10, color=colCols),
+        legend.position = "right", legend.title=element_blank())
 
 
 #png(file="fig2.png",width=3200,height=3200,res=250)
-pdf(file="fig2.pdf", width = 15, height = 15)
-grid.arrange(p11,p12, ncol=1, heights=c(1,2))
+pdf(file="fig2.pdf", width = 12, height = 5)
+p11
 dev.off()
 
 
-
-
+pdf(file="fig6.pdf", width = 12, height = 12)
+grid.arrange(p1,p2, ncol=1, heights=c(1,2))
+dev.off()

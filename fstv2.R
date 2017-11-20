@@ -313,6 +313,92 @@ colnames(totl1)<-colnames(main1)
 main2 <- as.data.frame(main1)
 totl2 <- as.data.frame(totl1)
 
+#
+main4 <- as.data.frame(main1) %>%
+  rownames_to_column('Var1') %>%
+  gather(Var2, value, -Var1) %>%
+  mutate(
+    Var1 = factor(Var1, level=row.names(main1)),
+    Var2 = factor(gsub("V", "", Var2), level=colnames(main1))
+  )
+
+inte1 <- totl1-main1
+inte4 <- as.data.frame(inte1) %>%
+  rownames_to_column('Var1') %>%
+  gather(Var2, value, -Var1) %>%
+  mutate(
+    Var1 = factor(Var1, level=row.names(inte1)),
+    Var2 = factor(gsub("V", "", Var2), level=colnames(inte1))
+  )
+
+main4$order<-"Main"
+totl4$order<-"Total"
+inte4$order<-"Interaction"
+
+mt<-rbind(main4,inte4)
+
+Var3<-c(rep("APAP_0.5h", 58),
+        rep("APAP_1h", 58),
+        rep("APAP_1.5h", 58),
+        rep("APAP_2h", 58),
+        rep("APAP_4h", 58),
+        rep("APAP_6h", 58),
+        rep("APAP_8h", 58),
+        rep("APAP_12h", 58),
+        rep("APAP-G_0.5h", 58),
+        rep("APAP-G_1h", 58),
+        rep("APAP-G_1.5h", 58),
+        rep("APAP-G_2h", 58),
+        rep("APAP-G_4h", 58),
+        rep("APAP-G_6h", 58),
+        rep("APAP-G_8h", 58),
+        rep("APAP-G_12h", 58),
+        rep("APAP-S_0.5h", 58),
+        rep("APAP-S_1h", 58),
+        rep("APAP-S_1.5h", 58),
+        rep("APAP-S_2h", 58),
+        rep("APAP-S_4h", 58),
+        rep("APAP-S_6h", 58),
+        rep("APAP-S_8h", 58),
+        rep("APAP-S_12h", 58))
+
+Var4<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
+                           "APAP_4h","APAP_6h","APAP_8h","APAP_12h",
+                           "APAP-G_0.5h","APAP-G_1h","APAP-G_1.5h","APAP-G_2h",
+                           "APAP-G_4h","APAP-G_6h","APAP-G_8h","APAP-G_12h",
+                           "APAP-S_0.5h","APAP-S_1h","APAP-S_1.5h","APAP-S_2h",
+                           "APAP-S_4h","APAP-S_6h","APAP-S_8h","APAP-S_12h")) 
+
+mt1<-cbind(mt, Var4)
+
+mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
+mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
+
+mt1$value2 <- mt1$value
+mt1$value2[mt1$value2 < 0.01] <- NA
+
+colRows <-  c(rep("grey60", 37), rep("black", 21))
+colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
+
+p12<-ggplot(mt1, aes(Var4, Var1)) +
+  geom_tile(aes(fill = value)) + 
+  facet_grid(~order) +
+  geom_text(aes(label = round(value2, 2)), size=2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(-0.05,1.00)) +
+  labs(title="", x="Datasets", y="Parameters")+
+  theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1, color=colCols), 
+        axis.text.y = element_text(size=10, color=colRows),
+        legend.position = "top", legend.title=element_blank())
+
+pdf(file="fig4.pdf", width = 14, height = 10)
+p12
+dev.off()
+
+
+
+
+
+#
 M0<-main2[,1:24]
 T0<-totl2[,1:24]
 
@@ -327,9 +413,9 @@ I1<-T1-M1
 #M1<-(M0 - mean(M0)) / sd(M0)
 #T1<-(T0 - mean(T0)) / sd(T0)
 
-M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
-T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
-I1<-I1[ order(apply(I1, 1, max), decreasing = T), ]
+#M1<-M1[ order(apply(M1, 1, max), decreasing = T), ]
+#T1<-T1[ order(apply(T1, 1, max), decreasing = T), ]
+#I1<-I1[ order(apply(I1, 1, max), decreasing = T), ]
 
 for(i in 1:24){
   print(sum(T1[1:27,i])/sum(T1[,i])) 
@@ -343,8 +429,6 @@ colRows <-  c("grey60","grey60","grey60","black",
 colCols <-  c(rep("grey60",8),rep("red",8),rep("maroon",8))
 
 
-
-
 #heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
 #          density.info = 'histogram', scale = "none", keysize = 1.2, 
 #          cellnote=round(M1, digits = 1),
@@ -356,16 +440,8 @@ lhei = c(1,5)
 
 pdf(file="fstv2T.pdf", width = 18, height = 12)
 #png(file="fstv2T.png",width=4000,height=4000,res=250)
-heatmap.2(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), margins=c(6,9),trace="none",srtCol=35,
-          density.info = 'histogram', scale = "none", keysize = 1.2, 
-          cellnote=round(T1, digits = 3),
-          #colRow = colRows, 
-          colCol =  colCols,
-          dendrogram="none", 
-          Colv=FALSE, Rowv=FALSE, key.xlab = "Sobol indices (Total)", key.ylab = "",
-          key.par=list(mar=c(8,4,4,4)),
-          lmat=lmat, lwid = lwid, lhei = lhei,
-          notecol="black")
+heatmap(T1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), scale = "none",
+        Colv=NA, Rowv=NA)
 dev.off()
 
 
@@ -396,3 +472,5 @@ heatmap.2(I1, cexRow=1.2, cexCol=1.2, col = colorpanel(100, "white", "red"), mar
           lmat=lmat, lwid = lwid, lhei = lhei,
           notecol="black")
 dev.off()
+
+
