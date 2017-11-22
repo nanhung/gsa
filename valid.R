@@ -246,8 +246,8 @@ df.9<-do.call(rbind, list(df.1,df.2,df.3,df.4,df.5,df.6,df.7,df.8))
 # 
 options(digits=3)
 R2(obs.1$value, as.numeric(prd.o.1)) # .868
-R2(obs.1$value, as.numeric(prd.s.1)) # .8529
-R2(obs.1$value, as.numeric(prd.d.1)) # .9495
+R2(obs.1$value, as.numeric(prd.s.1)) # .853
+R2(obs.1$value, as.numeric(prd.d.1)) # .949
 R2(obs.1$value, as.numeric(prd.a.1)) # .962
 #R2(obs.1.1$value, as.numeric(prd.o.1.1)) 
 
@@ -257,34 +257,34 @@ R2(obs.2$value, as.numeric(prd.d.2)) # .994
 R2(obs.2$value, as.numeric(prd.a.2)) # .995
 
 R2(obs.3$value, as.numeric(prd.o.3)) # .939 
-R2(obs.3$value, as.numeric(prd.s.3)) # .934
-R2(obs.3$value, as.numeric(prd.d.3)) # .972   
+R2(obs.3$value, as.numeric(prd.s.3)) # .921
+R2(obs.3$value, as.numeric(prd.d.3)) # .971
 R2(obs.3$value, as.numeric(prd.a.3)) # .981
 
 R2(obs.4$value, as.numeric(prd.o.4)) # .917
-R2(obs.4$value, as.numeric(prd.s.4)) # .918
-R2(obs.4$value, as.numeric(prd.d.4)) # .952
+R2(obs.4$value, as.numeric(prd.s.4)) # .803
+R2(obs.4$value, as.numeric(prd.d.4)) # .953
 R2(obs.4$value, as.numeric(prd.a.4)) # .956
 
 
 R2(obs.5$value, as.numeric(prd.o.5)) # .98
-R2(obs.5$value, as.numeric(prd.s.5)) # .98
+R2(obs.5$value, as.numeric(prd.s.5)) # .976
 R2(obs.5$value, as.numeric(prd.d.5)) # .992
-R2(obs.5$value, as.numeric(prd.a.5)) # .993
+R2(obs.5$value, as.numeric(prd.a.5)) # .992
 
 R2(obs.6$value, as.numeric(prd.o.6)) # .993
-R2(obs.6$value, as.numeric(prd.s.6)) # .993
+R2(obs.6$value, as.numeric(prd.s.6)) # .991
 R2(obs.6$value, as.numeric(prd.d.6)) # .995
-R2(obs.6$value, as.numeric(prd.a.6)) # .996
+R2(obs.6$value, as.numeric(prd.a.6)) # .995
 
 R2(obs.7$value, as.numeric(prd.o.7)) # .988
-R2(obs.7$value, as.numeric(prd.s.7)) # .988
-R2(obs.7$value, as.numeric(prd.d.7)) # .995
-R2(obs.7$value, as.numeric(prd.a.7)) # .995
+R2(obs.7$value, as.numeric(prd.s.7)) # .986
+R2(obs.7$value, as.numeric(prd.d.7)) # .994
+R2(obs.7$value, as.numeric(prd.a.7)) # .996
 
 R2(obs.8$value, as.numeric(prd.o.8)) # .991
-R2(obs.8$value, as.numeric(prd.s.8)) # .992
-R2(obs.8$value, as.numeric(prd.d.8)) # .995
+R2(obs.8$value, as.numeric(prd.s.8)) # .989
+R2(obs.8$value, as.numeric(prd.d.8)) # .989
 R2(obs.8$value, as.numeric(prd.a.8)) # .995
 
 #
@@ -339,3 +339,57 @@ sd(res.Oall) # 0.159
 sd(res.Osen) # 0.16
 sd(res.Asen) # 0.11
 sd(res.Aall) # 0.1
+
+#
+r2<-c(R2(obs.1$value, as.numeric(prd.o.1)), # .868
+      R2(obs.1$value, as.numeric(prd.s.1)), # .853
+      R2(obs.1$value, as.numeric(prd.d.1)), # .949
+      R2(obs.1$value, as.numeric(prd.a.1)), # .962
+      R2(obs.2$value, as.numeric(prd.o.2)), # .983
+      R2(obs.2$value, as.numeric(prd.s.2)), # .982
+      R2(obs.2$value, as.numeric(prd.d.2)), # .994
+      R2(obs.2$value, as.numeric(prd.a.2)), # .995
+      R2(obs.3$value, as.numeric(prd.o.3)), # .939 
+      R2(obs.3$value, as.numeric(prd.s.3)), # .921
+      R2(obs.3$value, as.numeric(prd.d.3)), # .971
+      R2(obs.3$value, as.numeric(prd.a.3)), # .981
+      R2(obs.4$value, as.numeric(prd.o.4)), # .917
+      R2(obs.4$value, as.numeric(prd.s.4)), # .803
+      R2(obs.4$value, as.numeric(prd.d.4)), # .953
+      R2(obs.4$value, as.numeric(prd.a.4)), # .956
+      R2(obs.5$value, as.numeric(prd.o.5)), # .98
+      R2(obs.5$value, as.numeric(prd.s.5)), # .976
+      R2(obs.5$value, as.numeric(prd.d.5)), # .992
+      R2(obs.5$value, as.numeric(prd.a.5)), # .992
+      R2(obs.6$value, as.numeric(prd.o.6)), # .993
+      R2(obs.6$value, as.numeric(prd.s.6)), # .991
+      R2(obs.6$value, as.numeric(prd.d.6)), # .995
+      R2(obs.6$value, as.numeric(prd.a.6)), # .995
+      R2(obs.7$value, as.numeric(prd.o.7)), # .988
+      R2(obs.7$value, as.numeric(prd.s.7)), # .986
+      R2(obs.7$value, as.numeric(prd.d.7)), # .994
+      R2(obs.7$value, as.numeric(prd.a.7)), # .996
+      R2(obs.8$value, as.numeric(prd.o.8)), # .991
+      R2(obs.8$value, as.numeric(prd.s.8)), # .989
+      R2(obs.8$value, as.numeric(prd.d.8)), # .989
+      R2(obs.8$value, as.numeric(prd.a.8))) # .995)
+
+set<-c(rep(c("Original all parameters",
+            "Original sensitive parameters",
+            "All sensitive parameters",
+            "All model parameters"),8))
+
+gp<-c(rep("Group A, 325 mg", 4),
+      rep("Group B, 1000 mg", 4),
+      rep("Group C, 1000 mg", 4),
+      rep("Group D, 1000 mg", 4),
+      rep("Group E, 20 mg/kg",4),
+      rep("Group F, 20 mg/kg",4),
+      rep("Group G, 20 mg/kg",4),
+      rep("Group H, 80 mg/kg",4))
+
+r2df<-data.frame("R2", set, gp, r2)
+r2df$set = with(r2df, factor(set, levels = c("Original all parameters",
+                            "Original sensitive parameters",
+                            "All sensitive parameters",
+                            "All model parameters")))

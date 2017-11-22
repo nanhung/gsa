@@ -32,14 +32,23 @@ p1<-ggplot(df.9)+
   geom_line(aes(x = Time, y = exp(prd.a)/1000), size = 0.6, color = "darkgreen", linetype = "dashed") +
   geom_point(aes(x = Time, y = exp(value)/1000), size = 1.4)
 
+# r2
+p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
+  labs(x="",
+       y="R2") +
+  geom_col(color = "white")+
+  coord_cartesian(ylim=c(0.7,1.0)) +
+  scale_fill_manual(values =c("darkblue", "red", "green", "darkgreen")) +
+  guides(fill=FALSE) +
+  facet_grid(~gp) + theme_bw()+
+  theme(text = element_text(size=16),
+        axis.text.x = element_blank())
 
 #
 df.a <- melt(df.9, id=c("Time","variable","value","exp")) 
 names(df.a)<-c("Time","Chem","Obs","Exp","prd.typ","prd.val")
 df.a$Obs<-exp(df.a$Obs)/1000
 df.a$prd.val<-exp(df.a$prd.val)/1000
-
-
 
 org_fit  = lm(log(df.a[1:246,6]) ~ offset(log(df.a[1:246,3])) - 1 ) # omitting slope intercept
 sen_fit  = lm(log(df.a[247:491,6]) ~ offset(log(df.a[247:491,3])) - 1) # omitting intercept
@@ -87,13 +96,13 @@ png(file="EXP.png",width=4000,height=1600,res=250)
 p1
 dev.off()
 
-#pdf(file="valid.pdf", width = 7, height = 7)
-png(file="calib.png",width=2000,height=2000,res=250)
+
+pdf(file="fig6.pdf", width = 18, height = 14)
+#png(file="calib.png",width=3600,height=2400,res=250)
+grid.arrange(p1,p11, ncol=1, heights=c(3,1))
+dev.off()
+
+pdf(file="fig7.pdf", width = 7, height = 7)
+#png(file="calib.png",width=2000,height=2000,res=250)
 p2
 dev.off()
-
-#pdf(file="fig6.pdf", width = 14, height = 18)
-png(file="calib.png",width=3600,height=4200,res=250)
-grid.arrange(p1,p2, ncol=1, heights=c(1,2))
-dev.off()
-

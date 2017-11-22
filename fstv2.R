@@ -350,8 +350,6 @@ main4$order<-"Main"
 totl4$order<-"Total"
 inte4$order<-"Interaction"
 
-mt<-rbind(main4,inte4)
-
 Var3<-c(rep("APAP_0.5h", 58),
         rep("APAP_1h", 58),
         rep("APAP_1.5h", 58),
@@ -383,13 +381,13 @@ Var4<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
                            "APAP-G_4h","APAP-G_6h","APAP-G_8h","APAP-G_12h",
                            "APAP-S_0.5h","APAP-S_1h","APAP-S_1.5h","APAP-S_2h",
                            "APAP-S_4h","APAP-S_6h","APAP-S_8h","APAP-S_12h")) 
-#mt<-rbind(main4, inte4)
-mt<-rbind(main4, totl4)
+mt<-rbind(main4, inte4)
+#mt<-rbind(main4, totl4)
 mt1<-cbind(mt, Var4)
 
-#mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
+mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
 mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
-mt1$order <- factor(mt1$order, levels = c("Main","Total"))
+#mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
 mt1$value2[mt1$value2 < 0.01] <- NA
@@ -407,8 +405,8 @@ p12<-ggplot(mt1, aes(Var4, Var1)) +
         axis.text.y = element_text(size=10, color=colRows),
         legend.position = "top", legend.title=element_blank())
 
-#pdf(file="fig4.pdf", width = 14, height = 10)
-png(file="fstv2.png",width=4000,height=3000,res=300)
+pdf(file="fig4.pdf", width = 14, height = 10)
+#png(file="fstv2.png",width=4000,height=3000,res=300)
 p12
 dev.off()
 
