@@ -92,7 +92,8 @@ png(file="calib.png",width=2000,height=2000,res=250)
 p2
 dev.off()
 
-pdf(file="fig6.pdf", width = 14, height = 18)
+#pdf(file="fig6.pdf", width = 14, height = 18)
+png(file="calib.png",width=3600,height=4200,res=250)
 grid.arrange(p1,p2, ncol=1, heights=c(1,2))
 dev.off()
 

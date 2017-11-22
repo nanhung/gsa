@@ -101,28 +101,16 @@ colnames(Mmu1)<-colnames(sig1)<-c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
 
 main4 <- as.data.frame(main1) %>%
   rownames_to_column('Var1') %>%
-  gather(Var2, value, -Var1) %>%
-  mutate(
-    Var1 = factor(Var1, level=row.names(main1)),
-    Var2 = factor(gsub("V", "", Var2), level=colnames(main1))
-  )
+  gather(Var2, value, -Var1)
 
 totl4 <- as.data.frame(totl1) %>%
   rownames_to_column('Var1') %>%
-  gather(Var2, value, -Var1) %>%
-  mutate(
-    Var1 = factor(Var1, level=row.names(totl1)),
-    Var2 = factor(gsub("V", "", Var2), level=colnames(totl1))
-  )
+  gather(Var2, value, -Var1) 
 
 inte1<-totl1-main1
 inte4 <- as.data.frame(inte1) %>%
   rownames_to_column('Var1') %>%
-  gather(Var2, value, -Var1) %>%
-  mutate(
-    Var1 = factor(Var1, level=row.names(inte1)),
-    Var2 = factor(gsub("V", "", Var2), level=colnames(inte1))
-  )
+  gather(Var2, value, -Var1)
 
 Mmu4 <- as.data.frame(Mmu1) %>%
   rownames_to_column('Var1') %>%
@@ -174,18 +162,18 @@ Var3<-c(rep("APAP_0.5h", 21),
         rep("APAP-S_8h", 21),
         rep("APAP-S_12h", 21))
 
-Var4<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
+Var3<-factor(Var3, level=c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
                            "APAP_4h","APAP_6h","APAP_8h","APAP_12h",
                            "APAP-G_0.5h","APAP-G_1h","APAP-G_1.5h","APAP-G_2h",
                            "APAP-G_4h","APAP-G_6h","APAP-G_8h","APAP-G_12h",
                            "APAP-S_0.5h","APAP-S_1h","APAP-S_1.5h","APAP-S_2h",
                            "APAP-S_4h","APAP-S_6h","APAP-S_8h","APAP-S_12h")) 
 
-mt<-rbind(main4, totl4)
-mt1<-cbind(mt, Var4)
+mt<-rbind(main4, inte4)
+mt1<-cbind(mt, Var3)
 
-mt1$Var1 = with(mt1, factor(Var1, levels = rev(levels(Var1))))
-mt1$order <- factor(mt1$order, levels = c("Main","Total"))
+mt1$Var1 = with(mt1, factor(Var1, levels = rev(rownames(main1))))
+mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
 
 mt1$value2 <- mt1$value
 mt1$value2[mt1$value2 < 0.05] <- NA
@@ -194,7 +182,7 @@ colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
 
 
 ### ----
-p12<-ggplot(mt1, aes(Var4, Var1)) +
+p12<-ggplot(mt1, aes(Var3, Var1)) +
   geom_tile(aes(fill = value)) + 
   facet_grid(est~order) +
   geom_text(aes(label = round(value2, 2)), size=2.5) +
