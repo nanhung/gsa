@@ -67,9 +67,35 @@ all_prd_fit[,3]-all_prd_fit[,1] # 0.197
 prd_fit<-do.call(rbind, list(org_prd_fit, sen_prd_fit, add_prd_fit, all_prd_fit))
 
 df.b <-cbind(na.omit(df.a), prd_fit)
+df.b$res<-log(df.b$Obs, 10)-log(df.b$prd.val, 10)
+
+abs(mean(subset(df.b, prd.typ=="prd.o")$res)) #0.000689
+abs(mean(subset(df.b, prd.typ=="prd.s")$res)) #0.0054
+abs(mean(subset(df.b, prd.typ=="prd.d")$res)) #0.00128
+abs(mean(subset(df.b, prd.typ=="prd.a")$res)) #0.000143
+
+sd(subset(df.b, prd.typ=="prd.o")$res) #0.0689
+sd(subset(df.b, prd.typ=="prd.s")$res) #0.0868
+sd(subset(df.b, prd.typ=="prd.d")$res) #0.0477
+sd(subset(df.b, prd.typ=="prd.a")$res) #0.0437
+
+stat<-c(rep("mean",4), rep("sd",4))
+gp<-rep(c("prd.o","prd.s","prd.d","prd.a"),2)
+value<-c(0.000689, 0.0054, 0.00128, 0.000143, 0.0689, 0.0868, 0.0477, 0.0437)
+df.res <- data.frame(stat,gp,value)
+df.res$gp <- with(df.res, factor(gp, levels = c("prd.o","prd.s","prd.d","prd.a")))
+
+p3<- ggplot(df.res, aes(x=gp, y=value, fill=stat)) + theme_bw() +
+  xlab("") + ylab(expression(Log[10] ~ residual)) +
+  geom_bar(stat="identity", color="black", position=position_dodge()) +
+  theme(legend.justification=c("right", "top"), 
+        legend.position=c(1,1), 
+        text = element_text(size=20),
+        legend.background = element_rect(fill=alpha('white', 0.1)),
+        panel.grid.minor = element_blank())
 
 p2<-ggplot(df.b, aes(Obs, prd.val)) + 
-  xlab("in-vivo observation") + ylab("in-silico prediction") +
+  xlab("") + ylab("in-silico prediction") +
   theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
   theme(legend.position="top") + annotation_logticks(sides = "lb") +
   scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
@@ -90,6 +116,20 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
         legend.background = element_rect(fill=alpha('white', 0.1)),
         panel.grid.minor = element_blank()) # Hide the minor grid lines because they don't align with the ticks
 
+p3<-ggplot(df.b, aes(Obs, res)) + 
+  geom_abline(slope = 0, intercept = 0) +
+  geom_point(aes(colour = prd.typ), alpha = 0.6) +
+  scale_colour_manual(values =c("darkblue", "red", "green", "darkgreen")) + 
+  guides(colour=FALSE) +
+  labs(x="in-vivo observation",
+       y=expression(Log[10] ~ residual)) +
+  theme_bw() + annotation_logticks(sides = "b") +
+  scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x))) +
+  ylim(-0.6, 0.6) +
+  theme(text = element_text(size=20),
+        panel.grid.minor = element_blank())
+
 
 #pdf(file="EXP.pdf", width = 16, height = 9)
 png(file="EXP.png",width=4000,height=1600,res=250)
@@ -102,7 +142,9 @@ pdf(file="fig6.pdf", width = 18, height = 14)
 grid.arrange(p1,p11, ncol=1, heights=c(3,1))
 dev.off()
 
-pdf(file="fig7.pdf", width = 7, height = 7)
-#png(file="calib.png",width=2000,height=2000,res=250)
-p2
+
+pdf(file="fig7.pdf", width = 12, height = 14)
+#png(file="calib.png",width=3600,height=2400,res=250)
+grid.arrange(p2,p3, ncol=1, heights=c(3,1))
 dev.off()
+
