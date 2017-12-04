@@ -2,8 +2,12 @@ if(!require(ggplot2)) {
   install.packages("ggplot2"); require(ggplot2)}
 if(!require(scales)) {
   install.packages("scales"); require(scales)} # to access break formatting functions
+if(!require(grid)) {
+  install.packages("grid"); require(grid)} # to use grob
 if(!require(gridExtra)) {
   install.packages("gridExtra"); require(gridExtra)}
+if(!require(cowplot)) {
+  install.packages("cowplot"); require(cowplot)}
 
 # Change facet label
 levels(df.9$variable)
@@ -25,7 +29,7 @@ p1<-ggplot(df.9)+
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
   facet_grid(variable~exp) + theme_bw() + xlim(0, 13) +
-  theme(text = element_text(size=16)) + 
+  theme(text = element_text(size=20)) + 
   geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "blue") + 
   geom_line(aes(x = Time, y = exp(prd.s)/1000), size = 0.6, color = "red", linetype = "dashed") +
   geom_line(aes(x = Time, y = exp(prd.d)/1000), size = 0.6, color = "green") +
@@ -35,13 +39,13 @@ p1<-ggplot(df.9)+
 # r2
 p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
   labs(x="",
-       y="R2") +
+       y=bquote(~italic(R)^2)) +
   geom_col(color = "white")+
   coord_cartesian(ylim=c(0.7,1.0)) +
   scale_fill_manual(values =c("darkblue", "red", "green", "darkgreen")) +
   guides(fill=FALSE) +
   facet_grid(~gp) + theme_bw()+
-  theme(text = element_text(size=16),
+  theme(text = element_text(size=20),
         axis.text.x = element_blank())
 
 #
@@ -79,20 +83,24 @@ sd(subset(df.b, prd.typ=="prd.s")$res) #0.0868
 sd(subset(df.b, prd.typ=="prd.d")$res) #0.0477
 sd(subset(df.b, prd.typ=="prd.a")$res) #0.0437
 
-stat<-c(rep("mean",4), rep("sd",4))
-gp<-rep(c("prd.o","prd.s","prd.d","prd.a"),2)
+stat<-c(rep("Mean",4), rep("SD",4))
+gp<-rep(c("OAP","OSP","ASP","AMP"),2)
 value<-c(0.000689, 0.0054, 0.00128, 0.000143, 0.0689, 0.0868, 0.0477, 0.0437)
 df.res <- data.frame(stat,gp,value)
-df.res$gp <- with(df.res, factor(gp, levels = c("prd.o","prd.s","prd.d","prd.a")))
+df.res$gp <- with(df.res, factor(gp, levels = c("OAP","OSP","ASP","AMP")))
 
 p3<- ggplot(df.res, aes(x=gp, y=value, fill=stat)) + theme_bw() +
-  xlab("") + ylab(expression(Log[10] ~ residual)) +
+  xlab("") + ylab(expression(Log[10] ~ residual)) + labs(fill = "") +
   geom_bar(stat="identity", color="black", position=position_dodge()) +
+  scale_fill_manual(values =c("grey80", "grey40")) + 
+  
   theme(legend.justification=c("right", "top"), 
         legend.position=c(1,1), 
         text = element_text(size=20),
         legend.background = element_rect(fill=alpha('white', 0.1)),
         panel.grid.minor = element_blank())
+
+g<-ggplotGrob(p3)
 
 p2<-ggplot(df.b, aes(Obs, prd.val)) + 
   xlab("") + ylab("in-silico prediction") +
@@ -105,7 +113,9 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
   geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.1) +
   scale_fill_manual(values =c("darkblue", "red", "green", "darkgreen")) + 
   guides(fill=FALSE) + # remove "fill" legend 
-  geom_point(aes(colour = prd.typ), alpha = 0.6)+
+  geom_point(aes(colour = prd.typ), alpha = 0.6) +
+  annotation_custom(grob=g, xmin = log(2), xmax = log(8),
+                    ymin=log(0.4), ymax=log(1.5)) +
   scale_color_manual(values=c("darkblue", "red", "green", "darkgreen"),
                      name="",
                      breaks=c("prd.o", "prd.s", "prd.d", "prd.a"),
@@ -130,21 +140,20 @@ p3<-ggplot(df.b, aes(Obs, res)) +
   theme(text = element_text(size=20),
         panel.grid.minor = element_blank())
 
-
 #pdf(file="EXP.pdf", width = 16, height = 9)
-png(file="EXP.png",width=4000,height=1600,res=250)
-p1
+#png(file="EXP.png",width=4000,height=1600,res=250)
+#p1
+#dev.off()
+
+pdf(file="fig6.pdf", width = 18, height = 10)
+#png(file="calib.png",width=3600,height=2400,res=250)
+#grid.arrange(p1,p11, ncol=1, heights=c(3,1))
+plot_grid(p1,p11, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
 dev.off()
 
-
-pdf(file="fig6.pdf", width = 18, height = 14)
+pdf(file="fig7.pdf", width = 10, height = 12)
 #png(file="calib.png",width=3600,height=2400,res=250)
-grid.arrange(p1,p11, ncol=1, heights=c(3,1))
-dev.off()
-
-
-pdf(file="fig7.pdf", width = 12, height = 14)
-#png(file="calib.png",width=3600,height=2400,res=250)
-grid.arrange(p2,p3, ncol=1, heights=c(3,1))
+#grid.arrange(p2,p3, ncol=1, heights=c(3,1))
+plot_grid(p2,p3, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
 dev.off()
 
