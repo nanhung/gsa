@@ -52,14 +52,14 @@ Pct_Flow_fat_min <- exp(log(Pct_Flow_fat)-log(1.6))
 Pct_Flow_liv_min <- exp(log(Pct_Flow_liv)-log(1.6))
 Pct_Flow_pp_min <- exp(log(Pct_Flow_pp)-log(1.6))
 
-PC_fat_min <- exp(log(PC_fat)-log(1.6))
-PC_liv_min <- exp(log(PC_liv)-log(1.6))
-PC_wp_min <- exp(log(PC_wp)-log(1.6))
-PC_pp_min <- exp(log(PC_pp)-log(1.6))
-PC_art_min <- exp(log(PC_art)-log(1.6))
+PC_fat_min <- exp(log(PC_fat)-log(2.7))
+PC_liv_min <- exp(log(PC_liv)-log(2.7))
+PC_wp_min <- exp(log(PC_wp)-log(2.7))
+PC_pp_min <- exp(log(PC_pp)-log(2.7))
+PC_art_min <- exp(log(PC_art)-log(2.7))
 
 sc_Vmax_min <- exp(log(sc_Vmax)-log(10))
-Km_min <- exp(log(Km)-Km_trun*log(10))
+Km_min <- exp(log(Km)-log(10))
 
 # Max
 LeanBodyWt_max <- exp(log(LeanBodyWt)+log(1.6))
@@ -74,14 +74,14 @@ Pct_Flow_fat_max <- exp(log(Pct_Flow_fat)+log(1.6))
 Pct_Flow_liv_max <- exp(log(Pct_Flow_liv)+log(1.6))
 Pct_Flow_pp_max <- exp(log(Pct_Flow_pp)+log(1.6))
 
-PC_fat_max <- exp(log(PC_fat)+log(1.6))
-PC_liv_max <- exp(log(PC_liv)+log(1.6))
-PC_wp_max <- exp(log(PC_wp)+log(1.6))
-PC_pp_max <- exp(log(PC_pp)+log(1.6))
-PC_art_max <- exp(log(PC_art)+log(1.6))
+PC_fat_max <- exp(log(PC_fat)+log(2.7))
+PC_liv_max <- exp(log(PC_liv)+log(2.7))
+PC_wp_max <- exp(log(PC_wp)+log(2.7))
+PC_pp_max <- exp(log(PC_pp)+log(2.7))
+PC_art_max <- exp(log(PC_art)+log(2.7))
 
 sc_Vmax_max <- exp(log(sc_Vmax)+log(10))
-Km_max <- exp(log(Km)-Km_trun*log(10))
+Km_max <- exp(log(Km)*log(10))
 
 #
 set.seed(1234)
