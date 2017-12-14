@@ -42,7 +42,7 @@ Km = 16
 # min
 LeanBodyWt_min <- exp(log(LeanBodyWt)-log(1.6))
 Flow_pul_min <- exp(log(Flow_pul)-log(1.6))
-Vent_Perf_min <- exp(log(Vent_Perf)-log(1.6))
+Vent_Perf_min <- exp(log(Vent_Perf)-log(2.0))
 
 Pct_M_fat_min <- exp(log(Pct_M_fat)-log(1.6))
 Pct_LM_liv_min <- exp(log(Pct_LM_liv)-log(1.6))
@@ -64,7 +64,8 @@ Km_min <- exp(log(Km)-log(10))
 # Max
 LeanBodyWt_max <- exp(log(LeanBodyWt)+log(1.6))
 Flow_pul_max <- exp(log(Flow_pul)+log(1.6))
-Vent_Perf_max <- exp(log(Vent_Perf)+log(1.6))
+
+Vent_Perf_max <- exp(log(Vent_Perf)+log(2.0))
 
 Pct_M_fat_max <- exp(log(Pct_M_fat)+log(1.6))
 Pct_LM_liv_max <- exp(log(Pct_LM_liv)+log(1.6))
@@ -82,6 +83,34 @@ PC_art_max <- exp(log(PC_art)+log(2.7))
 
 sc_Vmax_max <- exp(log(sc_Vmax)+log(10))
 Km_max <- exp(log(Km)*log(10))
+
+# From Bois et al. (1996)
+Vent_Perf.pst.mu <- 1.19; Vent_Perf.pst.sig <- 1.13
+Pct_LM_liv.pst.mu <- 0.033; Pct_LM_liv.pst.sig <- 1.04
+Pct_LM_wp.pst.mu <- 0.637; Pct_LM_wp.pst.sig <- 1.06
+Pct_LM_pp.pst.mu <- 0.641; Pct_LM_pp.pst.sig <- 1.03 # Will be recomputed in scale
+Pct_Flow_fat.pst.mu <- 0.488; Pct_Flow_fat.pst.sig <- 1.12
+Pct_Flow_liv.pst.mu <- 0.179; Pct_Flow_liv.pst.sig <- 1.11 
+Pct_Flow_pp.pst.mu <- 0.129; Pct_Flow_pp.pst.sig <- 1.11
+PC_fat.pst.mu <- 84.1; PC_fat.pst.sig <- 1.28
+PC_liv.pst.mu <- 3.08; PC_liv.pst.sig <- 1.12
+PC_wp.pst.mu <- 1.92; PC_wp.pst.sig <- 1.12
+PC_pp.pst.mu <- 2.9; PC_pp.pst.sig <- 1.15    
+PC_art.pst.mu <- 16; PC_art.pst.sig <- 1.11
+sc_Vmax.pst.mu <- 0.00191; sc_Vmax.pst.sig <- 1.45
+Km.pst.mu <- 0.729; Km.pst.sig <- 1.20
+
+Vent_Perf.1 <- rlnorm(1000, log(Vent_Perf.pst.mu), log(Vent_Perf.pst.sig))
+Pct_M_fat.1 <- NA
+Pct_LM_liv.1 <- rlnorm(1000, log(Pct_LM_liv.pst.mu), log(Pct_LM_liv.pst.sig))
+
+# 
+LeanBodyWt.2 <- rtri(1000, LeanBodyWt_min, LeanBodyWt_max, LeanBodyWt)
+Flow_pul.2 <- rtri(1000, Flow_pul_min, Flow_pul_max, Flow_pul)
+Vent_Perf.2 <- rtri(1000, Vent_Perf_min, Vent_Perf_max, Vent_Perf)
+  
+Pct_M_fat.2 <- rtri(1000, Pct_M_fat_min, Pct_M_fat_max, Pct_M_fat)
+Pct_LM_liv.2 <- rtri(1000, Pct_LM_liv_min, Pct_LM_liv_max, Pct_LM_liv)
 
 #
 set.seed(1234)
