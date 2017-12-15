@@ -17,7 +17,7 @@ Vent_Perf = 1.6  # ventilation over perfusion ratio
 # Percent mass of tissues with ranges shown
 Pct_M_fat  = .16  # % total body mass
 Pct_LM_liv = .033  # liver, % of lean mass
-Pct_LM_wp  = .28  # well perfused tissue, % of lean mass
+Pct_LM_wp  = .48  # well perfused tissue, % of lean mass
 #Pct_LM_pp  = .70  # poorly perfused tissue, will be recomputed in scale
 
 # Percent blood flows to tissues
@@ -40,69 +40,73 @@ Km = 16
 # Use 1.6 to make sure the min-max can cover the poster
 # the range is wider than prvious study
 # min
+Pct_Flow_gsd <- exp(0.7) # 2
+PC_gsd <- exp(1.2) # 3.3
+MM_gsd <- exp(4.6) # 99.4
+
 LeanBodyWt_min <- exp(log(LeanBodyWt)-log(1.6))
 Flow_pul_min <- exp(log(Flow_pul)-log(1.6))
-Vent_Perf_min <- exp(log(Vent_Perf)-log(2.0))
+Vent_Perf_min <- exp(log(Vent_Perf)-log(2.0))  # Use 2.0 to cover posterior range 
 
 Pct_M_fat_min <- exp(log(Pct_M_fat)-log(1.6))
 Pct_LM_liv_min <- exp(log(Pct_LM_liv)-log(1.6))
 Pct_LM_wp_min <- exp(log(Pct_LM_wp)-log(1.6))
 
-Pct_Flow_fat_min <- exp(log(Pct_Flow_fat)-log(1.6))
-Pct_Flow_liv_min <- exp(log(Pct_Flow_liv)-log(1.6))
-Pct_Flow_pp_min <- exp(log(Pct_Flow_pp)-log(1.6))
+Pct_Flow_fat_min <- exp(log(Pct_Flow_fat)-log(Pct_Flow_gsd))
+Pct_Flow_liv_min <- exp(log(Pct_Flow_liv)-log(Pct_Flow_gsd))
+Pct_Flow_pp_min <- exp(log(Pct_Flow_pp)-log(Pct_Flow_gsd))
 
-PC_fat_min <- exp(log(PC_fat)-log(2.7))
-PC_liv_min <- exp(log(PC_liv)-log(2.7))
-PC_wp_min <- exp(log(PC_wp)-log(2.7))
-PC_pp_min <- exp(log(PC_pp)-log(2.7))
-PC_art_min <- exp(log(PC_art)-log(2.7))
+PC_fat_min <- exp(log(PC_fat)-log(PC_gsd))
+PC_liv_min <- exp(log(PC_liv)-log(PC_gsd))
+PC_wp_min <- exp(log(PC_wp)-log(PC_gsd))
+PC_pp_min <- exp(log(PC_pp)-log(PC_gsd))
+PC_art_min <- exp(log(PC_art)-log(PC_gsd))
 
-sc_Vmax_min <- exp(log(sc_Vmax)-log(10))
-Km_min <- exp(log(Km)-log(10))
+sc_Vmax_min <- exp(log(sc_Vmax)-log(MM_gsd))
+Km_min <- exp(log(Km)-log(MM_gsd))
 
 # Max
 LeanBodyWt_max <- exp(log(LeanBodyWt)+log(1.6))
 Flow_pul_max <- exp(log(Flow_pul)+log(1.6))
 
-Vent_Perf_max <- exp(log(Vent_Perf)+log(2.0))
+Vent_Perf_max <- exp(log(Vent_Perf)+log(2.0)) # Use 2.0 to cover posterior range 
 
 Pct_M_fat_max <- exp(log(Pct_M_fat)+log(1.6))
 Pct_LM_liv_max <- exp(log(Pct_LM_liv)+log(1.6))
 Pct_LM_wp_max <- exp(log(Pct_LM_wp)+log(1.6))
 
-Pct_Flow_fat_max <- exp(log(Pct_Flow_fat)+log(1.6))
-Pct_Flow_liv_max <- exp(log(Pct_Flow_liv)+log(1.6))
-Pct_Flow_pp_max <- exp(log(Pct_Flow_pp)+log(1.6))
+Pct_Flow_fat_max <- exp(log(Pct_Flow_fat)+log(Pct_Flow_gsd))
+Pct_Flow_liv_max <- exp(log(Pct_Flow_liv)+log(Pct_Flow_gsd))
+Pct_Flow_pp_max <- exp(log(Pct_Flow_pp)+log(Pct_Flow_gsd))
 
-PC_fat_max <- exp(log(PC_fat)+log(2.7))
-PC_liv_max <- exp(log(PC_liv)+log(2.7))
-PC_wp_max <- exp(log(PC_wp)+log(2.7))
-PC_pp_max <- exp(log(PC_pp)+log(2.7))
-PC_art_max <- exp(log(PC_art)+log(2.7))
+PC_fat_max <- exp(log(PC_fat)+log(PC_gsd))
+PC_liv_max <- exp(log(PC_liv)+log(PC_gsd))
+PC_wp_max <- exp(log(PC_wp)+log(PC_gsd))
+PC_pp_max <- exp(log(PC_pp)+log(PC_gsd))
+PC_art_max <- exp(log(PC_art)+log(PC_gsd))
 
-sc_Vmax_max <- exp(log(sc_Vmax)+log(10))
-Km_max <- exp(log(Km)*log(10))
+sc_Vmax_max <- exp(log(sc_Vmax)+log(MM_gsd))
+Km_max <- exp(log(Km)*log(MM_gsd))
 
 # Prior
 set.seed(1234)
 {
-  LeanBodyWt.1 <- rtri(1000, LeanBodyWt_min, LeanBodyWt_max, LeanBodyWt)
-  Flow_pul.1 <- rtri(1000, Flow_pul_min, Flow_pul_max, Flow_pul)
-  Vent_Perf.1 <- rtri(1000, Vent_Perf_min, Vent_Perf_max, Vent_Perf)
-  Pct_M_fat.1 <- rtri(1000, Pct_M_fat_min, Pct_M_fat_max, Pct_M_fat)
-  Pct_LM_liv.1 <- rtri(1000, Pct_LM_liv_min, Pct_LM_liv_max, Pct_LM_liv)
-  Pct_LM_wp.1 <- rtri(1000, Pct_LM_wp_min, Pct_LM_wp_max, Pct_LM_wp)
-  Pct_Flow_fat.1 <- rtri(1000, Pct_Flow_fat_min, Pct_Flow_fat_max, Pct_Flow_fat)
-  Pct_Flow_liv.1 <- rtri(1000, Pct_Flow_liv_min, Pct_Flow_liv_max, Pct_Flow_liv)
-  Pct_Flow_pp.1 <- rtri(1000, Pct_Flow_pp_min, Pct_Flow_pp_max, Pct_Flow_pp)
-  PC_fat.1 <- rtri(1000, PC_fat_min, PC_fat_max, PC_fat)
-  PC_liv.1 <- rtri(1000, PC_liv_min, PC_liv_max, PC_liv)
-  PC_wp.1 <- rtri(1000, PC_wp_min, PC_wp_max, PC_wp)
-  PC_pp.1 <- rtri(1000, PC_pp_min, PC_pp_max, PC_pp)
-  PC_art.1 <- rtri(1000, PC_art_min, PC_art_max, PC_art)
-  sc_Vmax.1 <- rtri(1000, sc_Vmax_min, sc_Vmax_max, sc_Vmax)
-  Km.1 <- rtri(1000, Km_min, Km_max, Km)
+  LeanBodyWt.1 <- exp(rtri(1000, log(LeanBodyWt_min), log(LeanBodyWt_max), log(LeanBodyWt)))
+  Flow_pul.1 <- exp(rtri(1000, log(Flow_pul_min), log(Flow_pul_max), log(Flow_pul)))
+  Vent_Perf.1 <- exp(rtri(1000, log(Vent_Perf_min), log(Vent_Perf_max), log(Vent_Perf)))
+  Pct_M_fat.1 <- exp(rtri(1000, log(Pct_M_fat_min), log(Pct_M_fat_max), log(Pct_M_fat)))
+  Pct_LM_liv.1 <- exp(rtri(1000, log(Pct_LM_liv_min), log(Pct_LM_liv_max), log(Pct_LM_liv)))
+  Pct_LM_wp.1 <- exp(rtri(1000, log(Pct_LM_wp_min), log(Pct_LM_wp_max), log(Pct_LM_wp)))
+  Pct_Flow_fat.1 <- exp(rtri(1000, log(Pct_Flow_fat_min), log(Pct_Flow_fat_max), log(Pct_Flow_fat)))
+  Pct_Flow_liv.1 <- exp(rtri(1000, log(Pct_Flow_liv_min), log(Pct_Flow_liv_max), log(Pct_Flow_liv)))
+  Pct_Flow_pp.1 <- exp(rtri(1000, log(Pct_Flow_pp_min), log(Pct_Flow_pp_max), log(Pct_Flow_pp)))
+  PC_fat.1 <- exp(rtri(1000, log(PC_fat_min), log(PC_fat_max), log(PC_fat)))
+  PC_liv.1 <- exp(rtri(1000, log(PC_liv_min), log(PC_liv_max), log(PC_liv)))
+  PC_wp.1 <- exp(rtri(1000, log(PC_wp_min), log(PC_wp_max), log(PC_wp)))
+  PC_pp.1 <- exp(rtri(1000, log(PC_pp_min), log(PC_pp_max), log(PC_pp)))
+  PC_art.1 <- exp(rtri(1000, log(PC_art_min), log(PC_art_max), log(PC_art)))
+  sc_Vmax.1 <- exp(rtri(1000, log(sc_Vmax_min), log(sc_Vmax_max), log(sc_Vmax)))
+  Km.1 <- exp(rtri(1000, log(Km_min), log(Km_max), log(Km)))  
 }
 
 # From Bois et al. (1996)
@@ -159,12 +163,48 @@ Flow_fat.1 <- Pct_Flow_fat.1 * Flow_tot.1;
 Flow_liv.1 <- Pct_Flow_liv.1 * Flow_tot.1;
 Flow_pp.1  <- Pct_Flow_pp.1  * Flow_tot.1;
 Flow_wp.1  <- Flow_tot.1 - Flow_fat.1 - Flow_liv.1 - Flow_pp.1;
+plot(density(Flow_wp.1))
 
 Flow_tot.2 <- Flow_pul.1 * 0.7 / Vent_Perf.2;
 Flow_fat.2 <- Pct_Flow_fat.2 * Flow_tot.2;
 Flow_liv.2 <- Pct_Flow_liv.2 * Flow_tot.2;
 Flow_pp.2  <- Pct_Flow_pp.2  * Flow_tot.2;
 Flow_wp.2  <- Flow_tot.2 - Flow_fat.2 - Flow_liv.2 - Flow_pp.2;
+plot(density(Flow_wp.2))
+
+#
+df.pri<-data.frame(LeanBodyWt.1, Flow_pul.1, Vent_Perf.1, 
+                   Pct_M_fat.1, Pct_LM_liv.1, Pct_LM_wp.1,
+                   Pct_Flow_fat.1, Pct_Flow_liv.1, Pct_Flow_pp.1,
+                   PC_fat.1, PC_liv.1, PC_wp.1, PC_pp.1, PC_art.1,
+                   sc_Vmax.1, Km.1)
+df.pst<-data.frame(LeanBodyWt.2, Flow_pul.2, Vent_Perf.2, 
+                   Pct_M_fat.2, Pct_LM_liv.2, Pct_LM_wp.2,
+                   Pct_Flow_fat.2, Pct_Flow_liv.2, Pct_Flow_pp.2,
+                   PC_fat.2, PC_liv.2, PC_wp.2, PC_pp.2, PC_art.2,
+                   sc_Vmax.2, Km.2)
+names(df.pri)<-c("Ln_LeanBodyWt", "Ln_Flow_pul", "Ln_Vent_Perf", 
+                 "Ln_Pct_M_fat", "Ln_Pct_LM_liv", "Ln_Pct_LM_wp",
+                 "Ln_Pct_Flow_fat", "Ln_Pct_Flow_liv", "Ln_Pct_Flow_pp",
+                 "Ln_PC_fat", "Ln_PC_liv", "LnPC_wp", "Ln_PC_pp", "Ln_PC_art",
+                 "Ln_sc_Vmax", "Ln_Km")
+
+
+par(mfrow=c(4,4), mar=c(2,2,2,1))
+for(i in 1:16)
+{
+  if (is.na(df.pst[1,i])==TRUE){
+    plot(density(log(df.pri[,i])), main = names(df.pri)[i], xlab="", ylab="",
+         col=2, lwd = 2)
+  }else{
+    plot(density(log(df.pst[,i])), main = names(df.pri)[i], xlab="", ylab="",
+         xlim=c(log(min(df.pri[,i])),log(max(df.pri[,i]))), col=3, lwd = 2)
+    lines(density(log(df.pri[,i])), col=2, lwd = 2)
+  }
+}
+
+max(log(df.pst[,15]))
+min(log(df.pri[,15]))
 
 #
 set.seed(1234)
