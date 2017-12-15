@@ -207,8 +207,7 @@ for(i in 1:16)
   }
 }
 
-max(log(df.pst[,15]))
-min(log(df.pri[,15]))
+system("cd perc; ./mcsim.perc perc.mtc.in");
 
 #
 set.seed(1234)
