@@ -39,7 +39,11 @@ Km = 16
 # Set minimun and maximum parameter value for Morris
 # Use 1.6 to make sure the min-max can cover the poster
 # the range is wider than prvious study
+# It's a challenging work to determine the suitable distribution to do GSA
+
 # min
+
+
 Pct_Flow_gsd <- exp(0.7) # 2
 PC_gsd <- exp(1.2) # 3.3
 MM_gsd <- exp(4.6) # 99.4
