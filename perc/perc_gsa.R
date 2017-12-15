@@ -43,18 +43,18 @@ Km = 16
 
 # min
 
-
+Pct_M <- exp(0.6)
 Pct_Flow_gsd <- exp(0.7) # 2
 PC_gsd <- exp(1.2) # 3.3
 MM_gsd <- exp(4.6) # 99.4
 
-LeanBodyWt_min <- exp(log(LeanBodyWt)-log(1.6))
-Flow_pul_min <- exp(log(Flow_pul)-log(1.6))
+LeanBodyWt_min <- exp(log(LeanBodyWt)-log(1.4))
+Flow_pul_min <- exp(log(Flow_pul)-log(1.8))
 Vent_Perf_min <- exp(log(Vent_Perf)-log(2.0))  # Use 2.0 to cover posterior range 
 
-Pct_M_fat_min <- exp(log(Pct_M_fat)-log(1.6))
-Pct_LM_liv_min <- exp(log(Pct_LM_liv)-log(1.6))
-Pct_LM_wp_min <- exp(log(Pct_LM_wp)-log(1.6))
+Pct_M_fat_min <- exp(log(Pct_M_fat)-log(Pct_M))
+Pct_LM_liv_min <- exp(log(Pct_LM_liv)-log(Pct_M))
+Pct_LM_wp_min <- exp(log(Pct_LM_wp)-log(Pct_M))
 
 Pct_Flow_fat_min <- exp(log(Pct_Flow_fat)-log(Pct_Flow_gsd))
 Pct_Flow_liv_min <- exp(log(Pct_Flow_liv)-log(Pct_Flow_gsd))
@@ -70,14 +70,14 @@ sc_Vmax_min <- exp(log(sc_Vmax)-log(MM_gsd))
 Km_min <- exp(log(Km)-log(MM_gsd))
 
 # Max
-LeanBodyWt_max <- exp(log(LeanBodyWt)+log(1.6))
-Flow_pul_max <- exp(log(Flow_pul)+log(1.6))
+LeanBodyWt_max <- exp(log(LeanBodyWt)+log(1.4))
+Flow_pul_max <- exp(log(Flow_pul)+log(1.8))
 
 Vent_Perf_max <- exp(log(Vent_Perf)+log(2.0)) # Use 2.0 to cover posterior range 
 
-Pct_M_fat_max <- exp(log(Pct_M_fat)+log(1.6))
-Pct_LM_liv_max <- exp(log(Pct_LM_liv)+log(1.6))
-Pct_LM_wp_max <- exp(log(Pct_LM_wp)+log(1.6))
+Pct_M_fat_max <- exp(log(Pct_M_fat)+log(Pct_M))
+Pct_LM_liv_max <- exp(log(Pct_LM_liv)+log(Pct_M))
+Pct_LM_wp_max <- exp(log(Pct_LM_wp)+log(Pct_M))
 
 Pct_Flow_fat_max <- exp(log(Pct_Flow_fat)+log(Pct_Flow_gsd))
 Pct_Flow_liv_max <- exp(log(Pct_Flow_liv)+log(Pct_Flow_gsd))
@@ -116,6 +116,7 @@ set.seed(1234)
 # From Bois et al. (1996)
 LeanBodyWt.obs.mu <- LeanBodyWt; LeanBodyWt.obs.sig <- 1.04 # Use the imformation from original paper as posterior
 Flow_pul.obs.mu <- Flow_pul; Flow_pul.obs.sig <- 1.08
+Pct_M_fat.obs.mu <- Pct_M_fat; Pct_M_fat.obs.sig <- 1.08
 
 Vent_Perf.pst.mu <- 1.19; Vent_Perf.pst.sig <- 1.13
 Pct_LM_liv.pst.mu <- 0.033; Pct_LM_liv.pst.sig <- 1.04
@@ -138,7 +139,7 @@ set.seed(1234)
   LeanBodyWt.2 <- rlnorm(1000, log(LeanBodyWt.obs.mu), log(LeanBodyWt.obs.sig)) 
   Flow_pul.2 <- rlnorm(1000, log(Flow_pul.obs.mu), log(Flow_pul.obs.sig))
   Vent_Perf.2 <- rlnorm(1000, log(Vent_Perf.pst.mu), log(Vent_Perf.pst.sig))
-  Pct_M_fat.2 <- NA
+  Pct_M_fat.2 <- rlnorm(1000, log(Pct_M_fat.obs.mu), log(Pct_M_fat.obs.sig))
   Pct_LM_liv.2 <- rlnorm(1000, log(Pct_LM_liv.pst.mu), log(Pct_LM_liv.pst.sig))
   Pct_LM_wp.2 <- rlnorm(1000, log(Pct_LM_wp.pst.mu), log(Pct_LM_wp.pst.sig))
   #Pct_LM_pp.2 <- rlnorm(1000, log(Pct_LM_pp.pst.mu), log(Pct_LM_pp.pst.sig))
