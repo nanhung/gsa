@@ -84,12 +84,33 @@ PC_art_max <- exp(log(PC_art)+log(2.7))
 sc_Vmax_max <- exp(log(sc_Vmax)+log(10))
 Km_max <- exp(log(Km)*log(10))
 
+# Prior
+set.seed(1234)
+{
+  LeanBodyWt.1 <- rtri(1000, LeanBodyWt_min, LeanBodyWt_max, LeanBodyWt)
+  Flow_pul.1 <- rtri(1000, Flow_pul_min, Flow_pul_max, Flow_pul)
+  Vent_Perf.1 <- rtri(1000, Vent_Perf_min, Vent_Perf_max, Vent_Perf)
+  Pct_M_fat.1 <- rtri(1000, Pct_M_fat_min, Pct_M_fat_max, Pct_M_fat)
+  Pct_LM_liv.1 <- rtri(1000, Pct_LM_liv_min, Pct_LM_liv_max, Pct_LM_liv)
+  Pct_LM_wp.1 <- rtri(1000, Pct_LM_wp_min, Pct_LM_wp_max, Pct_LM_wp)
+  Pct_Flow_fat.1 <- rtri(1000, Pct_Flow_fat_min, Pct_Flow_fat_max, Pct_Flow_fat)
+  Pct_Flow_liv.1 <- rtri(1000, Pct_Flow_liv_min, Pct_Flow_liv_max, Pct_Flow_liv)
+  Pct_Flow_pp.1 <- rtri(1000, Pct_Flow_pp_min, Pct_Flow_pp_max, Pct_Flow_pp)
+  PC_fat.1 <- rtri(1000, PC_fat_min, PC_fat_max, PC_fat)
+  PC_liv.1 <- rtri(1000, PC_liv_min, PC_liv_max, PC_liv)
+  PC_wp.1 <- rtri(1000, PC_wp_min, PC_wp_max, PC_wp)
+  PC_pp.1 <- rtri(1000, PC_pp_min, PC_pp_max, PC_pp)
+  PC_art.1 <- rtri(1000, PC_art_min, PC_art_max, PC_art)
+  sc_Vmax.1 <- rtri(1000, sc_Vmax_min, sc_Vmax_max, sc_Vmax)
+  Km.1 <- rtri(1000, Km_min, Km_max, Km)
+}
+
 # From Bois et al. (1996)
 Vent_Perf.pst.mu <- 1.19; Vent_Perf.pst.sig <- 1.13
 Pct_LM_liv.pst.mu <- 0.033; Pct_LM_liv.pst.sig <- 1.04
 Pct_LM_wp.pst.mu <- 0.637; Pct_LM_wp.pst.sig <- 1.06
 Pct_LM_pp.pst.mu <- 0.641; Pct_LM_pp.pst.sig <- 1.03 # Will be recomputed in scale
-Pct_Flow_fat.pst.mu <- 0.488; Pct_Flow_fat.pst.sig <- 1.12
+Pct_Flow_fat.pst.mu <- 0.0488; Pct_Flow_fat.pst.sig <- 1.12
 Pct_Flow_liv.pst.mu <- 0.179; Pct_Flow_liv.pst.sig <- 1.11 
 Pct_Flow_wp.pst.mu <- 0.637; Pct_Flow_wp.pst.sig <- 1.06 # Will be recomputed in scale
 Pct_Flow_pp.pst.mu <- 0.129; Pct_Flow_pp.pst.sig <- 1.11 
@@ -101,29 +122,49 @@ PC_art.pst.mu <- 16; PC_art.pst.sig <- 1.11
 sc_Vmax.pst.mu <- 0.00191; sc_Vmax.pst.sig <- 1.45
 Km.pst.mu <- 0.729; Km.pst.sig <- 1.20
 
-Vent_Perf.1 <- rlnorm(1000, log(Vent_Perf.pst.mu), log(Vent_Perf.pst.sig))
-Pct_M_fat.1 <- NA
-Pct_LM_liv.1 <- rlnorm(1000, log(Pct_LM_liv.pst.mu), log(Pct_LM_liv.pst.sig))
-Pct_LM_wp.1 <- rlnorm(1000, log(Pct_LM_wp.pst.mu), log(Pct_LM_wp.pst.sig))
-Pct_Flow_fat.1 <- rlnorm(1000, log(Pct_Flow_fat.pst.mu), log(Pct_Flow_fat.pst.sig))
-Pct_Flow_liv.1 <- rlnorm(1000, log(Pct_Flow_liv.pst.mu), log(Pct_Flow_liv.pst.sig))
-Pct_Flow_pp.1 <- rlnorm(1000, log(Pct_Flow_pp.pst.mu), log(Pct_Flow_pp.pst.sig))
-PC_fat.1 <- rlnorm(1000, log(PC_fat.pst.mu), log(PC_fat.pst.sig))
-PC_liv.1 <- rlnorm(1000, log(PC_liv.pst.mu), log(PC_liv.pst.sig))
-PC_wp.1 <- rlnorm(1000, log(PC_wp.pst.mu), log(PC_wp.pst.sig))
-PC_pp.1 <- rlnorm(1000, log(PC_pp.pst.mu), log(PC_pp.pst.sig))
-PC_art.1 <- rlnorm(1000, log(PC_art.pst.mu), log(PC_art.pst.sig))
-sc_Vmax.1 <- rlnorm(1000, log(sc_Vmax.pst.mu), log(sc_Vmax.pst.sig))
-Km.1 <- rlnorm(1000, log(Km.pst.mu), log(Km.pst.sig))
+set.seed(1234)
+{
+  LeanBodyWt.2 <- NA
+  Flow_pul.2 <- NA
+  Vent_Perf.2 <- rlnorm(1000, log(Vent_Perf.pst.mu), log(Vent_Perf.pst.sig))
+  Pct_M_fat.2 <- NA
+  Pct_LM_liv.2 <- rlnorm(1000, log(Pct_LM_liv.pst.mu), log(Pct_LM_liv.pst.sig))
+  Pct_LM_wp.2 <- rlnorm(1000, log(Pct_LM_wp.pst.mu), log(Pct_LM_wp.pst.sig))
+  #Pct_LM_pp.2 <- rlnorm(1000, log(Pct_LM_pp.pst.mu), log(Pct_LM_pp.pst.sig))
+  Pct_Flow_fat.2 <- rlnorm(1000, log(Pct_Flow_fat.pst.mu), log(Pct_Flow_fat.pst.sig))
+  Pct_Flow_liv.2 <- rlnorm(1000, log(Pct_Flow_liv.pst.mu), log(Pct_Flow_liv.pst.sig))
+  #Pct_Flow_wp.2 <- rlnorm(1000, log(Pct_Flow_wp.pst.mu), log(Pct_Flow_wp.pst.sig))
+  Pct_Flow_pp.2 <- rlnorm(1000, log(Pct_Flow_pp.pst.mu), log(Pct_Flow_pp.pst.sig))
+  PC_fat.2 <- rlnorm(1000, log(PC_fat.pst.mu), log(PC_fat.pst.sig))
+  PC_liv.2 <- rlnorm(1000, log(PC_liv.pst.mu), log(PC_liv.pst.sig))
+  PC_wp.2 <- rlnorm(1000, log(PC_wp.pst.mu), log(PC_wp.pst.sig))
+  PC_pp.2 <- rlnorm(1000, log(PC_pp.pst.mu), log(PC_pp.pst.sig))
+  PC_art.2 <- rlnorm(1000, log(PC_art.pst.mu), log(PC_art.pst.sig))
+  sc_Vmax.2 <- rlnorm(1000, log(sc_Vmax.pst.mu), log(sc_Vmax.pst.sig))
+  Km.2 <- rlnorm(1000, log(Km.pst.mu), log(Km.pst.sig))
+}
 
-# 
-LeanBodyWt.2 <- rtri(1000, LeanBodyWt_min, LeanBodyWt_max, LeanBodyWt)
-Flow_pul.2 <- rtri(1000, Flow_pul_min, Flow_pul_max, Flow_pul)
-Vent_Perf.2 <- rtri(1000, Vent_Perf_min, Vent_Perf_max, Vent_Perf)
-  
-Pct_M_fat.2 <- rtri(1000, Pct_M_fat_min, Pct_M_fat_max, Pct_M_fat)
-Pct_LM_liv.2 <- rtri(1000, Pct_LM_liv_min, Pct_LM_liv_max, Pct_LM_liv)
+# Check V_pp to prevent nagetive value
+V_liv.1  <- Pct_LM_liv.1 * LeanBodyWt.1;
+V_wp.1 <- Pct_LM_wp.1  * LeanBodyWt.1;
+V_pp.1 <- 0.9 * LeanBodyWt.1 - V_liv.1 - V_wp.1;
 
+V_liv.2  <- Pct_LM_liv.2 * LeanBodyWt.1;
+V_wp.2 <- Pct_LM_wp.2  * LeanBodyWt.1;
+V_pp.2 <- 0.9 * LeanBodyWt.1 - V_liv.2 - V_wp.2;
+
+# Check Flow_wp to prevent nagetive value
+Flow_tot.1 <- Flow_pul.1 * 0.7 / Vent_Perf.1;
+Flow_fat.1 <- Pct_Flow_fat.1 * Flow_tot.1;
+Flow_liv.1 <- Pct_Flow_liv.1 * Flow_tot.1;
+Flow_pp.1  <- Pct_Flow_pp.1  * Flow_tot.1;
+Flow_wp.1  <- Flow_tot.1 - Flow_fat.1 - Flow_liv.1 - Flow_pp.1;
+
+Flow_tot.2 <- Flow_pul.1 * 0.7 / Vent_Perf.2;
+Flow_fat.2 <- Pct_Flow_fat.2 * Flow_tot.2;
+Flow_liv.2 <- Pct_Flow_liv.2 * Flow_tot.2;
+Flow_pp.2  <- Pct_Flow_pp.2  * Flow_tot.2;
+Flow_wp.2  <- Flow_tot.2 - Flow_fat.2 - Flow_liv.2 - Flow_pp.2;
 
 #
 set.seed(1234)
