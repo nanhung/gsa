@@ -15,13 +15,13 @@ Flow_pul = 10.0 # Pulmonary ventilation rate (minute volume)
 Vent_Perf = 1.6  # ventilation over perfusion ratio
 
 # Percent mass of tissues with ranges shown
-Pct_M_fat  = .16  # % total body mass
+Pct_M_fat  = .20  # % total body mass # no prior and posterior information
 Pct_LM_liv = .033  # liver, % of lean mass
-Pct_LM_wp  = .48  # well perfused tissue, % of lean mass
-#Pct_LM_pp  = .70  # poorly perfused tissue, will be recomputed in scale
+Pct_LM_wp  = .28  # well perfused tissue, % of lean mass
+#Pct_LM_pp  = .56  # poorly perfused tissue, will be recomputed in scale
 
 # Percent blood flows to tissues
-Pct_Flow_fat = .07
+Pct_Flow_fat = .07 
 Pct_Flow_liv = .25
 #Pct_Flow_wp  = .50 
 Pct_Flow_pp  = .20
@@ -114,9 +114,12 @@ set.seed(1234)
 }
 
 # From Bois et al. (1996)
+LeanBodyWt.obs.mu <- LeanBodyWt; LeanBodyWt.obs.sig <- 1.04 # Use the imformation from original paper as posterior
+Flow_pul.obs.mu <- Flow_pul; Flow_pul.obs.sig <- 1.08
+
 Vent_Perf.pst.mu <- 1.19; Vent_Perf.pst.sig <- 1.13
 Pct_LM_liv.pst.mu <- 0.033; Pct_LM_liv.pst.sig <- 1.04
-Pct_LM_wp.pst.mu <- 0.637; Pct_LM_wp.pst.sig <- 1.06
+Pct_LM_wp.pst.mu <- 0.196; Pct_LM_wp.pst.sig <- 1.09
 Pct_LM_pp.pst.mu <- 0.641; Pct_LM_pp.pst.sig <- 1.03 # Will be recomputed in scale
 Pct_Flow_fat.pst.mu <- 0.0488; Pct_Flow_fat.pst.sig <- 1.12
 Pct_Flow_liv.pst.mu <- 0.179; Pct_Flow_liv.pst.sig <- 1.11 
@@ -132,8 +135,8 @@ Km.pst.mu <- 0.729; Km.pst.sig <- 1.20
 
 set.seed(1234)
 {
-  LeanBodyWt.2 <- NA
-  Flow_pul.2 <- NA
+  LeanBodyWt.2 <- rlnorm(1000, log(LeanBodyWt.obs.mu), log(LeanBodyWt.obs.sig)) 
+  Flow_pul.2 <- rlnorm(1000, log(Flow_pul.obs.mu), log(Flow_pul.obs.sig))
   Vent_Perf.2 <- rlnorm(1000, log(Vent_Perf.pst.mu), log(Vent_Perf.pst.sig))
   Pct_M_fat.2 <- NA
   Pct_LM_liv.2 <- rlnorm(1000, log(Pct_LM_liv.pst.mu), log(Pct_LM_liv.pst.sig))
