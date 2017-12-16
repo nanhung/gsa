@@ -1,7 +1,7 @@
 Integrate (Lsodes, 1e-4, 1e-6, 1);
 
 SetPoints ("perc.setpoint.out", "perc.setpoint.dat", 0,
-           LeanBodyWt, Vent_Perf, Flow_pul, 
+           LeanBodyWt, Flow_pul, Vent_Perf, 
            Pct_M_fat, Pct_LM_liv, Pct_LM_wp,
            Pct_Flow_fat, Pct_Flow_liv, Pct_Flow_pp,
            PC_fat, PC_liv, PC_wp, PC_pp, PC_art,
@@ -17,7 +17,7 @@ SetPoints ("perc.setpoint.out", "perc.setpoint.dat", 0,
 # Inhalation is given in ppm
 #---------------------------------------------------------
 
-Simulation { # 1:
+Simulation { # 1: Short-term exposure Human experiment
 
   InhMag = 72;            # ppm
   Period = 1e10;          # Only one dose
@@ -25,20 +25,22 @@ Simulation { # 1:
 
   # Post-exposure measurements at Bef.End. [5' 30'] 2hr 18 42 67 91 139 163
 
-  Print (C_exh_ug, 239.9, 245, 270, 360, 1320, 2760, 4260, 5700, 8580, 10020);
-  Print (C_ven, 239.9, 360, 1320, 2760, 4260, 5700, 8580, 10020);
+  Print (C_exh_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (C_ven, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (Pct_metabolized, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
 }
 
-Simulation { # 2:
+Simulation { # 2: Long-term exposure predicted
 
-  InhMag = 144;           # ppm
-  Period = 1e10;          # Only one dose
-  Exposure = 240;         # 4 hour exposure
+  InhMag = 72;          # ppm
+  Period = 1e10;           # Only one dose
+  Exposure = 2880;        # 2 days exposure
 
-  # Post-exposure measurements at Bef.End. [5' 30'] 2hr 18 42 67 91 139 163
-
-  Print (C_exh_ug, 239.9, 245, 270, 360, 1320, 2760, 4260, 5700, 8580, 10020);
-  Print (C_ven, 239.9, 360, 1320, 2760, 4260, 5700, 8580, 10020);
+  Print (C_exh_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (C_ven, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (Pct_metabolized, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
 }
+
+
 
 END.

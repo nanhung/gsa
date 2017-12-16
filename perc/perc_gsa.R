@@ -1,12 +1,11 @@
-library(sensitivity)
-library(EnvStats) # to use truncation lognormal
 library(RCurl) # to use getURL 
-library(readr) # to use read_table2 
 
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
   install.packages("EnvStats"); require(EnvStats)} # to access break formatting functions
+if(!require(data.table)) {
+  install.packages("data.table"); require(data.table)} # to access break formatting functions
 
 # Set the prior information for the testing parameters
 # Physiological parameter
@@ -211,7 +210,154 @@ for(i in 1:16)
   }
 }
 
-system("cd perc; ./mcsim.perc perc.mtc.in");
+setwd(paste(getwd(), "/perc", sep=""))
+
+setpt1.df <- cbind(1, df.pri)
+write.table(setpt1.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
+system("./mcsim.perc perc.setpt1.in")
+sim1 <- as.data.frame(fread("perc.setpoint.out", head = T))
+
+setpt2.df <- cbind(1, df.pst)
+write.table(setpt2.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
+system("./mcsim.perc perc.setpt1.in")
+sim2 <- as.data.frame(fread("perc.setpoint.out", head = T))
+
+time<-c(60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880)/60
+
+j = 18:27 # range of simulated data
+j = 28:37 
+j = 38:47
+j = 48:57 # long-1
+j = 58:67 # long-2
+j = 68:77 # long-3
+
+par(mar = c(5, 6, 3, 1))
+for (i in 1:dim(sim1)[1]) {
+  if (i == 1) {
+    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+         main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
+         type = "l", log = "y", ylim = c(1E-1, 1E3))
+    mtext("Exhaled (ug)", 2, 4, cex = 1.5)
+  } else {
+    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         main = "", las = 1, col = "grey", pch = 20,
+         type = "l", log = "y", ylim = c(1E-1, 1E3)) 
+  }
+  par(new=T)
+}
+par(new=F)
+
+for (i in 1:dim(sim2)[1]) {
+  lines(time, sim2[i,j], col="red")  
+}
+
+# blood
+par(mar = c(5, 6, 3, 1))
+for (i in 1:dim(sim1)[1]) {
+  if (i == 1) {
+    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+         main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
+         type = "l", log = "y", ylim = c(1E-4, 1E2))
+    mtext("Blood (mg/l)", 2, 4, cex = 1.5)
+  } else {
+    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         main = "", las = 1, col = "grey", pch = 20,
+         type = "l", log = "y", ylim = c(1E-4, 1E2)) 
+  }
+  par(new=T)
+}
+par(new=F)
+
+for (i in 1:dim(sim2)[1]) {
+  lines(time, sim2[i,j], col="red")  
+}
+
+
+#Pct_metabolize
+par(mar = c(5, 6, 3, 1))
+for (i in 1:dim(sim1)[1]) {
+  if (i == 1) {
+    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+         main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
+         type = "l", log = "y", ylim = c(1E-6, 1E2))
+    mtext("Metabolize", 2, 4, cex = 1.5)
+  } else {
+    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         main = "", las = 1, col = "grey", pch = 20,
+         type = "l", log = "y", ylim = c(1E-6, 1E2)) 
+  }
+  par(new=T)
+}
+par(new=F)
+
+for (i in 1:dim(sim2)[1]) {
+  lines(time, sim2[i,j], col="red")  
+}
+
+# long-1
+par(mar = c(5, 6, 3, 1))
+for (i in 1:dim(sim1)[1]) {
+  if (i == 1) {
+    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+         main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
+         type = "l", log = "y", ylim = c(1E-6, 1E10))
+    mtext("Exh", 2, 4, cex = 1.5)
+  } else {
+    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         main = "", las = 1, col = "grey", pch = 20,
+         type = "l", log = "y", ylim = c(1E-6, 1E10)) 
+  }
+  par(new=T)
+}
+par(new=F)
+
+for (i in 1:dim(sim2)[1]) {
+  lines(time, sim2[i,j], col="red")  
+}
+
+# long-2
+par(mar = c(5, 6, 3, 1))
+for (i in 1:dim(sim1)[1]) {
+  if (i == 1) {
+    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+         main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
+         type = "l", log = "y", ylim = c(1E-6, 1E10))
+    mtext("Ven", 2, 4, cex = 1.5)
+  } else {
+    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         main = "", las = 1, col = "grey", pch = 20,
+         type = "l", log = "y", ylim = c(1E-6, 1E10)) 
+  }
+  par(new=T)
+}
+par(new=F)
+
+for (i in 1:dim(sim2)[1]) {
+  lines(time, sim2[i,j], col="red")  
+}
+
+# long-3
+par(mar = c(5, 6, 3, 1))
+for (i in 1:dim(sim1)[1]) {
+  if (i == 1) {
+    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+         main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
+         type = "l", log = "y", ylim = c(1E-6, 1E10))
+    mtext("Metabolize", 2, 4, cex = 1.5)
+  } else {
+    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         main = "", las = 1, col = "grey", pch = 20,
+         type = "l", log = "y", ylim = c(1E-6, 1E10)) 
+  }
+  par(new=T)
+}
+par(new=F)
+
+for (i in 1:dim(sim2)[1]) {
+  lines(time, sim2[i,j], col="red")  
+}
+
+
 
 #
 set.seed(1234)
@@ -250,6 +396,9 @@ morr <- morris(model = NULL, factors = 16, r = 1024,
                         PC_art_max,
                         sc_Vmax_max, 
                         Km_max), scale = TRUE)                  
+
+
+
 
 morr.perc.df <- cbind(1, morr$X) 
 nrow(morr$X) # nrow=17408
