@@ -45,7 +45,7 @@ Km = 16
 Pct_M <- exp(0.6)
 Pct_Flow_gsd <- exp(0.7) # 2
 PC_gsd <- exp(1.2) # 3.3
-MM_gsd <- exp(4.6) # 99.4
+MM_gsd <- exp(3.9) # 99.4
 
 LeanBodyWt_min <- exp(log(LeanBodyWt)-log(1.4))
 Flow_pul_min <- exp(log(Flow_pul)-log(1.8))
@@ -196,7 +196,8 @@ names(df.pri)<-c("Ln_LeanBodyWt", "Ln_Flow_pul", "Ln_Vent_Perf",
                  "Ln_PC_fat", "Ln_PC_liv", "LnPC_wp", "Ln_PC_pp", "Ln_PC_art",
                  "Ln_sc_Vmax", "Ln_Km")
 
-
+pdf(file="fig1.pdf", width = 7, height = 5)
+#png(file="fig2.png",width=2000,height=1200,res=250)
 par(mfrow=c(4,4), mar=c(2,2,2,1))
 for(i in 1:16)
 {
@@ -209,6 +210,7 @@ for(i in 1:16)
     lines(density(log(df.pri[,i])), col=2, lwd = 2)
   }
 }
+dev.off()
 
 setwd(paste(getwd(), "/perc", sep=""))
 
@@ -224,6 +226,15 @@ sim2 <- as.data.frame(fread("perc.setpoint.out", head = T))
 
 time<-c(60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880)/60
 
+conc<-function(conc1st, conclast){
+  sim.str<-which(names(sim1)==conc1st)
+  sim.end<-which(names(sim1)==conclast)
+  sim.str:sim.end
+}
+
+C_exh_ug_1<-conc("C_exh_ug_1.1", "C_exh_ug_1.10")
+
+
 j = 18:27 # range of simulated data
 j = 28:37 
 j = 38:47
@@ -231,15 +242,16 @@ j = 48:57 # long-1
 j = 58:67 # long-2
 j = 68:77 # long-3
 
+
 par(mar = c(5, 6, 3, 1))
 for (i in 1:dim(sim1)[1]) {
   if (i == 1) {
-    plot(time, sim1[i,j], xlab = "Time (hour)", ylab = "",
+    plot(time, sim1[i,C_exh_ug_1], xlab = "Time (hour)", ylab = "",
          main = "", las = 1, col = "grey", pch = 20, cex.lab = 1.5,
          type = "l", log = "y", ylim = c(1E-1, 1E3))
     mtext("Exhaled (ug)", 2, 4, cex = 1.5)
   } else {
-    plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+    plot(time, sim1[i,C_exh_ug_1], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
          main = "", las = 1, col = "grey", pch = 20,
          type = "l", log = "y", ylim = c(1E-1, 1E3)) 
   }
@@ -248,7 +260,7 @@ for (i in 1:dim(sim1)[1]) {
 par(new=F)
 
 for (i in 1:dim(sim2)[1]) {
-  lines(time, sim2[i,j], col="red")  
+  lines(time, sim2[i,C_exh_ug_1], col="red")  
 }
 
 # blood

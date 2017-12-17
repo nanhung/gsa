@@ -6,5 +6,5 @@
 *.dat
 *.csv
 *.png
-mcsim.
+mcsim.*
 *.out
