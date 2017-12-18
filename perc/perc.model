@@ -58,18 +58,25 @@ IngDose  = 0.0; # ingested dose
 # Physiological and pharmacokinetic parameters
 # --------------------------------------------
 LeanBodyWt = 55;    # lean body weight (kg)
+lnLeanBodyWt = log(55);
 
 # Percent mass of tissues with ranges shown
 Pct_M_fat  = .16;   # % total body mass
 Pct_LM_liv = .03;   # liver, % of lean mass
 Pct_LM_wp  = .17;   # well perfused tissue, % of lean mass
-Pct_LM_pp  = .70;   # poorly perfused tissue, will be recomputed in scale
+#Pct_LM_pp  = .70;   # poorly perfused tissue, will be recomputed in scale
+lnPct_M_fat  = log(.16);  
+lnPct_LM_liv = log(.03);  
+lnPct_LM_wp  = log(.17);   
 
 # Percent blood flows to tissues
 Pct_Flow_fat = .09;
 Pct_Flow_liv = .34;
-Pct_Flow_wp  = .50; # will be recomputed in scale
+#Pct_Flow_wp  = .50; # will be recomputed in scale
 Pct_Flow_pp  = .07;
+lnPct_Flow_fat = log(.09);
+lnPct_Flow_liv = log(.34);
+lnPct_Flow_pp  = log(.17);
 
 # Tissue/blood partition coeficients
 PC_fat = 144;
@@ -77,13 +84,22 @@ PC_liv = 4.6;
 PC_wp  = 8.7;
 PC_pp  = 1.4;
 PC_art = 12.0;
+lnPC_fat = log(144);
+lnPC_liv = log(4.6);
+lnPC_wp  = log(8.7);
+lnPC_pp  = log(1.4);
+lnPC_art = log(12.0);
 
 Flow_pul   = 8.0;    # Pulmonary ventilation rate (minute volume)
 Vent_Perf = 1.14;    # ventilation over perfusion ratio
+lnFlow_pul = log(8.0);    # Pulmonary ventilation rate (minute volume)
+lnVent_Perf = log(1.14);    # ventilation over perfusion ratio
 
 sc_Vmax = .0026;     # scaling coeficient of body weight for Vmax
+lnsc_Vmax = log(.0026);
 
 Km = 1.0;  
+lnKm = log(1.0);  
 
 # Scaled parameters
 # -----------------
@@ -118,6 +134,23 @@ Vmax = 0;            # kg/minute
 #---------------------------------------------------------
 
 Initialize {
+    # 
+    LeanBodyWt = exp(lnLeanBodyWt);
+    Pct_M_fat = exp(lnPct_M_fat);
+    Pct_LM_liv = exp(lnPct_LM_liv);
+    Pct_LM_wp = exp(lnPct_LM_wp);
+    Pct_Flow_fat = exp(lnPct_Flow_fat);
+    Pct_Flow_liv = exp(lnPct_Flow_liv);
+    Pct_Flow_pp = exp(lnPct_Flow_pp);
+    PC_fat = exp(lnPC_fat);
+    PC_liv = exp(lnPC_liv);
+    PC_wp = exp(lnPC_wp);
+    PC_pp = exp(lnPC_pp);
+    PC_art = exp(lnPC_art);
+    Flow_pul = exp(lnFlow_pul);
+    Vent_Perf = exp(lnVent_Perf);
+    sc_Vmax = exp(lnsc_Vmax);
+    Km = exp(lnKm);
 
   # Volumes scaled to actual volumes
   BodyWt = LeanBodyWt / (1 - Pct_M_fat);

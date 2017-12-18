@@ -1,11 +1,11 @@
 Integrate (Lsodes, 1e-4, 1e-6, 1);
 
 SetPoints ("perc.setpoint.out", "perc.setpoint.dat", 0,
-           LeanBodyWt, Flow_pul, Vent_Perf, 
-           Pct_M_fat, Pct_LM_liv, Pct_LM_wp,
-           Pct_Flow_fat, Pct_Flow_liv, Pct_Flow_pp,
-           PC_fat, PC_liv, PC_wp, PC_pp, PC_art,
-           sc_Vmax, Km);
+           lnLeanBodyWt, lnFlow_pul, lnVent_Perf, 
+           lnPct_M_fat, lnPct_LM_liv, lnPct_LM_wp,
+           lnPct_Flow_fat, lnPct_Flow_liv, lnPct_Flow_pp,
+           lnPC_fat, lnPC_liv, lnPC_wp, lnPC_pp, lnPC_art,
+           lnsc_Vmax, lnKm);
 
 #---------------------------------------------------------
 # The first two simulations describe Dr. Monster's

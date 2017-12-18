@@ -216,12 +216,12 @@ for(i in 1:16)
 dev.off()
 
 
-setpt1.df <- cbind(1, df.pri)
+setpt1.df <- cbind(1, log(df.pri))
 write.table(setpt1.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.perc perc.setpt1.in")
 sim1 <- as.data.frame(fread("perc.setpoint.out", head = T))
 
-setpt2.df <- cbind(1, df.pst)
+setpt2.df <- cbind(1, log(df.pst))
 write.table(setpt2.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.perc perc.setpt1.in")
 sim2 <- as.data.frame(fread("perc.setpoint.out", head = T))
@@ -262,7 +262,7 @@ TK.plt<-function(j, mtext, col, ylim, ylwr, yupr){
       
     } else {
       plot(time, sim1[i,j], xlab = "", ylab = "", xaxt = "n", yaxt = "n",
-           main = "", las = 1, col = "grey", pch = 20,
+           main = "", las = 1, col = "grey", pch = 20, lwd= 0.1,
            type = "l", log = "y", ylim = ylim) 
     }
     par(new=T)
@@ -270,11 +270,11 @@ TK.plt<-function(j, mtext, col, ylim, ylwr, yupr){
   par(new=F)
   
   for (i in 1:dim(sim2)[1]) {
-    lines(time, sim2[i,j], col=col)  
+    lines(time, sim2[i,j], lwd= 0.1, col=col)  
   }
 }
 
-pdf(file="fig2.pdf", width = 7, height = 5)
+pdf(file="fig2.pdf", width = 7, height = 6)
 #png(file="fig2.png",width=2000,height=1200,res=250)
 par(mfrow=c(3,3), mar = c(2, 2, 3, 1), oma = c(3,3,2,0))
 TK.plt(C_exh_ug_1, expression(paste("Exhaled air, ",mu, "g/L")), "blue", c(1E-4, 1E4), -4, 4)
@@ -295,8 +295,7 @@ mtext("Inhalation = 72 ppm", NORTH<-3, line=-1, adj=0.3, cex=1.2, outer=TRUE, co
 mtext("Ingestion = 72 mg", NORTH<-3, line=-1, adj=0.93, cex=1.2, outer=TRUE, col="red")
 dev.off()
 
-#TK.plt(Pct_metabolized_1, c(1E-6, 1E2), "Percent metabolized")
-#TK.plt(Pct_metabolized_2, c(1E-4, 1E2), "Percent metabolized")
+
 
 #
 setpt1.df <- cbind(1, df.pri)
