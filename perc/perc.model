@@ -21,7 +21,8 @@ Outputs = {C_liv,               # mg/l in the liver
            C_exh,               # ... in the exhaled air
            C_ven,               # ... in the venous blood
            Pct_metabolized,     # % of the dose metabolized
-           C_exh_ug};           # ug/l in the exhaled air
+           C_exh_ug,            # ug/l in the exhaled air
+           C_ven_ug};           # ... in the venous blood
 
 
 Inputs = {C_inh,                # Concentration inhaled (ppm)
@@ -210,6 +211,7 @@ CalcOutputs {
                      (1440 * Flow_alv * InhMag * mg_per_l_per_PPM) : 0);
 
   C_exh_ug = C_exh * 1000; # milli to micrograms
+  C_ven_ug = C_ven * 1000; # milli to micrograms
 
 } # End of output calculation
 
