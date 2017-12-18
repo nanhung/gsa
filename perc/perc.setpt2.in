@@ -16,7 +16,7 @@ SetPoints ("perc.setpoint.out", "perc.setpoint.dat", 0,
 #
 # Inhalation is given in ppm
 #
-# This file was used to simulate the TK of TCE
+# This file was used to estimate the AUC of TCE
 #---------------------------------------------------------
 
 Simulation { # 1: Short-term exposure Human experiment
@@ -27,9 +27,7 @@ Simulation { # 1: Short-term exposure Human experiment
 
   # Post-exposure measurements at Bef.End. [5' 30'] 2hr 18 42 67 91 139 163
 
-  Print (C_exh_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
-  Print (C_ven_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
-  Print (Q_met_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (AUC_exh_ug, 2880);
 }
 
 Simulation { # 2: Long-term exposure predicted
@@ -38,9 +36,7 @@ Simulation { # 2: Long-term exposure predicted
   Period = 1e10;           # Only one dose
   Exposure = 2880;        # 2 days exposure
 
-  Print (C_exh_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
-  Print (C_ven_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
-  Print (Q_met_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (AUC_exh_ug, 2880);
 }
 
 Simulation { # 3: Ingested exposure predicted
@@ -50,9 +46,7 @@ Simulation { # 3: Ingested exposure predicted
   # Ingested dose (instantaneous bolus dose) in mg
   Q_ing =  NDoses(2, IngDose 0, 0 0.1);
 
-  Print (C_exh_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
-  Print (C_ven_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
-  Print (Q_met_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
+  Print (AUC_exh_ug, 2880);
 }
 
 END.

@@ -13,7 +13,8 @@ States = {Q_fat,        # Quantity of PERC in the fat (mg)
           Q_pp,         #   ...   in the poorly-perfused compartment (mg)
           Q_liv,        #   ...   in the liver (mg)
           Q_exh,        #   ...   exhaled (mg)
-          Q_met};       # Quantity of metabolite formed (mg)
+          Q_met,        # Quantity of metabolite formed (mg)
+          AUC_exh_ug};  # Area under the curve of exhaled (ug.hr/l)     
 
 
 Outputs = {C_liv,               # mg/l in the liver
@@ -22,7 +23,8 @@ Outputs = {C_liv,               # mg/l in the liver
            C_ven,               # ... in the venous blood
            Pct_metabolized,     # % of the dose metabolized
            C_exh_ug,            # ug/l in the exhaled air
-           C_ven_ug};           # ... in the venous blood
+           C_ven_ug,            # ... in the venous blood
+           Q_met_ug};           # ug in the metabolized
 
 
 Inputs = {C_inh,                # Concentration inhaled (ppm)
@@ -191,6 +193,12 @@ Dynamics {
   # Metabolite formation
   dt (Q_met) = dQmet_liv;
 
+  #
+  C_exh_ug = C_exh * 1000; # milli to micrograms
+
+  # AUC
+  dt(AUC_exh_ug) = C_exh_ug;
+  
 } # End of Dynamics
 
 
@@ -205,13 +213,14 @@ CalcOutputs {
   # Liver concentration
   C_liv = Q_liv / V_liv;
 
-  # Fraction of TCE metabolized per day
+  # Fraction of PERC metabolized per day
   Pct_metabolized = (InhMag ?
                      100 * Q_met / 
                      (1440 * Flow_alv * InhMag * mg_per_l_per_PPM) : 0);
 
-  C_exh_ug = C_exh * 1000; # milli to micrograms
+  
   C_ven_ug = C_ven * 1000; # milli to micrograms
+  Q_met_ug = Q_met * 1000; # milli to micrograms
 
 } # End of output calculation
 

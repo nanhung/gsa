@@ -196,6 +196,8 @@ names(df.pri)<-c("Ln_LeanBodyWt", "Ln_Flow_pul", "Ln_Vent_Perf",
                  "Ln_PC_fat", "Ln_PC_liv", "LnPC_wp", "Ln_PC_pp", "Ln_PC_art",
                  "Ln_sc_Vmax", "Ln_Km")
 
+setwd(paste(getwd(), "/perc", sep=""))
+
 # Parameter distribution
 pdf(file="fig1.pdf", width = 7, height = 5)
 #png(file="fig2.png",width=2000,height=1200,res=250)
@@ -213,8 +215,6 @@ for(i in 1:16)
 }
 dev.off()
 
-#
-setwd(paste(getwd(), "/perc", sep=""))
 
 setpt1.df <- cbind(1, df.pri)
 write.table(setpt1.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
@@ -236,13 +236,13 @@ conc<-function(conc1st, conclast){
 
 C_exh_ug_1<-conc("C_exh_ug_1.1", "C_exh_ug_1.10")
 C_ven_ug_1<-conc("C_ven_ug_1.1", "C_ven_ug_1.10")
-Pct_metabolized_1<-conc("Pct_metabolized_1.1", "Pct_metabolized_1.10")
+Q_met_1<-conc("Q_met_ug_1.1", "Q_met_ug_1.10")
 C_exh_ug_2<-conc("C_exh_ug_2.1", "C_exh_ug_2.10")
 C_ven_ug_2<-conc("C_ven_ug_2.1", "C_ven_ug_2.10")
-Pct_metabolized_2<-conc("Pct_metabolized_2.1", "Pct_metabolized_2.10")
+Q_met_2<-conc("Q_met_ug_2.1", "Q_met_ug_2.10")
 C_exh_ug_3<-conc("C_exh_ug_3.1", "C_exh_ug_3.10")
 C_ven_ug_3<-conc("C_ven_ug_3.1", "C_ven_ug_3.10")
-Pct_metabolized_3<-conc("Pct_metabolized_3.1", "Pct_metabolized_3.10")
+Q_met_3<-conc("Q_met_ug_3.1", "Q_met_ug_3.10")
 
 #
 
@@ -276,18 +276,21 @@ TK.plt<-function(j, mtext, col, ylim, ylwr, yupr){
 
 pdf(file="fig2.pdf", width = 7, height = 5)
 #png(file="fig2.png",width=2000,height=1200,res=250)
-par(mfrow=c(2,3), mar = c(2, 2, 3, 1), oma = c(0,3,2,0))
-TK.plt(C_exh_ug_1, "Exhaled air", "blue", c(1E-4, 1E4), -4, 4)
-TK.plt(C_exh_ug_2, "Exhaled air", "blue", c(1E-4, 1E4), -4, 4)
-TK.plt(C_exh_ug_3, "Exhaled air", "red", c(1E-4, 1E4), -4, 4)
+par(mfrow=c(3,3), mar = c(2, 2, 3, 1), oma = c(3,3,2,0))
+TK.plt(C_exh_ug_1, expression(paste("Exhaled air, ",mu, "g/L")), "blue", c(1E-4, 1E4), -4, 4)
+TK.plt(C_exh_ug_2, expression(paste("Exhaled air, ",mu, "g/L")), "blue", c(1E-4, 1E4), -4, 4)
+TK.plt(C_exh_ug_3, expression(paste("Exhaled air, ",mu, "g/L")), "red", c(1E-4, 1E4), -4, 4)
 
-TK.plt(C_ven_ug_1, "Blood", "blue", c(1E-3, 1E5), -3, 5)
-TK.plt(C_ven_ug_2, "Blood", "blue",c(1E-3, 1E5), -3, 5)
-TK.plt(C_ven_ug_3, "Blood", "red",c(1E-3, 1E5), -3, 5)
+TK.plt(C_ven_ug_1, expression(paste("Blood, ",mu, "g/L")), "blue", c(1E-3, 1E5), -3, 5)
+TK.plt(C_ven_ug_2, expression(paste("Blood, ",mu, "g/L")), "blue", c(1E-3, 1E5), -3, 5)
+TK.plt(C_ven_ug_3, expression(paste("Blood, ",mu, "g/L")), "red", c(1E-3, 1E5), -3, 5)
 
-mtext(c(expression(paste("Concentration, ",mu, "g/L"))),
-      c(WEST<-2),
-      line=0.4, cex=1, outer=TRUE) 
+TK.plt(Q_met_1, expression(paste("Metabolized, ",mu, "g")), "blue", c(1E-1, 1E7), -1, 7)
+TK.plt(Q_met_2, expression(paste("Metabolized, ",mu, "g")), "blue", c(1E-1, 1E7), -1, 7)
+TK.plt(Q_met_3, expression(paste("Metabolized, ",mu, "g")), "red", c(1E-3, 1E5), -3, 5)
+
+mtext("Concentration", WEST<-2, line=0.6, cex=1, outer=TRUE) 
+mtext("Time, hr", South<-1, line=0.6, cex=1, outer=TRUE) 
 mtext("Inhalation = 72 ppm", NORTH<-3, line=-1, adj=0.3, cex=1.2, outer=TRUE, col="blue")
 mtext("Ingestion = 72 mg", NORTH<-3, line=-1, adj=0.93, cex=1.2, outer=TRUE, col="red")
 dev.off()
@@ -295,6 +298,11 @@ dev.off()
 #TK.plt(Pct_metabolized_1, c(1E-6, 1E2), "Percent metabolized")
 #TK.plt(Pct_metabolized_2, c(1E-4, 1E2), "Percent metabolized")
 
+#
+setpt1.df <- cbind(1, df.pri)
+write.table(setpt1.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
+system("./mcsim.perc perc.setpt2.in")
+sim1 <- as.data.frame(fread("perc.setpoint.out", head = T))
 
 #
 set.seed(1234)
