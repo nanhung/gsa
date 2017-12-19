@@ -337,21 +337,94 @@ morr.perc.df <- cbind(1, morr$X)
 nrow(morr$X) # nrow=17408
 write.table(morr.perc.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.perc perc.setpt2.in")
-sim3 <- as.data.frame(fread("perc.setpoint.out", head = T))
+sim.morris <- as.data.frame(fread("perc.setpoint.out", head = T))
 
-mor.1.1 <- tell(morr, sim3[,ncol(morr$X)+2])
-mor.1.2 <- tell(morr, sim3[,ncol(morr$X)+3])
-mor.1.3 <- tell(morr, sim3[,ncol(morr$X)+4])
 
-mor.2.1 <- tell(morr, sim3[,ncol(morr$X)+5])
-mor.2.2 <- tell(morr, sim3[,ncol(morr$X)+6])
-mor.2.3 <- tell(morr, sim3[,ncol(morr$X)+7])
+mor.1.1 <- tell(morr, sim.morris[,ncol(morr$X)+2])
+mor.1.2 <- tell(morr, sim.morris[,ncol(morr$X)+3])
+mor.1.3 <- tell(morr, sim.morris[,ncol(morr$X)+4])
 
-mor.3.1 <- tell(morr, sim3[,ncol(morr$X)+8])
-mor.3.2 <- tell(morr, sim3[,ncol(morr$X)+9])
-mor.3.3 <- tell(morr, sim3[,ncol(morr$X)+10])
+mor.2.1 <- tell(morr, sim.morris[,ncol(morr$X)+5])
+mor.2.2 <- tell(morr, sim.morris[,ncol(morr$X)+6])
+mor.2.3 <- tell(morr, sim.morris[,ncol(morr$X)+7])
 
-par(mfrow=c(3,3))
+mor.3.1 <- tell(morr, sim.morris[,ncol(morr$X)+8])
+mor.3.2 <- tell(morr, sim.morris[,ncol(morr$X)+9])
+mor.3.3 <- tell(morr, sim.morris[,ncol(morr$X)+10])
+
+mu.star.1.1 <- apply(mor.1.1$ee, 2, function(x) mean(abs(x)))
+mu.star.1.2 <- apply(mor.1.2$ee, 2, function(x) mean(abs(x)))
+mu.star.1.3 <- apply(mor.1.3$ee, 2, function(x) mean(abs(x)))
+mu.star.2.1 <- apply(mor.2.1$ee, 2, function(x) mean(abs(x)))
+mu.star.2.2 <- apply(mor.2.2$ee, 2, function(x) mean(abs(x)))
+mu.star.2.3 <- apply(mor.2.3$ee, 2, function(x) mean(abs(x)))
+mu.star.3.1 <- apply(mor.3.1$ee, 2, function(x) mean(abs(x)))
+mu.star.3.2 <- apply(mor.3.2$ee, 2, function(x) mean(abs(x)))
+mu.star.3.3 <- apply(mor.3.3$ee, 2, function(x) mean(abs(x)))
+
+sigma.1.1 <- apply(mor.1.1$ee, 2, sd)
+sigma.1.2 <- apply(mor.1.2$ee, 2, sd)
+sigma.1.3 <- apply(mor.1.3$ee, 2, sd)
+sigma.2.1 <- apply(mor.2.1$ee, 2, sd)
+sigma.2.2 <- apply(mor.2.2$ee, 2, sd)
+sigma.2.3 <- apply(mor.2.3$ee, 2, sd)
+sigma.3.1 <- apply(mor.3.1$ee, 2, sd)
+sigma.3.2 <- apply(mor.3.2$ee, 2, sd)
+sigma.3.3 <- apply(mor.3.3$ee, 2, sd)
+
+pdf(file="fig3.pdf", width = 10, height = 10)
+#png(file="fig2.png",width=2000,height=1200,res=250)
+par(mfrow=c(3,3), mar = c(2, 2, 3, 1), oma = c(3,3,1,0))
+xlab <- expression(paste(mu,"*"))
+labels <- c("LeanBodyWt", "Flow_pul", "Vent_Perf", 
+            "Pct_M_fat", "Pct_LM_liv", "Pct_LM_wp",
+            "Pct_Flow_fat", "Pct_Flow_liv", "Pct_Flow_pp",
+            "PC_fat", "PC_liv", "PC_wp", "PC_pp", "PC_art",
+            "sc_Vmax", "Km")
+
+plot(mu.star.1.1, sigma.1.1, main = "4-hr exposure \n Exhaled air",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.1.1, sigma.1.1, labels = labels)
+plot(mu.star.2.1, sigma.2.1, main = "48-hr exposure \n Exhaled air",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.2.1, sigma.2.1, labels = labels)
+plot(mu.star.3.1, sigma.3.1, main = "1-time dose \n Exhaled air",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.3.1, sigma.3.1, labels = labels)
+
+plot(mu.star.1.2, sigma.1.2, main = "Blood",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.1.2, sigma.1.2, labels = labels)
+plot(mu.star.2.2, sigma.2.2, main = "Blood",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.2.2, sigma.2.2, labels = labels)
+plot(mu.star.3.2, sigma.3.2, main = "Blood",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.3.2, sigma.3.2, labels = labels)
+
+plot(mu.star.1.3, sigma.1.3, main = "Metabolized",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.1.3, sigma.1.3, labels = labels)
+plot(mu.star.2.3, sigma.2.3, main = "Metabolized",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.2.3, sigma.2.3, labels = labels)
+plot(mu.star.3.3, sigma.3.3, main = "Metabolized",
+     col = "white", xlab = "", ylab = "",
+     xlim=NULL)
+text(mu.star.3.3, sigma.3.3, labels = labels)
+mtext(expression(~sigma), WEST<-2, line=0.7, cex=1, outer=TRUE) 
+mtext(expression(paste(mu,"*")), South<-1, line=0.7, cex=1, outer=TRUE) 
+dev.off()
+
+
 plot(mor.1.1)
 plot(mor.2.1)
 plot(mor.3.1)
@@ -384,3 +457,112 @@ q.arg <- list(list(log(LeanBodyWt_min), log(LeanBodyWt_max), log(LeanBodyWt)),
               list(log(Km_min), log(Km_max), log(Km)))
 
 fast <- fast99(model = NULL, factors = 16, n = 8192, M = 4, q = q, q.arg = q.arg)
+
+fast.perc.df <- cbind(1, fast$X) # nrow = 131072
+write.table(fast.perc.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
+system("./mcsim.perc perc.setpt2.in")
+sim.fast <- as.data.frame(fread("perc.setpoint.out", head=T)) 
+
+fst.1.1 <- tell(fast, sim.fast[,ncol(morr$X)+2])
+fst.1.2 <- tell(fast, sim.fast[,ncol(morr$X)+3])
+fst.1.3 <- tell(fast, sim.fast[,ncol(morr$X)+4])
+
+fst.2.1 <- tell(fast, sim.fast[,ncol(morr$X)+5])
+fst.2.2 <- tell(fast, sim.fast[,ncol(morr$X)+6])
+fst.2.3 <- tell(fast, sim.fast[,ncol(morr$X)+7])
+
+fst.3.1 <- tell(fast, sim.fast[,ncol(morr$X)+8])
+fst.3.2 <- tell(fast, sim.fast[,ncol(morr$X)+9])
+fst.3.3 <- tell(fast, sim.fast[,ncol(morr$X)+10])
+
+pdf(file="fig4.pdf", width = 14, height = 12)
+#png(file="fig2.png",width=2000,height=1200,res=250)
+par(mfrow=c(3,3))
+plot(fst.1.1)
+plot(fst.2.1)
+plot(fst.3.1)
+
+plot(fst.1.2)
+plot(fst.2.2)
+plot(fst.3.2)
+
+plot(fst.1.3)
+plot(fst.2.3)
+plot(fst.3.3)
+dev.off()
+
+# pst
+q <- rep("qnormTrunc", 16)
+q.arg <- list(list(log(LeanBodyWt.obs.mu), log(LeanBodyWt.obs.sig), log(LeanBodyWt_min), log(LeanBodyWt_max)),
+              list(log(Flow_pul.obs.mu), log(Flow_pul.obs.sig), log(Flow_pul_min), log(Flow_pul_max)),
+              list(log(Vent_Perf.pst.mu), log(Vent_Perf.pst.sig), log(Vent_Perf_min), log(Vent_Perf_max)),
+              list(log(Pct_M_fat.obs.mu), log(Pct_M_fat.obs.sig), log(Pct_M_fat_min), log(Pct_M_fat_max)),
+              list(log(Pct_LM_liv.pst.mu), log(Pct_LM_liv.pst.sig), log(Pct_LM_liv_min), log(Pct_LM_liv_max)),
+              list(log(Pct_LM_wp.pst.mu), log(Pct_LM_wp.pst.sig), log(Pct_LM_wp_min), log(Pct_LM_wp_max)),
+              list(log(Pct_Flow_fat.pst.mu), log(Pct_Flow_fat.pst.sig), log(Pct_Flow_fat_min), log(Pct_Flow_fat_max)),
+              list(log(Pct_Flow_liv.pst.mu), log(Pct_Flow_liv.pst.sig), log(Pct_Flow_liv_min), log(Pct_Flow_liv_max)),
+              list(log(Pct_Flow_pp.pst.mu), log(Pct_Flow_pp.pst.sig), log(Pct_Flow_pp_min), log(Pct_Flow_pp_max)),
+              list(log(PC_fat.pst.mu), log(PC_fat.pst.sig), log(PC_fat_min), log(PC_fat_max)),
+              list(log(PC_liv.pst.mu), log(PC_liv.pst.sig), log(PC_liv_min), log(PC_liv_max)),
+              list(log(PC_wp.pst.mu), log(PC_wp.pst.sig), log(PC_wp_min), log(PC_wp_max)),
+              list(log(PC_pp.pst.mu), log(PC_pp.pst.sig), log(PC_pp_min), log(PC_pp_max)),
+              list(log(PC_art.pst.mu), log(PC_art.pst.sig), log(PC_art_min), log(PC_art_max)),
+              list(log(sc_Vmax.pst.mu), log(sc_Vmax.pst.sig), log(sc_Vmax_min), log(sc_Vmax_max)),
+              list(log(Km.pst.mu), log(Km.pst.sig), log(Km_min), log(Km_max)))
+
+fst2 <- fast99(model = NULL, factors = 16, n = 8192, M = 4, q = q, q.arg = q.arg)
+fst2.perc.df <- cbind(1, fst2$X) # nrow = 131072
+write.table(fst2.perc.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
+system("./mcsim.perc perc.setpt2.in")
+sim.fst2 <- as.data.frame(fread("perc.setpoint.out", head=T)) 
+
+fst2.1.1 <- tell(fst2, sim.fst2[,ncol(morr$X)+2])
+fst2.1.2 <- tell(fst2, sim.fst2[,ncol(morr$X)+3])
+fst2.1.3 <- tell(fst2, sim.fst2[,ncol(morr$X)+4])
+
+fst2.2.1 <- tell(fst2, sim.fst2[,ncol(morr$X)+5])
+fst2.2.2 <- tell(fst2, sim.fst2[,ncol(morr$X)+6])
+fst2.2.3 <- tell(fst2, sim.fst2[,ncol(morr$X)+7])
+
+fst2.3.1 <- tell(fst2, sim.fst2[,ncol(morr$X)+8])
+fst2.3.2 <- tell(fst2, sim.fst2[,ncol(morr$X)+9])
+fst2.3.3 <- tell(fst2, sim.fst2[,ncol(morr$X)+10])
+
+
+pdf(file="fig5.pdf", width = 14, height = 12)
+#png(file="fig2.png",width=2000,height=1200,res=250)
+par(mfrow=c(3,3))
+plot(fst2.1.1)
+plot(fst2.2.1)
+plot(fst2.3.1)
+
+plot(fst2.1.2)
+plot(fst2.2.2)
+plot(fst2.3.2)
+
+plot(fst2.1.3)
+plot(fst2.2.3)
+plot(fst2.3.3)
+dev.off()
+
+#
+fast.table<-function(dataset){
+  rbind(print(dataset)[1:16], print(dataset)[17:32]-print(dataset)[1:16])
+}
+
+f.table.1.1 <- fast.table(fst2.1.1)
+f.table.1.2 <- fast.table(fst2.1.1)
+f.table.2.1 <- fast.table(fst2.1.1)
+f.table.2.2 <- fast.table(fst2.1.1)
+
+
+
+png(file="eFAST.png",width=4000,height=2000,res=300)
+par(mfrow = c(2,4),
+    oma = c(5,2,0,0) + 0.1,
+    mar = c(2,1,2,1) + 0.1)
+barplot(f.table.1.1, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
+barplot(f.table.1.2, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
+barplot(f.table.2.1, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
+barplot(f.table.2.1, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
+dev.off()
