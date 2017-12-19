@@ -14,7 +14,8 @@ States = {Q_fat,        # Quantity of PERC in the fat (mg)
           Q_liv,        #   ...   in the liver (mg)
           Q_exh,        #   ...   exhaled (mg)
           Q_met,        # Quantity of metabolite formed (mg)
-          AUC_exh_ug};  # Area under the curve of exhaled (ug.hr/l)     
+          AUC_exh_ug,   # Area under the curve of exhaled (ug.hr/l) 
+          AUC_ven_ug};  # Area under the curve of venous blood (ug.hr/l)     
 
 
 Outputs = {C_liv,               # mg/l in the liver
@@ -228,9 +229,11 @@ Dynamics {
 
   #
   C_exh_ug = C_exh * 1000; # milli to micrograms
+  C_ven_ug = C_ven * 1000; # milli to micrograms
 
   # AUC
   dt(AUC_exh_ug) = C_exh_ug;
+  dt(AUC_ven_ug) = C_ven_ug;
   
 } # End of Dynamics
 
@@ -251,8 +254,6 @@ CalcOutputs {
                      100 * Q_met / 
                      (1440 * Flow_alv * InhMag * mg_per_l_per_PPM) : 0);
 
-  
-  C_ven_ug = C_ven * 1000; # milli to micrograms
   Q_met_ug = Q_met * 1000; # milli to micrograms
 
 } # End of output calculation

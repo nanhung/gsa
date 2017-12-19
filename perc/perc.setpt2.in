@@ -28,7 +28,10 @@ Simulation { # 1: Short-term exposure Human experiment
   # Post-exposure measurements at Bef.End. [5' 30'] 2hr 18 42 67 91 139 163
 
   Print (AUC_exh_ug, 2880);
+  Print (AUC_ven_ug, 2880);
+  Print (Q_met_ug, 2880);
 }
+
 
 Simulation { # 2: Long-term exposure predicted
 
@@ -36,7 +39,9 @@ Simulation { # 2: Long-term exposure predicted
   Period = 1e10;           # Only one dose
   Exposure = 2880;        # 2 days exposure
 
-  Print (AUC_exh_ug, 2880);
+  Print (C_exh_ug, 2880);
+  Print (C_ven_ug, 2880);
+  Print (Q_met_ug, 2880);
 }
 
 Simulation { # 3: Ingested exposure predicted
@@ -45,8 +50,9 @@ Simulation { # 3: Ingested exposure predicted
   
   # Ingested dose (instantaneous bolus dose) in mg
   Q_ing =  NDoses(2, IngDose 0, 0 0.1);
-
   Print (AUC_exh_ug, 2880);
+  Print (AUC_ven_ug, 2880);
+  Print (Q_met_ug, 2880);
 }
 
 END.

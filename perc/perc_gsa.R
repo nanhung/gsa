@@ -43,7 +43,7 @@ Km = 16
 # min
 
 Pct_M <- exp(0.6)
-Pct_Flow_gsd <- exp(0.7) # 2
+Pct_Flow_gsd <- exp(0.6) # 1.8 this parameter can cause "out of bound" problem 
 PC_gsd <- exp(1.2) # 3.3
 MM_gsd <- exp(3.9) # 99.4
 
@@ -295,55 +295,92 @@ mtext("Inhalation = 72 ppm", NORTH<-3, line=-1, adj=0.3, cex=1.2, outer=TRUE, co
 mtext("Ingestion = 72 mg", NORTH<-3, line=-1, adj=0.93, cex=1.2, outer=TRUE, col="red")
 dev.off()
 
-
-
-#
-setpt1.df <- cbind(1, df.pri)
-write.table(setpt1.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
-system("./mcsim.perc perc.setpt2.in")
-sim1 <- as.data.frame(fread("perc.setpoint.out", head = T))
-
 #
 set.seed(1234)
-morr <- morris(model = NULL, factors = 16, r = 1024, 
+morr <- morris(model = NULL, factors = 16, r = 100, 
                design = list(type = "oat", levels = 5, grid.jump = 3), 
-               binf = c(LeanBodyWt_min,
-                        Flow_pul_min,
-                        Vent_Perf_min,
-                        Pct_M_fat_min, 
-                        Pct_LM_liv_min, 
-                        Pct_LM_wp_min,
-                        Pct_Flow_fat_min, 
-                        Pct_Flow_liv_min, 
-                        Pct_Flow_pp_min, 
-                        PC_fat_min, 
-                        PC_liv_min, 
-                        PC_wp_min, 
-                        PC_pp_min, 
-                        PC_art_min,
-                        sc_Vmax_min, 
-                        Km_min
+               binf = c(log(LeanBodyWt_min),
+                        log(Flow_pul_min),
+                        log(Vent_Perf_min),
+                        log(Pct_M_fat_min), 
+                        log(Pct_LM_liv_min), 
+                        log(Pct_LM_wp_min),
+                        log(Pct_Flow_fat_min), 
+                        log(Pct_Flow_liv_min), 
+                        log(Pct_Flow_pp_min), 
+                        log(PC_fat_min), 
+                        log(PC_liv_min), 
+                        log(PC_wp_min), 
+                        log(PC_pp_min), 
+                        log(PC_art_min),
+                        log(sc_Vmax_min), 
+                        log(Km_min)
                         ),
-               bsup = c(LeanBodyWt_max,
-                        Flow_pul_max,
-                        Vent_Perf_max,
-                        Pct_M_fat_max, 
-                        Pct_LM_liv_max, 
-                        Pct_LM_wp_max,
-                        Pct_Flow_fat_max, 
-                        Pct_Flow_liv_max, 
-                        Pct_Flow_pp_max, 
-                        PC_fat_max, 
-                        PC_liv_max, 
-                        PC_wp_max, 
-                        PC_pp_max, 
-                        PC_art_max,
-                        sc_Vmax_max, 
-                        Km_max), scale = TRUE)                  
-
-
-
+               bsup = c(log(LeanBodyWt_max),
+                        log(Flow_pul_max),
+                        log(Vent_Perf_max),
+                        log(Pct_M_fat_max), 
+                        log(Pct_LM_liv_max), 
+                        log(Pct_LM_wp_max),
+                        log(Pct_Flow_fat_max), 
+                        log(Pct_Flow_liv_max), 
+                        log(Pct_Flow_pp_max), 
+                        log(PC_fat_max), 
+                        log(PC_liv_max), 
+                        log(PC_wp_max), 
+                        log(PC_pp_max), 
+                        log(PC_art_max),
+                        log(sc_Vmax_max), 
+                        log(Km_max)), scale = TRUE)                  
 
 morr.perc.df <- cbind(1, morr$X) 
 nrow(morr$X) # nrow=17408
 write.table(morr.perc.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
+system("./mcsim.perc perc.setpt2.in")
+sim3 <- as.data.frame(fread("perc.setpoint.out", head = T))
+
+mor.1.1 <- tell(morr, sim3[,ncol(morr$X)+2])
+mor.1.2 <- tell(morr, sim3[,ncol(morr$X)+3])
+mor.1.3 <- tell(morr, sim3[,ncol(morr$X)+4])
+
+mor.2.1 <- tell(morr, sim3[,ncol(morr$X)+5])
+mor.2.2 <- tell(morr, sim3[,ncol(morr$X)+6])
+mor.2.3 <- tell(morr, sim3[,ncol(morr$X)+7])
+
+mor.3.1 <- tell(morr, sim3[,ncol(morr$X)+8])
+mor.3.2 <- tell(morr, sim3[,ncol(morr$X)+9])
+mor.3.3 <- tell(morr, sim3[,ncol(morr$X)+10])
+
+par(mfrow=c(3,3))
+plot(mor.1.1)
+plot(mor.2.1)
+plot(mor.3.1)
+
+plot(mor.1.2)
+plot(mor.2.2)
+plot(mor.3.2)
+
+plot(mor.1.3)
+plot(mor.2.3)
+plot(mor.3.3)
+
+#
+q <- rep("qtri", 16)
+q.arg <- list(list(log(LeanBodyWt_min), log(LeanBodyWt_max), log(LeanBodyWt)),
+              list(log(Flow_pul_min), log(Flow_pul_max), log(Flow_pul)),
+              list(log(Vent_Perf_min), log(Vent_Perf_max), log(Vent_Perf)),
+              list(log(Pct_M_fat_min), log(Pct_M_fat_max), log(Pct_M_fat)),
+              list(log(Pct_LM_liv_min), log(Pct_LM_liv_max), log(Pct_LM_liv)),
+              list(log(Pct_LM_wp_min), log(Pct_LM_wp_max), log(Pct_LM_wp)),
+              list(log(Pct_Flow_fat_min), log(Pct_Flow_fat_max), log(Pct_Flow_fat)),
+              list(log(Pct_Flow_liv_min), log(Pct_Flow_liv_max), log(Pct_Flow_liv)),
+              list(log(Pct_Flow_pp_min), log(Pct_Flow_pp_max), log(Pct_Flow_pp)),
+              list(log(PC_fat_min), log(PC_fat_max), log(PC_fat)),
+              list(log(PC_liv_min), log(PC_liv_max), log(PC_liv)),
+              list(log(PC_wp_min), log(PC_wp_max), log(PC_wp)),
+              list(log(PC_pp_min), log(PC_pp_max), log(PC_pp)),
+              list(log(PC_art_min), log(PC_art_max), log(PC_art)),
+              list(log(sc_Vmax_min), log(sc_Vmax_max), log(sc_Vmax)),
+              list(log(Km_min), log(Km_max), log(Km)))
+
+fast <- fast99(model = NULL, factors = 16, n = 8192, M = 4, q = q, q.arg = q.arg)
