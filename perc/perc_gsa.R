@@ -372,7 +372,8 @@ sigma.3.1 <- apply(mor.3.1$ee, 2, sd)
 sigma.3.2 <- apply(mor.3.2$ee, 2, sd)
 sigma.3.3 <- apply(mor.3.3$ee, 2, sd)
 
-pdf(file="fig3.pdf", width = 10, height = 10)
+options(scipen = 6)
+pdf(file="fig3.pdf", width = 7, height = 7)
 #png(file="fig2.png",width=2000,height=1200,res=250)
 par(mfrow=c(3,3), mar = c(2, 2, 3, 1), oma = c(3,3,1,0))
 xlab <- expression(paste(mu,"*"))
@@ -385,41 +386,41 @@ labels <- c("LeanBodyWt", "Flow_pul", "Vent_Perf",
 plot(mu.star.1.1, sigma.1.1, main = "4-hr exposure \n Exhaled air",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.1.1, sigma.1.1, labels = labels)
+text(mu.star.1.1, sigma.1.1, labels = labels, cex=0.8)
 plot(mu.star.2.1, sigma.2.1, main = "48-hr exposure \n Exhaled air",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.2.1, sigma.2.1, labels = labels)
+text(mu.star.2.1, sigma.2.1, labels = labels, cex=0.8)
 plot(mu.star.3.1, sigma.3.1, main = "1-time dose \n Exhaled air",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.3.1, sigma.3.1, labels = labels)
+text(mu.star.3.1, sigma.3.1, labels = labels, cex=0.8)
 
 plot(mu.star.1.2, sigma.1.2, main = "Blood",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.1.2, sigma.1.2, labels = labels)
+text(mu.star.1.2, sigma.1.2, labels = labels, cex=0.8)
 plot(mu.star.2.2, sigma.2.2, main = "Blood",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.2.2, sigma.2.2, labels = labels)
+text(mu.star.2.2, sigma.2.2, labels = labels, cex=0.8)
 plot(mu.star.3.2, sigma.3.2, main = "Blood",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.3.2, sigma.3.2, labels = labels)
+text(mu.star.3.2, sigma.3.2, labels = labels, cex=0.8)
 
 plot(mu.star.1.3, sigma.1.3, main = "Metabolized",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.1.3, sigma.1.3, labels = labels)
+text(mu.star.1.3, sigma.1.3, labels = labels, cex=0.8)
 plot(mu.star.2.3, sigma.2.3, main = "Metabolized",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.2.3, sigma.2.3, labels = labels)
+text(mu.star.2.3, sigma.2.3, labels = labels, cex=0.8)
 plot(mu.star.3.3, sigma.3.3, main = "Metabolized",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
-text(mu.star.3.3, sigma.3.3, labels = labels)
+text(mu.star.3.3, sigma.3.3, labels = labels, cex=0.8)
 mtext(expression(~sigma), WEST<-2, line=0.7, cex=1, outer=TRUE) 
 mtext(expression(paste(mu,"*")), South<-1, line=0.7, cex=1, outer=TRUE) 
 dev.off()
@@ -463,33 +464,32 @@ write.table(fast.perc.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.perc perc.setpt2.in")
 sim.fast <- as.data.frame(fread("perc.setpoint.out", head=T)) 
 
-fst.1.1 <- tell(fast, sim.fast[,ncol(morr$X)+2])
-fst.1.2 <- tell(fast, sim.fast[,ncol(morr$X)+3])
-fst.1.3 <- tell(fast, sim.fast[,ncol(morr$X)+4])
+fst.1.1 <- tell(fast, sim.fast[,ncol(fast$X)+2])
+fst.1.2 <- tell(fast, sim.fast[,ncol(fast$X)+3])
+fst.1.3 <- tell(fast, sim.fast[,ncol(fast$X)+4])
 
-fst.2.1 <- tell(fast, sim.fast[,ncol(morr$X)+5])
-fst.2.2 <- tell(fast, sim.fast[,ncol(morr$X)+6])
-fst.2.3 <- tell(fast, sim.fast[,ncol(morr$X)+7])
+fst.2.1 <- tell(fast, sim.fast[,ncol(fast$X)+5])
+fst.2.2 <- tell(fast, sim.fast[,ncol(fast$X)+6])
+fst.2.3 <- tell(fast, sim.fast[,ncol(fast$X)+7])
 
-fst.3.1 <- tell(fast, sim.fast[,ncol(morr$X)+8])
-fst.3.2 <- tell(fast, sim.fast[,ncol(morr$X)+9])
-fst.3.3 <- tell(fast, sim.fast[,ncol(morr$X)+10])
+fst.3.1 <- tell(fast, sim.fast[,ncol(fast$X)+8])
+fst.3.2 <- tell(fast, sim.fast[,ncol(fast$X)+9])
+fst.3.3 <- tell(fast, sim.fast[,ncol(fast$X)+10])
 
-pdf(file="fig4.pdf", width = 14, height = 12)
-#png(file="fig2.png",width=2000,height=1200,res=250)
-par(mfrow=c(3,3))
-plot(fst.1.1)
-plot(fst.2.1)
-plot(fst.3.1)
+#
+fast.table<-function(dataset){
+  rbind(print(dataset)[1:16], print(dataset)[17:32]-print(dataset)[1:16])
+}
 
-plot(fst.1.2)
-plot(fst.2.2)
-plot(fst.3.2)
-
-plot(fst.1.3)
-plot(fst.2.3)
-plot(fst.3.3)
-dev.off()
+f.table.1.1 <- fast.table(fst.1.1)
+f.table.2.1 <- fast.table(fst.2.1)
+f.table.3.1 <- fast.table(fst.3.1)
+f.table.2.1 <- fast.table(fst.2.1)
+f.table.2.2 <- fast.table(fst.2.2)
+f.table.3.2 <- fast.table(fst.3.2)
+f.table.1.3 <- fast.table(fst.1.3)
+f.table.2.3 <- fast.table(fst.2.3)
+f.table.3.3 <- fast.table(fst.3.3)
 
 # pst
 q <- rep("qnormTrunc", 16)
@@ -528,6 +528,15 @@ fst2.3.1 <- tell(fst2, sim.fst2[,ncol(morr$X)+8])
 fst2.3.2 <- tell(fst2, sim.fst2[,ncol(morr$X)+9])
 fst2.3.3 <- tell(fst2, sim.fst2[,ncol(morr$X)+10])
 
+f2.table.1.1 <- fast.table(fst2.1.1)
+f2.table.2.1 <- fast.table(fst2.2.1)
+f2.table.3.1 <- fast.table(fst2.3.1)
+f2.table.1.2 <- fast.table(fst2.1.2)
+f2.table.2.2 <- fast.table(fst2.2.2)
+f2.table.3.2 <- fast.table(fst2.3.2)
+f2.table.1.3 <- fast.table(fst2.1.3)
+f2.table.2.3 <- fast.table(fst2.2.3)
+f2.table.3.3 <- fast.table(fst2.3.3)
 
 pdf(file="fig5.pdf", width = 14, height = 12)
 #png(file="fig2.png",width=2000,height=1200,res=250)
@@ -545,24 +554,52 @@ plot(fst2.2.3)
 plot(fst2.3.3)
 dev.off()
 
-#
-fast.table<-function(dataset){
-  rbind(print(dataset)[1:16], print(dataset)[17:32]-print(dataset)[1:16])
-}
 
-f.table.1.1 <- fast.table(fst2.1.1)
-f.table.1.2 <- fast.table(fst2.1.1)
-f.table.2.1 <- fast.table(fst2.1.1)
-f.table.2.2 <- fast.table(fst2.1.1)
+pdf(file="fig4.pdf", width = 9, height = 8)
+par(mfrow=c(3,3), mar = c(4, 2, 3, 1), oma = c(3,3,1,0))
+bp11<-barplot(f.table.1.1, ylim = c(0,1), col=c("white","grey"))
+text(bp11, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+bp21<-barplot(f.table.2.1, ylim = c(0,1), col=c("white","grey"))
+text(bp21, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+bp31<-barplot(f.table.3.1, ylim = c(0,1), col=c("white","grey"))
+text(bp31, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
+bp12<-barplot(f.table.1.2, ylim = c(0,1), col=c("white","grey"))
+text(bp12, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+bp22<-barplot(f.table.2.2, ylim = c(0,1), col=c("white","grey"))
+text(bp22, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+bp32<-barplot(f.table.3.2, ylim = c(0,1), col=c("white","grey"))
+text(bp32, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
+bp13<-barplot(f.table.1.3, ylim = c(0,1), col=c("white","grey"))
+text(bp13, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+bp23<-barplot(f.table.2.3, ylim = c(0,1), col=c("white","grey"))
+text(bp23, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+bp33<-barplot(f.table.3.3, ylim = c(0,1), col=c("white","grey"))
+text(bp33, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
-png(file="eFAST.png",width=4000,height=2000,res=300)
-par(mfrow = c(2,4),
-    oma = c(5,2,0,0) + 0.1,
-    mar = c(2,1,2,1) + 0.1)
-barplot(f.table.1.1, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
-barplot(f.table.1.2, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
-barplot(f.table.2.1, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
-barplot(f.table.2.1, names.arg=names(fast.perc.mcsim.df)[2:17],ylim = c(0,1), col=c("white","grey"), las=2)
+# subplot
+par(fig=c(0.05,0.25,0.76,0.98), new=TRUE)
+barplot(f2.table.1.1, ylim = c(0,1), col=c("white","grey"))
+par(fig=c(0.38,0.58,0.76,0.98), new=TRUE)
+barplot(f2.table.2.1, ylim = c(0,1), col=c("white","grey"))
+par(fig=c(0.72,0.92,0.76,0.98), new=TRUE)
+barplot(f2.table.3.1, ylim = c(0,1), col=c("white","grey"))
+
+par(fig=c(0.05,0.25,0.42,0.64), new=TRUE)
+barplot(f2.table.1.2, ylim = c(0,1), col=c("white","grey"))
+par(fig=c(0.38,0.58,0.42,0.64), new=TRUE)
+barplot(f2.table.2.2, ylim = c(0,1), col=c("white","grey"))
+par(fig=c(0.72,0.92,0.42,0.64), new=TRUE)
+barplot(f2.table.3.2, ylim = c(0,1), col=c("white","grey"))
+
+par(fig=c(0.05,0.25,0.08,0.3), new=TRUE)
+barplot(f2.table.1.2, ylim = c(0,1), col=c("white","grey"))
+par(fig=c(0.38,0.58,0.08,0.3), new=TRUE)
+barplot(f2.table.2.2, ylim = c(0,1), col=c("white","grey"))
+par(fig=c(0.72,0.92,0.08,0.3), new=TRUE)
+barplot(f2.table.3.2, ylim = c(0,1), col=c("white","grey"))
+
+mtext("Sobol sensitivity index", WEST<-2, line=0.7, cex=1.2, outer=TRUE) 
+mtext("Parameter", South<-1, line=0.7, cex=1.2, outer=TRUE) 
 dev.off()
