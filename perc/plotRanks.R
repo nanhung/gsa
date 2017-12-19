@@ -50,22 +50,3 @@ plotRanks <- function(df, rank_col, time_col, data_col, color_col = NA, labels_o
     text(rep(offset_choice, ith_length), 1:ith_length, text_paste)
   }
 }
-
-
-data(presidents)
-years <- rep(1945:1974, 4)
-n <- length(presidents)
-q1 <- presidents[seq(1, n, 4)]
-q2 <- presidents[seq(2, n, 4)]
-q3 <- presidents[seq(3, n, 4)]
-q4 <- presidents[seq(4, n, 4)]
-quarters <- c(q1, q2, q3, q4)
-q_label  <- c(rep("Q1", n / 4), rep("Q2", n / 4), rep("Q3", n / 4), rep("Q4", n / 4))
-q_colors <- c(Q1 = "blue", Q2 = "red", Q3 = "green", Q4 = "orange")
-q_colors <- q_colors[match(q_label, names(q_colors))]
-
-new_prez <- data.frame(years, quarters, q_label, q_colors)
-new_prez <- na.omit(new_prez)
-
-plotRanks(new_prez[new_prez$years %in% 1960:1970, ], "q_label", "years", "quarters", "q_colors")
-mtext("Morris", side=1, line=2, cex.lab=0.4)
