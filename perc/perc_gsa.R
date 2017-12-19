@@ -627,4 +627,47 @@ mtext("Sobol sensitivity index", WEST<-2, line=0.7, cex=1.2, outer=TRUE)
 mtext("Parameter", South<-1, line=0.7, cex=1.2, outer=TRUE) 
 dev.off()
 
+sen.rank<-function(dataset){
+  df<- cbind(labels, as.data.frame(dataset))
+  transform(df, rank = ave(df[,2], 
+                           FUN = function(x) rank(x, ties.method = "first")))
+}
 
+
+#
+mm1.1R<-sen.rank(mu.star.1.1)
+mm1.2R<-sen.rank(mu.star.1.2)
+mm1.3R<-sen.rank(mu.star.1.3)
+ms1.1R<-sen.rank(sigma.1.1)
+ms1.2R<-sen.rank(sigma.1.2)
+ms1.3R<-sen.rank(sigma.1.3)
+
+#
+fm1.1R<-sen.rank(print(fst.1.1)[1:16])
+fi1.1R<-sen.rank(print(fst.1.1)[17:32]-print(fst.1.1)[1:16])
+fm1.2R<-sen.rank(print(fst.1.2)[1:16])
+fi1.2R<-sen.rank(print(fst.1.2)[17:32]-print(fst.1.2)[1:16])
+fm1.3R<-sen.rank(print(fst.1.3)[1:16])
+fi1.3R<-sen.rank(print(fst.1.3)[17:32]-print(fst.1.3)[1:16])
+
+source(plotRanks)
+
+
+var<-c(rep("A1",16),rep("A2",16),rep("A3",16),rep("A4",16),rep("A5",16),rep("A6",16),
+       rep("B1",16),rep("B2",16),rep("B3",16),rep("B4",16),rep("B5",16),rep("B6",16))
+
+var<-c(rep(2001,16),rep(2002,16),rep(2003,16),rep(2004,16),rep(2005,16),rep(2006,16),
+       rep(2007,16),rep(2008,16),rep(2009,16),rep(2010,16),rep(2011,16),rep(2012,16))
+ranks<-c(mm1.1R[,3],mm1.2R[,3],mm1.3R[,3],ms1.1R[,3],ms1.2R[,3],ms1.3R[,3],
+         fm1.1R[,3],fm1.2R[,3],fm1.3R[,3],fi1.1R[,3],fi1.2R[,3],fi1.3R[,3])
+q_params<-c(rep(labels,12))
+q_colors<-c(LeanBodyWt = 1, Flow_pul = 2, Vent_Perf = 3,
+            Pct_M_fat = 4, Pct_LM_liv = 5, Pct_LM_wp = 6, 
+            Pct_Flow_fat = 7, Pct_Flow_liv = 8, Pct_Flow_pp = 9,
+            PC_fat = 10, PC_liv = 11, PC_wp = 12, PC_pp = 13, PC_art = 14,
+            sc_Vmax = 15, Km = 16)
+q_colors <- q_colors[match(q_params, names(q_colors))]
+
+new_prez <- data.frame(var, ranks, q_params, q_colors)
+
+plotRanks(new_prez[new_prez$var %in% 2001:2012, ], "q_params", "var", "ranks", "q_colors")
