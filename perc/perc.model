@@ -23,6 +23,8 @@ Outputs = {C_liv,               # mg/l in the liver
            C_exh,               # ... in the exhaled air
            C_ven,               # ... in the venous blood
            Pct_metabolized,     # % of the dose metabolized
+           Pct_cumulative_inh,  # % of the dose cumulative (inhaled)
+           Pct_cumulative_oral, # % of the dose cumulative (oral)
            C_exh_ug,            # ug/l in the exhaled air
            C_ven_ug,            # ... in the venous blood
            Q_met_ug};           # ug in the metabolized
@@ -253,7 +255,9 @@ CalcOutputs {
   Pct_metabolized = (InhMag ?
                      100 * Q_met / 
                      (1440 * Flow_alv * InhMag * mg_per_l_per_PPM) : 0);
-
+  Pct_cumulative_inh = 100 - Pct_metabolized;                   
+  Pct_cumulative_oral = 100 - Q_met/IngDose * 100;
+  
   Q_met_ug = Q_met * 1000; # milli to micrograms
 
 } # End of output calculation
