@@ -730,8 +730,9 @@ for(i in 1:16){ # Total mean ranking G3
 order.mr3<-mean.rank3[order(-as.numeric(mean.rank3[,2])),] 
 
 
-#
-par(mfrow=c(2,2), mar=c(5,7,1,1))
+pdf(file="fig4.pdf", width = 9, height = 8)
+par(mfrow=c(3,2), mar=c(5,7,1,1))
+# G1
 plot(subset(df1, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
       axes=FALSE, xlab="",ylab="",
       ylim=c(0,16))
@@ -762,23 +763,68 @@ par(mar=c(5,6,3,3))
 bp2.1<-barplot(rev(as.numeric(order.mr1[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
 text(par('usr')[3], bp2.1, labels = rev(order.mr[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
+# G2
+par(mar=c(5,7,1,1))
+plot(subset(df2, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
+     axes=FALSE, xlab="",ylab="",
+     ylim=c(0,16))
+text(c(1:12), -1.2, labels = labels2, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+text(0, c(1.4:16.4), labels = labels3.df2[,1], col=colfunc(16),
+     adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+axis(1, at=1:12, labels = c(rep("",12)))
+axis(2, at=1:16, labels = c(rep("",16)))
+
+lines(subset(df2, q_params == labels[2])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[2]), 3]])
+lines(subset(df2, q_params == labels[3])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[3]), 3]])
+lines(subset(df2, q_params == labels[4])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[4]), 3]])
+lines(subset(df2, q_params == labels[5])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[5]), 3]])
+lines(subset(df2, q_params == labels[6])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[6]), 3]])
+lines(subset(df2, q_params == labels[7])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[7]), 3]])
+lines(subset(df2, q_params == labels[8])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[8]), 3]])
+lines(subset(df2, q_params == labels[9])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[9]), 3]])
+lines(subset(df2, q_params == labels[10])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[10]), 3]])
+lines(subset(df2, q_params == labels[11])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[11]), 3]])
+lines(subset(df2, q_params == labels[12])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[12]), 3]])
+lines(subset(df2, q_params == labels[13])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[13]), 3]])
+lines(subset(df2, q_params == labels[14])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[14]), 3]])
+lines(subset(df2, q_params == labels[15])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[15]), 3]])
+lines(subset(df2, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[16]), 3]])
+
+# average rank barchart
+par(mar=c(5,6,3,3))
+bp2.2<-barplot(rev(as.numeric(order.mr2[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
+text(par('usr')[3], bp2.2, labels = rev(order.mr2[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
 
+# G3
+par(mar=c(5,7,1,1))
+plot(subset(df3, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
+     axes=FALSE, xlab="",ylab="",
+     ylim=c(0,16))
+text(c(1:12), -1.2, labels = labels2, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+text(0, c(1.4:16.4), labels = labels3.df3[,1], col=colfunc(16),
+     adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+axis(1, at=1:12, labels = c(rep("",12)))
+axis(2, at=1:16, labels = c(rep("",16)))
 
-source(plotRanks)
+lines(subset(df3, q_params == labels[2])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[2]), 3]])
+lines(subset(df3, q_params == labels[3])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[3]), 3]])
+lines(subset(df3, q_params == labels[4])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[4]), 3]])
+lines(subset(df3, q_params == labels[5])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[5]), 3]])
+lines(subset(df3, q_params == labels[6])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[6]), 3]])
+lines(subset(df3, q_params == labels[7])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[7]), 3]])
+lines(subset(df3, q_params == labels[8])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[8]), 3]])
+lines(subset(df3, q_params == labels[9])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[9]), 3]])
+lines(subset(df3, q_params == labels[10])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[10]), 3]])
+lines(subset(df3, q_params == labels[11])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[11]), 3]])
+lines(subset(df3, q_params == labels[12])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[12]), 3]])
+lines(subset(df3, q_params == labels[13])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[13]), 3]])
+lines(subset(df3, q_params == labels[14])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[14]), 3]])
+lines(subset(df3, q_params == labels[15])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[15]), 3]])
+lines(subset(df3, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[16]), 3]])
 
-var<-c(rep(2001,16),rep(2002,16),rep(2003,16),rep(2004,16),rep(2005,16),rep(2006,16),
-       rep(2007,16),rep(2008,16),rep(2009,16),rep(2010,16),rep(2011,16),rep(2012,16))
-ranks<-c(mm1.1R[,3],mm1.2R[,3],mm1.3R[,3],ms1.1R[,3],ms1.2R[,3],ms1.3R[,3],
-         fm1.1R[,3],fm1.2R[,3],fm1.3R[,3],fi1.1R[,3],fi1.2R[,3],fi1.3R[,3])
-q_params<-c(rep(labels,12))
-q_colors<-c(LeanBodyWt = 1, Flow_pul = 2, Vent_Perf = 3,
-            Pct_M_fat = 4, Pct_LM_liv = 5, Pct_LM_wp = 6, 
-            Pct_Flow_fat = 7, Pct_Flow_liv = 8, Pct_Flow_pp = 9,
-            PC_fat = 10, PC_liv = 11, PC_wp = 12, PC_pp = 13, PC_art = 14,
-            sc_Vmax = 15, Km = 16)
-q_colors <- q_colors[match(q_params, names(q_colors))]
-
-new_prez <- data.frame(var, ranks, q_params, q_colors)
-
-plotRanks(new_prez[new_prez$var %in% 2001:2012, ], "q_params", "var", "ranks", "q_colors")
+# average rank barchart
+par(mar=c(5,6,3,3))
+bp2.3<-barplot(rev(as.numeric(order.mr3[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
+text(par('usr')[3], bp2.3, labels = rev(order.mr3[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+dev.off()
