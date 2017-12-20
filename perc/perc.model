@@ -25,6 +25,7 @@ Outputs = {C_liv,               # mg/l in the liver
            Pct_metabolized,     # % of the dose metabolized
            Pct_cumulative_inh,  # % of the dose cumulative (inhaled)
            Pct_cumulative_oral, # % of the dose cumulative (oral)
+           Pct_cumulative,      # % of the dose cumulative (time-dependent)
            C_exh_ug,            # ug/l in the exhaled air
            C_ven_ug,            # ... in the venous blood
            Q_met_ug};           # ug in the metabolized
@@ -259,6 +260,8 @@ CalcOutputs {
   Pct_cumulative_inh = (Q_fat+ Q_wp+ Q_pp+ Q_liv)/
                       (Exposure * Flow_alv * InhMag * mg_per_l_per_PPM);          
   Pct_cumulative_oral = (Q_fat+ Q_wp+ Q_pp+ Q_liv)/IngDose;
+  
+  Pct_cumulative = (Q_fat + Q_wp + Q_pp + Q_liv) / (Q_fat + Q_wp + Q_pp + Q_liv + Q_exh + Q_met);
   
   Q_met_ug = Q_met * 1000; # milli to micrograms
 

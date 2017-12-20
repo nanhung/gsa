@@ -48,7 +48,7 @@ Simulation { # 3: Ingested exposure predicted
   IngDose = 72.0; # ingested dose
   
   # Ingested dose (instantaneous bolus dose) in mg
-  Q_ing =  NDoses(2, IngDose 0, 0 0.1);
+  Q_ing =  NDoses(2, IngDose 0, 0 1);
 
   Print (C_exh_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);
   Print (C_ven_ug, 60, 120, 239.9, 245, 270, 360, 480, 720, 1440, 2880);

@@ -1,14 +1,9 @@
-library(RCurl) # to use getURL 
-
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
   install.packages("EnvStats"); require(EnvStats)} # to access break formatting functions
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)} # to access break formatting functions
-
-if(!require(ggplot2)) {
-  install.packages("ggplot2"); require(ggplot2)} # to access break formatting functions
 
 
 # Set the prior information for the testing parameters

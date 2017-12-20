@@ -1,5 +1,5 @@
 setwd(paste(getwd(), "/perc", sep=""))
-source("/perc/perc.gsa.R")
+source("perc_gsa.R")
 
 # Parameter distribution
 pdf(file="fig1.pdf", width = 9, height = 7)
@@ -50,7 +50,6 @@ C_ven_ug_3<-conc("C_ven_ug_3.1", "C_ven_ug_3.10")
 Q_met_3<-conc("Q_met_ug_3.1", "Q_met_ug_3.10")
 
 #
-
 TK.plt<-function(j, mtext, col, ylim, ylwr, yupr){
   for (i in 1:dim(sim1)[1]) {
     if (i == 1) {
@@ -92,7 +91,7 @@ TK.plt(C_ven_ug_3, expression(paste("Blood, ",mu, "g/L")), "red", c(1E-3, 1E5), 
 
 TK.plt(Q_met_1, expression(paste("Metabolized, ",mu, "g")), "blue", c(1E-1, 1E7), -1, 7)
 TK.plt(Q_met_2, expression(paste("Metabolized, ",mu, "g")), "blue", c(1E-1, 1E7), -1, 7)
-TK.plt(Q_met_3, expression(paste("Metabolized, ",mu, "g")), "red", c(1E-3, 1E5), -3, 5)
+TK.plt(Q_met_3, expression(paste("Metabolized, ",mu, "g")), "red", c(1E-1, 1E7), -1, 7)
 
 mtext("Concentration", WEST<-2, line=0.6, cex=1, outer=TRUE) 
 mtext("Time, hr", South<-1, line=0.6, cex=1, outer=TRUE) 
@@ -283,7 +282,7 @@ f.table.1.3 <- fast.table(fst.1.3)
 f.table.2.3 <- fast.table(fst.2.3)
 f.table.3.3 <- fast.table(fst.3.3)
 
-# pst
+# pst (not used)
 q <- rep("qnormTrunc", 16)
 q.arg <- list(list(log(LeanBodyWt.obs.mu), log(LeanBodyWt.obs.sig), log(LeanBodyWt_min), log(LeanBodyWt_max)),
               list(log(Flow_pul.obs.mu), log(Flow_pul.obs.sig), log(Flow_pul_min), log(Flow_pul_max)),
@@ -330,7 +329,7 @@ f2.table.1.3 <- fast.table(fst2.1.3)
 f2.table.2.3 <- fast.table(fst2.2.3)
 f2.table.3.3 <- fast.table(fst2.3.3)
 
-
+# 
 pdf(file="fig3.pdf", width = 9, height = 8)
 par(mfrow=c(3,3), mar = c(4, 2, 3, 1), oma = c(3,3,1,0))
 bp11<-barplot(f.table.1.1, ylim = c(0,1), col=c("white","grey"))
@@ -406,27 +405,6 @@ plot(mu.star.3.3, sigma.3.3, main = "",
      col = "white", xlab = "", ylab = "",
      xlim=NULL)
 text(mu.star.3.3, sigma.3.3, labels = labels, cex=0.8)
-
-#par(fig=c(0.05,0.25,0.76,0.98), new=TRUE)
-#barplot(f2.table.1.1, ylim = c(0,1), col=c("white","grey"))
-#par(fig=c(0.38,0.58,0.76,0.98), new=TRUE)
-#barplot(f2.table.2.1, ylim = c(0,1), col=c("white","grey"))
-#par(fig=c(0.72,0.92,0.76,0.98), new=TRUE)
-#barplot(f2.table.3.1, ylim = c(0,1), col=c("white","grey"))
-
-#par(fig=c(0.05,0.25,0.42,0.64), new=TRUE)
-#barplot(f2.table.1.2, ylim = c(0,1), col=c("white","grey"))
-#par(fig=c(0.38,0.58,0.42,0.64), new=TRUE)
-#barplot(f2.table.2.2, ylim = c(0,1), col=c("white","grey"))
-#par(fig=c(0.72,0.92,0.42,0.64), new=TRUE)
-#barplot(f2.table.3.2, ylim = c(0,1), col=c("white","grey"))
-
-#par(fig=c(0.05,0.25,0.08,0.3), new=TRUE)
-#barplot(f2.table.1.2, ylim = c(0,1), col=c("white","grey"))
-#par(fig=c(0.38,0.58,0.08,0.3), new=TRUE)
-#barplot(f2.table.2.2, ylim = c(0,1), col=c("white","grey"))
-#par(fig=c(0.72,0.92,0.08,0.3), new=TRUE)
-#barplot(f2.table.3.2, ylim = c(0,1), col=c("white","grey"))
 
 mtext("Sobol sensitivity index", WEST<-2, line=0.7, cex=1.2, outer=TRUE) 
 mtext("Parameter", South<-1, line=0.7, cex=1.2, outer=TRUE) 
@@ -562,7 +540,7 @@ lines(subset(df1, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm1.1R[
 # average rank barchart
 par(mar=c(5,6,3,3))
 bp2.1<-barplot(rev(as.numeric(order.mr1[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
-text(par('usr')[3], bp2.1, labels = rev(order.mr[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+text(par('usr')[3], bp2.1, labels = rev(order.mr1[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
 # G2
 par(mar=c(5,7,1,1))
