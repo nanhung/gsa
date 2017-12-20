@@ -7,6 +7,10 @@ if(!require(EnvStats)) {
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)} # to access break formatting functions
 
+if(!require(ggplot2)) {
+  install.packages("ggplot2"); require(ggplot2)} # to access break formatting functions
+
+
 # Set the prior information for the testing parameters
 # Physiological parameter
 LeanBodyWt = 66  # lean body weight (kg)
@@ -627,21 +631,20 @@ mtext("Sobol sensitivity index", WEST<-2, line=0.7, cex=1.2, outer=TRUE)
 mtext("Parameter", South<-1, line=0.7, cex=1.2, outer=TRUE) 
 dev.off()
 
+# Sensitivity ranking
 sen.rank<-function(dataset){
   df<- cbind(labels, as.data.frame(dataset))
   transform(df, rank = ave(df[,2], 
-                           FUN = function(x) rank(-x, ties.method = "first")))
+                           FUN = function(x) rank(x, ties.method = "first")))
 }
 
-#
+# G1
 mm1.1R<-sen.rank(mu.star.1.1)
 mm1.2R<-sen.rank(mu.star.1.2)
 mm1.3R<-sen.rank(mu.star.1.3)
 ms1.1R<-sen.rank(sigma.1.1)
 ms1.2R<-sen.rank(sigma.1.2)
 ms1.3R<-sen.rank(sigma.1.3)
-
-#
 fm1.1R<-sen.rank(print(fst.1.1)[1:16])
 fi1.1R<-sen.rank(print(fst.1.1)[17:32]-print(fst.1.1)[1:16])
 fm1.2R<-sen.rank(print(fst.1.2)[1:16])
@@ -649,28 +652,116 @@ fi1.2R<-sen.rank(print(fst.1.2)[17:32]-print(fst.1.2)[1:16])
 fm1.3R<-sen.rank(print(fst.1.3)[1:16])
 fi1.3R<-sen.rank(print(fst.1.3)[17:32]-print(fst.1.3)[1:16])
 
+Rank1<-c(mm1.1R[,3],mm1.2R[,3],mm1.3R[,3],ms1.1R[,3],ms1.2R[,3],ms1.3R[,3],
+         fm1.1R[,3],fm1.2R[,3],fm1.3R[,3],fi1.1R[,3],fi1.2R[,3],fi1.3R[,3])
+labels3.df1 <- mm1.1R[order(mm1.1R[,3]),] 
 
+#G2
+mm2.1R<-sen.rank(mu.star.2.1)
+mm2.2R<-sen.rank(mu.star.2.2)
+mm2.3R<-sen.rank(mu.star.2.3)
+ms2.1R<-sen.rank(sigma.2.1)
+ms2.2R<-sen.rank(sigma.2.2)
+ms2.3R<-sen.rank(sigma.2.3)
+fm2.1R<-sen.rank(print(fst.2.1)[1:16])
+fi2.1R<-sen.rank(print(fst.2.1)[17:32]-print(fst.2.1)[1:16])
+fm2.2R<-sen.rank(print(fst.2.2)[1:16])
+fi2.2R<-sen.rank(print(fst.2.2)[17:32]-print(fst.2.2)[1:16])
+fm2.3R<-sen.rank(print(fst.2.3)[1:16])
+fi2.3R<-sen.rank(print(fst.2.3)[17:32]-print(fst.2.3)[1:16])
+
+Rank2<-c(mm2.1R[,3],mm2.2R[,3],mm2.3R[,3],ms2.1R[,3],ms2.2R[,3],ms2.3R[,3],
+         fm2.1R[,3],fm2.2R[,3],fm2.3R[,3],fi2.1R[,3],fi2.2R[,3],fi2.3R[,3])
+labels3.df2 <- mm2.1R[order(mm2.1R[,3]),] 
+
+#G3
+mm3.1R<-sen.rank(mu.star.3.1)
+mm3.2R<-sen.rank(mu.star.3.2)
+mm3.3R<-sen.rank(mu.star.3.3)
+ms3.1R<-sen.rank(sigma.3.1)
+ms3.2R<-sen.rank(sigma.3.2)
+ms3.3R<-sen.rank(sigma.3.3)
+fm3.1R<-sen.rank(print(fst.3.1)[1:16])
+fi3.1R<-sen.rank(print(fst.3.1)[17:32]-print(fst.3.1)[1:16])
+fm3.2R<-sen.rank(print(fst.3.2)[1:16])
+fi3.2R<-sen.rank(print(fst.3.2)[17:32]-print(fst.3.2)[1:16])
+fm3.3R<-sen.rank(print(fst.3.3)[1:16])
+fi3.3R<-sen.rank(print(fst.3.3)[17:32]-print(fst.3.3)[1:16])
+
+Rank3<-c(mm3.1R[,3],mm3.2R[,3],mm3.3R[,3],ms3.1R[,3],ms3.2R[,3],ms3.3R[,3],
+         fm3.1R[,3],fm3.2R[,3],fm3.3R[,3],fi3.1R[,3],fi3.2R[,3],fi3.3R[,3])
+labels3.df3 <- mm2.1R[order(mm3.1R[,3]),] 
+
+#
 var<-c(rep("Exh.Morris.mu",16),rep("Bld.Morris.mu",16),rep("Met.Morris.mu",16),rep("Exh.Morris.sig",16),rep("Bld.Morris.sig",16),rep("Met.Morris.sig",16),
        rep("Exh.eFAST.M",16),rep("Bld.eFAST.M",16),rep("Met.eFAST.M",16),rep("Exh.eFAST.I",16),rep("Bld.eFAST.I",16),rep("Met.eFAST.I",16))
 
-Rank<-c(mm1.1R[,3],mm1.2R[,3],mm1.3R[,3],ms1.1R[,3],ms1.2R[,3],ms1.3R[,3],
-         fm1.1R[,3],fm1.2R[,3],fm1.3R[,3],fi1.1R[,3],fi1.2R[,3],fi1.3R[,3])
 q_params<-c(rep(labels,12))
-q_colors<-c(LeanBodyWt = 1, Flow_pul = 2, Vent_Perf = 3,
-            Pct_M_fat = 4, Pct_LM_liv = 5, Pct_LM_wp = 6, 
-            Pct_Flow_fat = 7, Pct_Flow_liv = 8, Pct_Flow_pp = 9,
-            PC_fat = 10, PC_liv = 11, PC_wp = 12, PC_pp = 13, PC_art = 14,
-            sc_Vmax = 15, Km = 16)
-q_colors <- q_colors[match(q_params, names(q_colors))]
 
-df <- data.frame(var, Rank, q_params, q_colors)
+df1 <- data.frame(var, Rank1, q_params) # G1
+df2 <- data.frame(var, Rank2, q_params) # G2
+df3 <- data.frame(var, Rank3, q_params) # G3
 
-g <- ggplot(df, aes(x=var, y =Rank, colour=q_params, group = q_params)) +
-      geom_point() + theme_bw() +
-      geom_line(size=1.15) +
-      scale_y_continuous(trans = "reverse", breaks = unique(df$Rank))
+labels2<-c("Exh.Morris.mu", "Bld.Morris.mu","Met.Morris.mu",
+           "Exh.Morris.sig","Bld.Morris.sig","Met.Morris.sig",
+           "Exh.eFAST.M","Bld.eFAST.M","Met.eFAST.M",
+           "Exh.eFAST.I","Bld.eFAST.I","Met.eFAST.I")
+
+colfunc <- colorRampPalette(c("blue", "red"))
+
+mean.rank1<-data.frame(labels); mean.rank1$avg.rank<-""
+mean.rank2<-data.frame(labels); mean.rank2$avg.rank<-""
+mean.rank3<-data.frame(labels); mean.rank3$avg.rank<-""
+
+#
+for(i in 1:16){ # Total mean ranking G1
+  mean.rank1[i,2]<-mean(subset(df1, q_params == labels[i])[,2])
+}
+order.mr1<-mean.rank1[order(-as.numeric(mean.rank1[,2])),] 
+
+for(i in 1:16){ # Total mean ranking G2
+  mean.rank2[i,2]<-mean(subset(df2, q_params == labels[i])[,2])
+}
+order.mr2<-mean.rank2[order(-as.numeric(mean.rank2[,2])),] 
+
+for(i in 1:16){ # Total mean ranking G3
+  mean.rank3[i,2]<-mean(subset(df3, q_params == labels[i])[,2])
+}
+order.mr3<-mean.rank3[order(-as.numeric(mean.rank3[,2])),] 
+
+
+#
+par(mfrow=c(2,2), mar=c(5,7,1,1))
+plot(subset(df1, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
+      axes=FALSE, xlab="",ylab="",
+      ylim=c(0,16))
+text(c(1:12), -1.2, labels = labels2, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+text(0, c(1.4:16.4), labels = labels3.df1[,1], col=colfunc(16),
+     adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+axis(1, at=1:12, labels = c(rep("",12)))
+axis(2, at=1:16, labels = c(rep("",16)))
+
+lines(subset(df1, q_params == labels[2])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[2]), 3]])
+lines(subset(df1, q_params == labels[3])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[3]), 3]])
+lines(subset(df1, q_params == labels[4])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[4]), 3]])
+lines(subset(df1, q_params == labels[5])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[5]), 3]])
+lines(subset(df1, q_params == labels[6])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[6]), 3]])
+lines(subset(df1, q_params == labels[7])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[7]), 3]])
+lines(subset(df1, q_params == labels[8])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[8]), 3]])
+lines(subset(df1, q_params == labels[9])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[9]), 3]])
+lines(subset(df1, q_params == labels[10])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[10]), 3]])
+lines(subset(df1, q_params == labels[11])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[11]), 3]])
+lines(subset(df1, q_params == labels[12])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[12]), 3]])
+lines(subset(df1, q_params == labels[13])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[13]), 3]])
+lines(subset(df1, q_params == labels[14])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[14]), 3]])
+lines(subset(df1, q_params == labels[15])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[15]), 3]])
+lines(subset(df1, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[16]), 3]])
 
 # average rank barchart
+par(mar=c(5,6,3,3))
+bp2.1<-barplot(rev(as.numeric(order.mr1[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
+text(par('usr')[3], bp2.1, labels = rev(order.mr[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+
 
 
 
