@@ -49,7 +49,7 @@ Simulation { # 3: Ingested exposure predicted
   IngDose = 72.0; # ingested dose
   
   # Ingested dose (instantaneous bolus dose) in mg
-  Q_ing =  NDoses(2, IngDose 0, 0 0.1);
+  Q_ing =  NDoses(2, IngDose 0, 0 1);
   Print (AUC_exh_ug, 2880);
   Print (AUC_ven_ug, 2880);
   Print (Pct_cumulative_oral, 2880);

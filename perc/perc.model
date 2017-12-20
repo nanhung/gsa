@@ -255,8 +255,10 @@ CalcOutputs {
   Pct_metabolized = (InhMag ?
                      100 * Q_met / 
                      (1440 * Flow_alv * InhMag * mg_per_l_per_PPM) : 0);
-  Pct_cumulative_inh = 100 - Pct_metabolized;                   
-  Pct_cumulative_oral = 100 - Q_met/IngDose * 100;
+  
+  Pct_cumulative_inh = (Q_fat+ Q_wp+ Q_pp+ Q_liv)/
+                      (Exposure * Flow_alv * InhMag * mg_per_l_per_PPM);          
+  Pct_cumulative_oral = (Q_fat+ Q_wp+ Q_pp+ Q_liv)/IngDose;
   
   Q_met_ug = Q_met * 1000; # milli to micrograms
 
