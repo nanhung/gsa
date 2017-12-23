@@ -1,5 +1,7 @@
 setwd(paste(getwd(), "/perc", sep=""))
 source("perc_gsa.R")
+if(!require(scatterplot3d)) {
+  install.packages("scatterplot3d"); require(scatterplot3d)} 
 
 # Parameter distribution
 pdf(file="fig1.pdf", width = 9, height = 7)
@@ -98,6 +100,31 @@ mtext("Time, hr", South<-1, line=0.6, cex=1, outer=TRUE)
 mtext("Inhalation = 72 ppm", NORTH<-3, line=-1, adj=0.3, cex=1.2, outer=TRUE, col="blue")
 mtext("Ingestion = 72 mg", NORTH<-3, line=-1, adj=0.93, cex=1.2, outer=TRUE, col="red")
 dev.off()
+
+
+# 3dPhase plane (not finish)
+df<-data.frame(as.numeric(sim1[1,C_exh_ug_1]),
+               as.numeric(sim1[1,C_ven_ug_1]),
+               as.numeric(sim1[1,Q_met_1]))
+colfunc <- colorRampPalette(c("maroon", "red"))
+df1<-cbind(df, c(colfunc(10)[1], colfunc(10)[2], colfunc(10)[3], colfunc(10)[4], colfunc(10)[5],
+                 colfunc(10)[6], colfunc(10)[7],colfunc(10)[8], colfunc(10)[9], colfunc(10)[10]))
+names(df1)<-c("C_exh_ug","C_ven_ug","Q_met", "col")
+
+
+
+with(df1, {
+  scatterplot3d(C_exh_ug,   # x axis
+                C_ven_ug,     # y axis
+                Q_met,    # z axis,
+                xlab = "Exhaled air",
+                ylab = "Blood",
+                zlab = "Exhaled + Metabolized",
+                type = 'b',color = col)
+
+})
+
+
 
 #
 set.seed(1234)
