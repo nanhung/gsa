@@ -23,6 +23,17 @@ abline(mod)
 lines(newx, preds[ ,3], lty = 'dashed', col = 'red')
 lines(newx, preds[ ,2], lty = 'dashed', col = 'red')
 
+polygon(c(0, 1), c(-2,2), col = 'grey80', border = NA)
+
+# Rechteck einzeichnen
+polygon(
+  x = c(0, 0, 1, 1)
+  , y = c(-1, 2, 2, -1)
+  , col = "#0000cc33", 
+  border = NA
+)
+
+
 ######################################################
 
 x = 1:100
