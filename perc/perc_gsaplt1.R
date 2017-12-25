@@ -328,8 +328,13 @@ mtext("Parameter", South<-1, line=0.7, cex=1.2, outer=TRUE)
 dev.off()
 
 # Sensitivity ranking
+labs<-c("LeanBodyWt", "Flow_pul", "Vent_Perf", 
+       "Pct_M_fat", "Pct_LM_liv", "Pct_LM_wp",
+       "Pct_Flow_fat", "Pct_Flow_liv", "Pct_Flow_pp",
+       "PC_fat", "PC_liv", "PC_wp", "PC_pp", "PC_art",
+       "sc_Vmax", "Km")
 sen.rank<-function(dataset){
-  df<- cbind(labels, as.data.frame(dataset))
+  df<- cbind(labs, as.data.frame(dataset))
   transform(df, rank = ave(df[,2], 
                            FUN = function(x) rank(x, ties.method = "first")))
 }
@@ -392,7 +397,7 @@ labels3.df3 <- mm2.1R[order(mm3.1R[,3]),]
 var<-c(rep("Exh.Morris.mu",16),rep("Bld.Morris.mu",16),rep("Met.Morris.mu",16),rep("Exh.Morris.sig",16),rep("Bld.Morris.sig",16),rep("Met.Morris.sig",16),
        rep("Exh.eFAST.M",16),rep("Bld.eFAST.M",16),rep("Met.eFAST.M",16),rep("Exh.eFAST.I",16),rep("Bld.eFAST.I",16),rep("Met.eFAST.I",16))
 
-q_params<-c(rep(labels,12))
+q_params<-c(rep(labs,12))
 
 df1 <- data.frame(var, Rank1, q_params) # G1
 df2 <- data.frame(var, Rank2, q_params) # G2
@@ -405,23 +410,23 @@ labels2<-c("Exh.Morris.mu", "Bld.Morris.mu","Met.Morris.mu",
 
 colfunc <- colorRampPalette(c("blue", "red"))
 
-mean.rank1<-data.frame(labels); mean.rank1$avg.rank<-""
-mean.rank2<-data.frame(labels); mean.rank2$avg.rank<-""
-mean.rank3<-data.frame(labels); mean.rank3$avg.rank<-""
+mean.rank1<-data.frame(labs); mean.rank1$avg.rank<-""
+mean.rank2<-data.frame(labs); mean.rank2$avg.rank<-""
+mean.rank3<-data.frame(labs); mean.rank3$avg.rank<-""
 
 #
 for(i in 1:16){ # Total mean ranking G1
-  mean.rank1[i,2]<-mean(subset(df1, q_params == labels[i])[,2])
+  mean.rank1[i,2]<-mean(subset(df1, q_params == labs[i])[,2])
 }
 order.mr1<-mean.rank1[order(-as.numeric(mean.rank1[,2])),] 
 
 for(i in 1:16){ # Total mean ranking G2
-  mean.rank2[i,2]<-mean(subset(df2, q_params == labels[i])[,2])
+  mean.rank2[i,2]<-mean(subset(df2, q_params == labs[i])[,2])
 }
 order.mr2<-mean.rank2[order(-as.numeric(mean.rank2[,2])),] 
 
 for(i in 1:16){ # Total mean ranking G3
-  mean.rank3[i,2]<-mean(subset(df3, q_params == labels[i])[,2])
+  mean.rank3[i,2]<-mean(subset(df3, q_params == labs[i])[,2])
 }
 order.mr3<-mean.rank3[order(-as.numeric(mean.rank3[,2])),] 
 
@@ -429,7 +434,7 @@ order.mr3<-mean.rank3[order(-as.numeric(mean.rank3[,2])),]
 pdf(file="fig4.pdf", width = 9, height = 8)
 par(mfrow=c(3,2), mar=c(5,7,1,1))
 # G1
-plot(subset(df1, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
+plot(subset(df1, q_params == labs[1])[,2], type="b", col=colfunc(16)[8], 
      axes=FALSE, xlab="",ylab="",
      ylim=c(0,16))
 text(c(1:12), -1.2, labels = labels2, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
@@ -438,30 +443,30 @@ text(0, c(1.4:16.4), labels = labels3.df1[,1], col=colfunc(16),
 axis(1, at=1:12, labels = c(rep("",12)))
 axis(2, at=1:16, labels = c(rep("",16)))
 
-lines(subset(df1, q_params == labels[2])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[2]), 3]])
-lines(subset(df1, q_params == labels[3])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[3]), 3]])
-lines(subset(df1, q_params == labels[4])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[4]), 3]])
-lines(subset(df1, q_params == labels[5])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[5]), 3]])
-lines(subset(df1, q_params == labels[6])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[6]), 3]])
-lines(subset(df1, q_params == labels[7])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[7]), 3]])
-lines(subset(df1, q_params == labels[8])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[8]), 3]])
-lines(subset(df1, q_params == labels[9])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[9]), 3]])
-lines(subset(df1, q_params == labels[10])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[10]), 3]])
-lines(subset(df1, q_params == labels[11])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[11]), 3]])
-lines(subset(df1, q_params == labels[12])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[12]), 3]])
-lines(subset(df1, q_params == labels[13])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[13]), 3]])
-lines(subset(df1, q_params == labels[14])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[14]), 3]])
-lines(subset(df1, q_params == labels[15])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[15]), 3]])
-lines(subset(df1, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labels==labels[16]), 3]])
+lines(subset(df1, q_params == labs[2])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[2]), 3]])
+lines(subset(df1, q_params == labs[3])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[3]), 3]])
+lines(subset(df1, q_params == labs[4])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[4]), 3]])
+lines(subset(df1, q_params == labs[5])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[5]), 3]])
+lines(subset(df1, q_params == labs[6])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[6]), 3]])
+lines(subset(df1, q_params == labs[7])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[7]), 3]])
+lines(subset(df1, q_params == labs[8])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[8]), 3]])
+lines(subset(df1, q_params == labs[9])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[9]), 3]])
+lines(subset(df1, q_params == labs[10])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[10]), 3]])
+lines(subset(df1, q_params == labs[11])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[11]), 3]])
+lines(subset(df1, q_params == labs[12])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[12]), 3]])
+lines(subset(df1, q_params == labs[13])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[13]), 3]])
+lines(subset(df1, q_params == labs[14])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[14]), 3]])
+lines(subset(df1, q_params == labs[15])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[15]), 3]])
+lines(subset(df1, q_params == labs[16])[,2], type="b", col=colfunc(16)[mm1.1R[ which(mm1.1R$labs==labs[16]), 3]])
 
 # average rank barchart
 par(mar=c(5,6,3,3))
-bp2.1<-barplot(rev(as.numeric(order.mr1[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
+bp2.1<-barplot(rev(as.numeric(order.mr1[,2])), ylim = c(0,16), xlim = c(0,16), xlab="Ranking",horiz=TRUE)
 text(par('usr')[3], bp2.1, labels = rev(order.mr1[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
 # G2
 par(mar=c(5,7,1,1))
-plot(subset(df2, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
+plot(subset(df2, q_params == labs[1])[,2], type="b", col=colfunc(16)[8], 
      axes=FALSE, xlab="",ylab="",
      ylim=c(0,16))
 text(c(1:12), -1.2, labels = labels2, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
@@ -470,31 +475,31 @@ text(0, c(1.4:16.4), labels = labels3.df2[,1], col=colfunc(16),
 axis(1, at=1:12, labels = c(rep("",12)))
 axis(2, at=1:16, labels = c(rep("",16)))
 
-lines(subset(df2, q_params == labels[2])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[2]), 3]])
-lines(subset(df2, q_params == labels[3])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[3]), 3]])
-lines(subset(df2, q_params == labels[4])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[4]), 3]])
-lines(subset(df2, q_params == labels[5])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[5]), 3]])
-lines(subset(df2, q_params == labels[6])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[6]), 3]])
-lines(subset(df2, q_params == labels[7])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[7]), 3]])
-lines(subset(df2, q_params == labels[8])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[8]), 3]])
-lines(subset(df2, q_params == labels[9])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[9]), 3]])
-lines(subset(df2, q_params == labels[10])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[10]), 3]])
-lines(subset(df2, q_params == labels[11])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[11]), 3]])
-lines(subset(df2, q_params == labels[12])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[12]), 3]])
-lines(subset(df2, q_params == labels[13])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[13]), 3]])
-lines(subset(df2, q_params == labels[14])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[14]), 3]])
-lines(subset(df2, q_params == labels[15])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[15]), 3]])
-lines(subset(df2, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labels==labels[16]), 3]])
+lines(subset(df2, q_params == labs[2])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[2]), 3]])
+lines(subset(df2, q_params == labs[3])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[3]), 3]])
+lines(subset(df2, q_params == labs[4])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[4]), 3]])
+lines(subset(df2, q_params == labs[5])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[5]), 3]])
+lines(subset(df2, q_params == labs[6])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[6]), 3]])
+lines(subset(df2, q_params == labs[7])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[7]), 3]])
+lines(subset(df2, q_params == labs[8])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[8]), 3]])
+lines(subset(df2, q_params == labs[9])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[9]), 3]])
+lines(subset(df2, q_params == labs[10])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[10]), 3]])
+lines(subset(df2, q_params == labs[11])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[11]), 3]])
+lines(subset(df2, q_params == labs[12])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[12]), 3]])
+lines(subset(df2, q_params == labs[13])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[13]), 3]])
+lines(subset(df2, q_params == labs[14])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[14]), 3]])
+lines(subset(df2, q_params == labs[15])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[15]), 3]])
+lines(subset(df2, q_params == labs[16])[,2], type="b", col=colfunc(16)[mm2.1R[ which(mm1.1R$labs==labs[16]), 3]])
 
 # average rank barchart
 par(mar=c(5,6,3,3))
-bp2.2<-barplot(rev(as.numeric(order.mr2[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
+bp2.2<-barplot(rev(as.numeric(order.mr2[,2])), ylim = c(0,16), xlim = c(0,16), xlab="Ranking",horiz=TRUE)
 text(par('usr')[3], bp2.2, labels = rev(order.mr2[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 
 
 # G3
 par(mar=c(5,7,1,1))
-plot(subset(df3, q_params == labels[1])[,2], type="b", col=colfunc(16)[8], 
+plot(subset(df3, q_params == labs[1])[,2], type="b", col=colfunc(16)[8], 
      axes=FALSE, xlab="",ylab="",
      ylim=c(0,16))
 text(c(1:12), -1.2, labels = labels2, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
@@ -503,24 +508,37 @@ text(0, c(1.4:16.4), labels = labels3.df3[,1], col=colfunc(16),
 axis(1, at=1:12, labels = c(rep("",12)))
 axis(2, at=1:16, labels = c(rep("",16)))
 
-lines(subset(df3, q_params == labels[2])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[2]), 3]])
-lines(subset(df3, q_params == labels[3])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[3]), 3]])
-lines(subset(df3, q_params == labels[4])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[4]), 3]])
-lines(subset(df3, q_params == labels[5])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[5]), 3]])
-lines(subset(df3, q_params == labels[6])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[6]), 3]])
-lines(subset(df3, q_params == labels[7])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[7]), 3]])
-lines(subset(df3, q_params == labels[8])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[8]), 3]])
-lines(subset(df3, q_params == labels[9])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[9]), 3]])
-lines(subset(df3, q_params == labels[10])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[10]), 3]])
-lines(subset(df3, q_params == labels[11])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[11]), 3]])
-lines(subset(df3, q_params == labels[12])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[12]), 3]])
-lines(subset(df3, q_params == labels[13])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[13]), 3]])
-lines(subset(df3, q_params == labels[14])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[14]), 3]])
-lines(subset(df3, q_params == labels[15])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[15]), 3]])
-lines(subset(df3, q_params == labels[16])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labels==labels[16]), 3]])
+lines(subset(df3, q_params == labs[2])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[2]), 3]])
+lines(subset(df3, q_params == labs[3])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[3]), 3]])
+lines(subset(df3, q_params == labs[4])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[4]), 3]])
+lines(subset(df3, q_params == labs[5])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[5]), 3]])
+lines(subset(df3, q_params == labs[6])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[6]), 3]])
+lines(subset(df3, q_params == labs[7])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[7]), 3]])
+lines(subset(df3, q_params == labs[8])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[8]), 3]])
+lines(subset(df3, q_params == labs[9])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[9]), 3]])
+lines(subset(df3, q_params == labs[10])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[10]), 3]])
+lines(subset(df3, q_params == labs[11])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[11]), 3]])
+lines(subset(df3, q_params == labs[12])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[12]), 3]])
+lines(subset(df3, q_params == labs[13])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[13]), 3]])
+lines(subset(df3, q_params == labs[14])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[14]), 3]])
+lines(subset(df3, q_params == labs[15])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[15]), 3]])
+lines(subset(df3, q_params == labs[16])[,2], type="b", col=colfunc(16)[mm3.1R[ which(mm1.1R$labs==labs[16]), 3]])
 
 # average rank barchart
 par(mar=c(5,6,3,3))
-bp2.3<-barplot(rev(as.numeric(order.mr3[,2])), ylim = c(0,16), xlab="Ranking",horiz=TRUE)
+bp2.3<-barplot(rev(as.numeric(order.mr3[,2])), ylim = c(0,16), xlim = c(0,16), xlab="Ranking",horiz=TRUE)
 text(par('usr')[3], bp2.3, labels = rev(order.mr3[,1]), adj = c(1.1,1.1), xpd = TRUE, cex=.9)
+
+#
+par(fig=c(0.84, 0.99, 0.76, 0.91), mar= c(4,4,0,0), new=TRUE)
+plot(df1[1:96,2], df1[97:192,2], xlab = "Morris rank", ylab="eFAST rank", pch = 19, cex=0.8, cex.lab=1)
+par(fig=c(0.84,0.99, 0.40,0.55), new=TRUE)
+plot(df2[1:96,2], df1[97:192,2], xlab = "", ylab="", pch = 19, cex=0.8)
+par(fig=c(0.84,0.99, 0.06,0.21), new=TRUE)
+plot(df3[1:96,2], df1[97:192,2], xlab = "", ylab="", pch = 19, cex=0.8)
+
 dev.off()
+
+cor(df1[1:96,2], df1[97:192,2])
+cor(df2[1:96,2], df2[97:192,2])
+cor(df3[1:96,2], df3[97:192,2])
