@@ -187,14 +187,16 @@ par(mfrow=c(1,3), mar = c(3,2,1, 1), oma = c(3,3,2,0))
 #EP.plt2(sim0, sim1, sim2,7, "")
 #EP.plt2(sim0, sim3, sim4,11, "")
 EP.plt2(sim0, sim1, sim2,4, "")
-legend("bottomright", c("All parameter","High sensity parameter","Low sensity parameter"), cex=1, 
-       col=c("black","red","blue"), pch=21,  bty="n", cex=0.6);
+#legend("bottomright", c("All parameter","High sensity parameter","Low sensity parameter"), cex=1, 
+#       col=c("black","red","blue"), pch=21,  bty="n", cex=0.6);
 EP.plt2(sim0, sim1, sim2,8, "")
 EP.plt2(sim0, sim3, sim4,12, "")
 
 #par(fig=c(0.06,0.32, 0.1,0.44), mar = c(4,4,1,1), new=TRUE)
 par(fig=c(0.06,0.32, 0.2,0.94), mar = c(4,4,1,1), new=TRUE)
 TK.plt2(sim0, sim1, sim2, Pct_cumulative_1, "Time", "Cumulative fraction")
+abline(v=21, lty=2)
+text(17,0.8, labels = "t = 21 day")
 par(fig=c(0.39,0.65, 0.2,0.94), mar = c(4,4,1,1), new=TRUE)
 TK.plt2(sim0, sim1, sim2, Pct_cumulative_2, "", "")
 par(fig=c(0.73,0.99, 0.2,0.94), mar = c(4,4,1,1), new=TRUE)
