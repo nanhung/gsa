@@ -181,23 +181,23 @@ TK.plt2<-function(X0, X1, X2, j, xlab, ylab){
 }
 
 #
-pdf(file="fig6.pdf", width = 8, height = 6)
-par(mfrow=c(2,3), mar = c(3,2,1, 1), oma = c(3,3,2,0))
-EP.plt2(sim0, sim1, sim2, 3, "")
-legend("bottomright", c("All parameter","High sensity parameter","Low sensity parameter"), cex=1, 
-       col=c("black","red","blue"), pch=21,  bty="n");
-EP.plt2(sim0, sim1, sim2,7, "")
-EP.plt2(sim0, sim3, sim4,11, "")
+pdf(file="fig6.pdf", width = 8, height = 3)
+par(mfrow=c(1,3), mar = c(3,2,1, 1), oma = c(3,3,2,0))
+#EP.plt2(sim0, sim1, sim2, 3, "")
+#EP.plt2(sim0, sim1, sim2,7, "")
+#EP.plt2(sim0, sim3, sim4,11, "")
 EP.plt2(sim0, sim1, sim2,4, "")
+legend("bottomright", c("All parameter","High sensity parameter","Low sensity parameter"), cex=1, 
+       col=c("black","red","blue"), pch=21,  bty="n", cex=0.6);
 EP.plt2(sim0, sim1, sim2,8, "")
 EP.plt2(sim0, sim3, sim4,12, "")
 
-par(fig=c(0.06,0.32, 0.1,0.44), mar = c(4,4,1,1), new=TRUE)
-
+#par(fig=c(0.06,0.32, 0.1,0.44), mar = c(4,4,1,1), new=TRUE)
+par(fig=c(0.06,0.32, 0.2,0.94), mar = c(4,4,1,1), new=TRUE)
 TK.plt2(sim0, sim1, sim2, Pct_cumulative_1, "Time", "Cumulative fraction")
-par(fig=c(0.39,0.65, 0.1,0.44), mar = c(4,4,1,1), new=TRUE)
+par(fig=c(0.39,0.65, 0.2,0.94), mar = c(4,4,1,1), new=TRUE)
 TK.plt2(sim0, sim1, sim2, Pct_cumulative_2, "", "")
-par(fig=c(0.73,0.99, 0.1,0.44), mar = c(4,4,1,1), new=TRUE)
+par(fig=c(0.73,0.99, 0.2,0.94), mar = c(4,4,1,1), new=TRUE)
 TK.plt2(sim0, sim3, sim4, Pct_cumulative_3, "", "")
 
 mtext("Inhalation", NORTH<-3, line=0, adj=0.32, cex=1.2, outer=TRUE, col="grey20")
