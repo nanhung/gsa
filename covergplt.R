@@ -67,13 +67,24 @@ ind<-c(0.2619562,0.1379795, 0.08455584, 0.04598252,
 
 df7<-data.frame(Model,est,n, time, ind)
 
-dft<-do.call(rbind, list(df2,df3,df4,df5,df6,df7))
+Model<-c(rep("M21", 4), rep("M58", 4))
+est<-c(rep("Morris", 4), rep("Morris", 4))
+n<-c(1024, 2048, 4096, 8192, 1024, 2048, 4096, 8192)
+time<-c(0.5633333, 1.0816667, 2.1766667, 4.3883333,
+        1.592167, 3.071667,  6.233333, 12.728167)
+ind<-c(0.075, 0.063, 0.04, 0.033,
+       0.07, 0.051, 0.032, 0.023)
+df1<-data.frame(Model,est,n, time, ind)
+
+
+dft<-do.call(rbind, list(df2,df3,df4,df5,df6,df7,df1))
 
 dft$linetype<-c(rep("2",4), rep("1",4), rep("2",4), rep("1",4),
                 rep("2",4), rep("1",4), rep("2",4), rep("1",4),
-                rep("2",4), rep("1",4), rep("2",4), rep("1",4))
+                rep("2",4), rep("1",4), rep("2",4), rep("1",4),
+                rep("2",8))
 
-dft$color<-c(rep("2",16), rep("3",16), rep("4",16))
+dft$color<-c(rep("2",16), rep("3",16), rep("4",16), rep("1",8))
 levels(dft$Model) <- c("Original 21 Parameters", "All 58 parameters")
 
 pdf(file="fig1.pdf", width = 10, height = 7)
@@ -83,7 +94,7 @@ p1<-ggplot(dft, aes(x = n, y = ind)) + facet_grid(Model~.) +
   geom_point(aes(color = color), size = 1.4) + theme_bw() +
   xlab("Sample number, n") + ylab("Convergence index") +
   labs(colour="Estimator",linetype="Order") +
-  scale_color_discrete(labels=c("eFAST", "Jansen", "Owen")) +
+  scale_color_discrete(labels=c("Morris","eFAST", "Jansen", "Owen")) +
   scale_linetype_discrete(labels=c("Total effect", "Main effect")) +
   theme(strip.background = element_blank(), # remove box
         strip.text.y = element_blank(), 
