@@ -32,8 +32,7 @@ VMC  = 0.4; lnVMC = log(0.4);             # Muscle
 VBLAC= 0.0243; lnVBLAC = log(0.0243);        # Arterial Blood.
 VBLVC= 0.0557; lnVBLVC = log(0.0557);         # Venous Blood.
 VSC = 0.185; lnVSC = log(0.185);            # Slowly Perfused
-VRC = 0.0765; lnVRC = log(0.0765);           # Rapidly Perfused (1- everything else)
-
+#VRC = 0.0765; lnVRC = log(0.0765);           # Rapidly Perfused (1- everything else)
 
 # Fractional blood flows (fraction of cardiac output).
 QFC  = 0.052; lnQFC = log(0.052);           # Fat. **
@@ -42,8 +41,7 @@ QGC  = 0.181; lnQGC = log(0.181);          # Gut. **
 QLBC = 0.046; lnQLBC = log(0.046);          # Hepatic artery. **
 QMC  = 0.191; lnQMC = log(0.191);          # Muscle
 QSC = 0.14; lnQSC = log(0.14);           # Slowly Perfused
-QRC = 0.215; lnQRC = log(0.215);           # Rapidly Perfused (1 -  everything else)
-
+#QRC = 0.215; lnQRC = log(0.215);           # Rapidly Perfused (1 -  everything else)
 
 # Chemical Specific Transport Params
 #-----------------------------------
@@ -199,6 +197,24 @@ M_lnIVDose_APAP; M_lnVar_IVDose_APAP;
 M_BW; M_lnBW;
 M_fa; M_lnfa;
 
+#
+M_lnQCC;
+#
+M_lnVFC;
+M_lnVKC;
+M_lnVGC;
+M_lnVLC;
+M_lnVMC;
+M_lnVBLAC;
+M_lnVBLVC;
+M_lnVSC;
+M_lnQFC;
+M_lnQKC;
+M_lnQGC;
+M_lnQLBC;
+M_lnQMC;
+M_lnQSC;
+
 # Chemical Specific Transport Params
 #-----------------------------------
 M_kSG_Vm; M_lnkSG_Vm;
@@ -206,6 +222,7 @@ M_kSG_Km; M_lnkSG_Km;
 M_Tg;     M_lnTg;
 M_Tp;     M_lnTp;
 
+#
 M_CLC_APAP; M_lnCLC_APAP; # Total APAP blood clearance (L/hr/kg)
 M_CLC_AS; M_lnCLC_AS;       # Total AS blood clearance (L/hr/kg)
 M_CLC_AG; M_lnCLC_AG;      # Total AG blood clearance (L/hr/kg)
@@ -284,6 +301,25 @@ M_Km_AS; M_lnKm_AS;
 #----------------------
 Var_BW; Var_lnBW;
 Var_fa; Var_lnfa;
+
+#
+Var_lnQCC;
+#
+Var_lnVFC;
+Var_lnVKC;
+Var_lnVGC;
+Var_lnVLC;
+Var_lnVMC;
+Var_lnVBLAC;
+Var_lnVBLVC;
+Var_lnVSC;
+Var_lnQFC;
+Var_lnQKC;
+Var_lnQGC;
+Var_lnQLBC;
+Var_lnQMC;
+Var_lnQSC;
+
 
 # Chemical Specific Transport Params
 #-----------------------------------
@@ -518,14 +554,12 @@ VMC   = exp(lnVMC);
 VBLAC = exp(lnVBLAC);
 VBLVC = exp(lnVBLVC);
 VSC   = exp(lnVSC);
-VRC   = exp(lnVRC);
 QFC  = exp(lnQFC);
 QKC  = exp(lnQKC);
 QGC  = exp(lnQGC);
 QLBC = exp(lnQLBC);
 QMC  = exp(lnQMC);
 QSC  = exp(lnQSC);           
-QRC  = exp(lnQRC);    
 
 # Inital Dosing
 #--------------
@@ -625,31 +659,33 @@ IVDR_APAP = (IVD_APAP_mg/IVDur_APAP)*(1000./MW_APAP);
 #---------------------------------------------------------------------------
 # Specify the compartment volumes (L)
 #---------------------------------------------------------------------------
-VTC  = VFC+VKC+VGC+VLC+VMC+VBLAC+VBLVC+VRC+VSC;
-VF = VFC*BW/VTC;         # Fat.
-VK = VKC*BW/VTC;         # Kidney.
-VG = VGC*BW/VTC;         # Gut.
-VL = VLC*BW/VTC;         # Liver.
-VM = VMC*BW/VTC;         # Muscle.
-VBLA = VBLAC*BW/VTC;     # Arterial
-VBLV = VBLVC*BW/VTC;     # Venous
-VR = VRC*BW/VTC;         # Rapidly Perfused
-VS = VSC*BW/VTC;         # Slowly Perfused
+# VTC  = VFC+VKC+VGC+VLC+VMC+VBLAC+VBLVC+VRC+VSC;
+VRC = 1- (VFC+VKC+VGC+VLC+VMC+VBLAC+VBLVC+VSC);
+VF = VFC*BW;         # Fat.
+VK = VKC*BW;         # Kidney.
+VG = VGC*BW;         # Gut.
+VL = VLC*BW;         # Liver.
+VM = VMC*BW;         # Muscle.
+VBLA = VBLAC*BW;     # Arterial
+VBLV = VBLVC*BW;     # Venous
+VR = VRC*BW;         # Rapidly Perfused
+VS = VSC*BW;         # Slowly Perfused
 
 #---------------------------------------------------------------------------
 # Specify the flow rates (L/hr)
 #---------------------------------------------------------------------------
-QTC  = QFC+QKC+QGC+QLBC+QMC+QRC+QSC;
-QC  = QCC*pow(BW,0.75);      # Cardiac output (L/hr).
 
-QF = QFC*QC/QTC;         # Fat.
-QK = QKC*QC/QTC;         # Kidney.
-QG = QGC*QC/QTC;         # Gut.
-QM = QMC*QC/QTC;         # Gut.
-QLB = QLBC*QC/QTC;       # Hepatic artery.
-QR = QRC*QC/QTC;         # Rapidly Perfused
-QS = QSC*QC/QTC;         # Slowly Perfused
-QL  = QG+QLB;            # Total liver flow.
+# QTC = QFC+QKC+QGC+QLBC+QMC+QRC+QSC;
+QRC = 1 - (QFC+QKC+QGC+QLBC+QMC+QSC);
+QC  = QCC*pow(BW,0.75);      # Cardiac output (L/hr).
+QF = QFC*QC;         # Fat.
+QK = QKC*QC;         # Kidney.
+QG = QGC*QC;         # Gut.
+QM = QMC*QC;         # Musscle.
+QLB = QLBC*QC;       # Hepatic artery.
+QR = QRC*QC;         # Rapidly Perfused
+QS = QSC*QC;         # Slowly Perfused
+QL = QG+QLB;         # Total liver flow.
 
 #---------------------------------------------------------------------------
 # Compute the clearance rates (L/hr)
