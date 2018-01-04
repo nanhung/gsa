@@ -5,83 +5,77 @@ if(!require(EnvStats)) {
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)}
 
-Tg<-0.332
-Tp<-0.0476
-CYP_Km <- 123
-CYP_VmaxC <- 2.57
-SULT_Km_apap <- 1.2e3
-SULT_Ki <- 478
-SULT_Km_paps <- 0.345
-SULT_VmaxC <- 467
-UGT_Km <- 6.14e3
-UGT_Ki <- 4.99e4
-UGT_Km_GA <- 0.343
-UGT_VmaxC <- 5.21e3
-Km_AG <- 1.75e4
-Vmax_AG <- 3.54e4
-Km_AS <- 2.23e4
-Vmax_AS <- 1.4e7
-kGA_syn <- 3.6e4
-kPAPS_syn <- 3.66e3
-CLC_APAP <- 0.0123
-CLC_AG <- 0.155
-CLC_AS <- 0.138
+#Nominal value
+Tg <- log(0.23)
+Tp <- log(0.033)
+CYP_Km <- log(130)
+SULT_Km_apap <- log(300)
+SULT_Ki <- log(526)
+SULT_Km_paps <- log(0.5)
+UGT_Km <- log(6.0e3)
+UGT_Ki <- log(5.8e4)
+UGT_Km_GA <-log(0.5)
+Km_AG <- log(1.99e4)
+Km_AS <- log(2.29e4)
 
-QCC<-16.2
+QCC <- log(16.2)
 
-VFC <- 0.214 # Fat
-VKC <- 0.0044 # Kidney
-VGC <- 0.0144 # Gut
-VLC <- 0.0257 # Hepatic artery
-VMC <- 0.4 # Muscle
-VBLAC <- 0.0243  # Arterial Blood
-VBLVC <- 0.0557 # Venous Blood
-VSC <- 0.185 # Slowly Perfused
+VFC <- log(0.214) # Fat
+VKC <- log(0.0044) # Kidney
+VGC <- log(0.0144) # Gut
+VLC <- log(0.0257) # Hepatic artery
+VMC <- log(0.4) # Muscle
+VBLAC <- log(0.0243)  # Arterial Blood
+VBLVC <- log(0.0557) # Venous Blood
+VSC <- log(0.185) # Slowly Perfused
 #VRC <- 0.0765  # Rapidly Perfused (1- everything else)
 
-QFC  <- 0.052 # Fat
-QKC  <- 0.175 # Kidney
-QGC  <- 0.181 # Gut
-QLBC <- 0.046 # Hepatic artery
-QMC  <- 0.191 # Muscle
-QSC  <- 0.14 # Slowly Perfused
+QFC  <- log(0.052) # Fat
+QKC  <- log(0.175) # Kidney
+QGC  <- log(0.181) # Gut
+QLBC <- log(0.046) # Hepatic artery
+QMC  <- log(0.191) # Muscle
+QSC  <- log(0.14) # Slowly Perfused
 # QRC  <- 0.215  # Rapidly Perfused (1 -  everything else)
 
-BP_APAP = 0.9
+BP_APAP = log(0.9)
 
-PF_APAP = 0.447    # Fat:blood
-PG_APAP = 0.907    # Gut:blood
-PK_APAP = 0.711    # Kidney:blood
-PL_APAP = 0.687    # Liver:blood
-PM_APAP = 0.687    # Muscle:blood
-PR_APAP = 0.676    # rapidly perfused:blood [brain, lung, spleen]
-PS_APAP = 0.606    # slowly perfused:blood [bone, heart, skin]
+PF_APAP = log(0.447)   # Fat:blood
+PG_APAP = log(0.907)    # Gut:blood
+PK_APAP = log(0.711)    # Kidney:blood
+PL_APAP = log(0.687)    # Liver:blood
+PM_APAP = log(0.687)    # Muscle:blood
+PR_APAP = log(0.676)   # rapidly perfused:blood [brain, lung, spleen]
+PS_APAP = log(0.606)    # slowly perfused:blood [bone, heart, skin]
 
-PF_AS = 0.088
-PG_AS = 0.297
-PK_AS = 0.261
-PL_AS = 0.203
-PM_AS = 0.199
-PR_AS = 0.207
-PS_AS = 0.254
+PF_AS = log(0.088)
+PG_AS = log(0.297)
+PK_AS = log(0.261)
+PL_AS = log(0.203)
+PM_AS = log(0.199)
+PR_AS = log(0.207)
+PS_AS = log(0.254)
 
-PF_AG = 0.128
-PG_AG = 0.436
-PK_AG = 0.392
-PL_AG = 0.321
-PM_AG = 0.336
-PR_AG = 0.364
-PS_AG = 0.351
+PF_AG = log(0.128)
+PG_AG = log(0.436)
+PK_AG = log(0.392)
+PL_AG = log(0.321)
+PM_AG = log(0.336)
+PR_AG = log(0.364)
+PS_AG = log(0.351)
 
-#
-lwr <- -1.2
-upr <- 1.2
-lwr_QCC <- -0.8
-upr_QCC <- 0.8
-lwr_phy <- -0.08
-upr_phy <- 0.08
-lwr_p <- -2.0
-upr_p <- 2.0
+r <- 2.0 # narrow down the range to prevent calculation error
+r_QCC <- 0.8 # Frm Chiu et al. (2009)
+r_QFC <- 0.92
+r_QGC <- 0.36
+r_QLC <- 0.90
+r_QKC <- 0.24
+r_QSC <- 0.64
+r_QMC <- 0.64 # smae as slow
+
+r_phy<- 0.08
+r_pc <- 1.2 # Use the small range to improve converge
+
 
 #
 binf<-c(Tg*exp(lwr), 
@@ -105,7 +99,7 @@ binf<-c(Tg*exp(lwr),
         CLC_APAP*exp(lwr), 
         CLC_AG*exp(lwr), 
         CLC_AS*exp(lwr),
-        QCC*exp(lwr_QCC),
+        QCC*exp(r_QCC),
         VFC*exp(lwr_phy),
         VKC*exp(lwr_phy),
         VGC*exp(lwr_phy),
@@ -164,7 +158,7 @@ bsup<-c(Tg*exp(upr),
         CLC_APAP*exp(upr), 
         CLC_AG*exp(upr), 
         CLC_AS*exp(upr),
-        QCC*exp(upr_QCC),
+        QCC*exp(-r_QCC),
         VFC*exp(upr_phy),
         VKC*exp(upr_phy),
         VGC*exp(upr_phy),
@@ -365,53 +359,3 @@ save(apap.Mmu.df.1.1,apap.Mmu.df.1.2,apap.Mmu.df.1.3,apap.Mmu.df.1.4,
      apap.sig.df.3.1,apap.sig.df.3.2,apap.sig.df.3.3,apap.sig.df.3.4,
      apap.sig.df.3.5,apap.sig.df.3.6,apap.sig.df.3.7,apap.sig.df.3.8,
      file = "morv2.rda")
-
-Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2], apap.Mmu.df.1.2[,2], apap.Mmu.df.1.3[,2], apap.Mmu.df.1.4[,2],
-                          apap.Mmu.df.1.5[,2], apap.Mmu.df.1.6[,2], apap.Mmu.df.1.7[,2], apap.Mmu.df.1.8[,2],
-                          apap.Mmu.df.2.1[,2], apap.Mmu.df.2.2[,2], apap.Mmu.df.2.3[,2], apap.Mmu.df.2.4[,2],
-                          apap.Mmu.df.2.5[,2], apap.Mmu.df.2.6[,2], apap.Mmu.df.2.7[,2], apap.Mmu.df.2.8[,2],
-                          apap.Mmu.df.3.1[,2], apap.Mmu.df.3.2[,2], apap.Mmu.df.3.3[,2], apap.Mmu.df.3.4[,2],
-                          apap.Mmu.df.3.5[,2], apap.Mmu.df.3.6[,2], apap.Mmu.df.3.7[,2], apap.Mmu.df.3.8[,2]
-))
-sig1<-do.call(cbind, list(apap.sig.df.1.1[,2], apap.sig.df.1.2[,2], apap.sig.df.1.3[,2], apap.sig.df.1.4[,2],
-                          apap.sig.df.1.5[,2], apap.sig.df.1.6[,2], apap.sig.df.1.7[,2], apap.sig.df.1.8[,2],
-                          apap.sig.df.2.1[,2], apap.sig.df.2.2[,2], apap.sig.df.2.3[,2], apap.sig.df.2.4[,2],
-                          apap.sig.df.2.5[,2], apap.sig.df.2.6[,2], apap.sig.df.2.7[,2], apap.sig.df.2.8[,2],
-                          apap.sig.df.3.1[,2], apap.sig.df.3.2[,2], apap.sig.df.3.3[,2], apap.sig.df.3.4[,2],
-                          apap.sig.df.3.5[,2], apap.sig.df.3.6[,2], apap.sig.df.3.7[,2], apap.sig.df.3.8[,2]))
-
-colnames(Mmu1)<-colnames(sig1)<-c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
-                                  "APAP_4h","APAP_6h","APAP_8h","APAP_12h",
-                                  "APAP-G_0.5h","APAP-G_1h", "APAP-G_1.5h","APAP-G_2h",
-                                  "APAP-G_4h","APAP-G_6h", "APAP-G_8h","APAP-G_12h",
-                                  "APAP-S_0.5h", "APAP-S_1h", "APAP-S_1.5h","APAP-S_2h",
-                                  "APAP-S_4h", "APAP-S_6h", "APAP-S_8h","APAP-S_12h")
-rownames(Mmu1)<-rownames(sig1)<-c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
-                                  "SULT_Km_paps","SULT_VmaxC","UGT_Km","UGT_Ki",
-                                  "UGT_Km_GA","UGT_VmaxC","Km_AG","Vmax_AG","Km_AS",
-                                  "Vmax_AS","kGA_syn","kPAPS_syn","CLC_APAP","CLC_AG","CLC_AS",
-                                  "QCC","VFC","VKC","VGC","VLC","VMC","VBLAC","VBLVC","VSC",
-                                  "QFC","QKC","QGC","QLBC","QMC","QSC",  
-                                  "BP_APAP","PF_APAP","PG_APAP","PK_APAP","PL_APAP","PM_APAP","PR_APAP","PS_APAP",
-                                  "PF_AS","PG_AS","PK_AS","PL_AS","PM_AS","PR_AS","PS_AS",
-                                  "PF_AG" ,"PG_AG","PK_AG","PL_AG","PM_AG","PR_AG","PS_AG")
-
-M1<-as.matrix(scale(Mmu1))
-S1<-as.matrix(scale(sig1))
-
-if(!require(gplots)) {
-  install.packages("gplots"); require(gplots)} #heatmap.2
-
-pdf(file="mor_mu_v2.pdf", width = 12, height = 12)
-heatmap.2(M1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
-          density.info = 'histogram', scale = "none", keysize = 1.2, 
-          cellnote=round(M1, digits = 1),
-          notecol="black")
-dev.off()
-
-pdf(file="mor_sig_v2.pdf", width = 12, height = 12)
-heatmap.2(S1, cexRow=1.2, cexCol=1.2, col = bluered(100), margins=c(6,9),trace="none",srtCol=35,
-          density.info = 'histogram', scale = "none", keysize = 1.2, 
-          cellnote=round(M1, digits = 1),
-          notecol="black")
-dev.off()
