@@ -65,15 +65,44 @@ PR_AG = log(0.364)
 PS_AG = log(0.351)
 
 r <- 2.0 # narrow down the range to prevent calculation error
-r_QCC <- 0.8 # Frm Chiu et al. (2009)
-r_QFC <- 0.92
-r_QGC <- 0.36
-r_QLC <- 0.90
-r_QKC <- 0.24
-r_QSC <- 0.64
-r_QMC <- 0.64 # smae as slow
+r_QCC <- 0.8 # From Chiu et al. (2009)
 
-r_phy<- 0.08
+r_VFC <- 0.9 # From Chiu et al. (2009)
+r_VKC <- 0.34 # From Chiu et al. (2009)
+r_VGC <- 0.16 # From Chiu et al. (2009)
+r_VLC <- 0.46 # From Chiu et al. (2009)
+r_VMC <-  0.34 # From Price et al. (2003), CV = 0.20
+r_VBLAC <- 0.24 # From Chiu et al. (2009)
+r_VBLVC <- 0.24 # From Chiu et al. (2009)
+r_VSC <- 0.34 # From Price et al. (2003), CV = 0.20
+
+r_QFC <- 0.67 # From Price et al. (2003), CV = 0.38
+r_QGC <- 0.35 # From Chiu et al. (2009)
+r_QLBC <- 0.35 # From Price et al. (2003), CV = 0.20
+r_QKC <- 0.24 # From Chiu et al. (2009)
+r_QSC <- 0.26 # From Price et al. (2003), CV = 0.15
+r_QMC <- 0.35 # From Price et al. (2003), CV = 0.20
+
+# sd(exp(runif(1000, QFC-r_QFC, QFC+r_QFC)))/mean(exp(runif(1000, QFC-r_QFC, QFC+r_QFC)))
+# sd(exp(runif(1000, QLBC-r_QLBC, QLBC+r_QLBC)))/mean(exp(runif(1000, QLBC-r_QLBC, QLBC+r_QLBC)))
+# sd(exp(runif(1000, QSC-r_QSC, QSC+r_QSC)))/mean(exp(runif(1000, QSC-r_QSC, QSC+r_QSC)))
+
+# sd(exp(runif(1000, VMC-r_VMC, VMC+r_VMC)))/mean(exp(runif(1000, VMC-r_VMC, VMC+r_VMC)))
+# sd(exp(runif(1000, VSC-r_VSC, VSC+r_VSC)))/mean(exp(runif(1000, VSC-r_VSC, VSC+r_VSC)))
+
+# Check
+QRC<-1-(
+  exp(runif(1000, QFC-r_QFC, QFC+r_QFC)) + 
+    exp(runif(1000, QGC-r_QGC, QGC+r_QGC)) +
+    exp(runif(1000, QLBC-r_QLBC, QLBC+r_QLBC)) +
+    exp(runif(1000, QKC-r_QKC, QKC+r_QKC)) +
+    exp(runif(1000, QSC-r_QSC, QSC+r_QSC)) +
+    exp(runif(1000, QMC-r_QMC, QMC+r_QMC)))
+plot(QRC)
+
+
+
+
 r_pc <- 1.2 # Use the small range to improve converge
 
 
