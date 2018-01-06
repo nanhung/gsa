@@ -76,7 +76,7 @@ r_VBLAC <- 0.24 # From Chiu et al. (2009)
 r_VBLVC <- 0.24 # From Chiu et al. (2009)
 r_VSC <- 0.34 # From Price et al. (2003), CV = 0.20
 
-r_QFC <- 0.67 # From Price et al. (2003), CV = 0.38
+r_QFC <- 0.63 # From Price et al. (2003), CV = 0.35
 r_QGC <- 0.35 # From Chiu et al. (2009)
 r_QLBC <- 0.35 # From Price et al. (2003), CV = 0.20
 r_QKC <- 0.24 # From Chiu et al. (2009)
