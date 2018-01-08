@@ -67,21 +67,23 @@ PS_AG = log(0.351)
 r <- 2.0 # narrow down the range to prevent calculation error
 r_QCC <- 0.8 # From Chiu et al. (2009)
 
-r_VFC <- 0.9 # From Chiu et al. (2009)
-r_VKC <- 0.34 # From Chiu et al. (2009)
-r_VGC <- 0.16 # From Chiu et al. (2009)
-r_VLC <- 0.46 # From Chiu et al. (2009)
+r_VFC <- 0.45 # From Chiu et al. (2009)
+r_VKC <- 0.17 # From Chiu et al. (2009)
+r_VGC <- 0.08 # From Chiu et al. (2009)
+r_VLC <- 0.23 # From Chiu et al. (2009)
 r_VMC <-  0.34 # From Price et al. (2003), CV = 0.20
-r_VBLAC <- 0.24 # From Chiu et al. (2009)
-r_VBLVC <- 0.24 # From Chiu et al. (2009)
+r_VBLAC <- 0.12 # From Chiu et al. (2009)
+r_VBLVC <- 0.12 # From Chiu et al. (2009)
 r_VSC <- 0.34 # From Price et al. (2003), CV = 0.20
 
-r_QFC <- 0.63 # From Price et al. (2003), CV = 0.35
-r_QGC <- 0.35 # From Chiu et al. (2009)
-r_QLBC <- 0.35 # From Price et al. (2003), CV = 0.20
-r_QKC <- 0.24 # From Chiu et al. (2009)
-r_QSC <- 0.26 # From Price et al. (2003), CV = 0.15
+r_QFC <- 0.46 # From Chiu et al. (2009)
+r_QGC <- 0.18 # From Chiu et al. (2009)
+r_QLBC <- 0.45 # From Chiu et al. (2009)
+r_QKC <- 0.12 # From Chiu et al. (2009)
+r_QSC <- 0.32 # From Chiu et al. (2009)
 r_QMC <- 0.35 # From Price et al. (2003), CV = 0.20
+
+r_pc <- 1.2 # Assumed
 
 # sd(exp(runif(1000, QFC-r_QFC, QFC+r_QFC)))/mean(exp(runif(1000, QFC-r_QFC, QFC+r_QFC)))
 # sd(exp(runif(1000, QLBC-r_QLBC, QLBC+r_QLBC)))/mean(exp(runif(1000, QLBC-r_QLBC, QLBC+r_QLBC)))
@@ -90,147 +92,134 @@ r_QMC <- 0.35 # From Price et al. (2003), CV = 0.20
 # sd(exp(runif(1000, VMC-r_VMC, VMC+r_VMC)))/mean(exp(runif(1000, VMC-r_VMC, VMC+r_VMC)))
 # sd(exp(runif(1000, VSC-r_VSC, VSC+r_VSC)))/mean(exp(runif(1000, VSC-r_VSC, VSC+r_VSC)))
 
-# Check
-QRC<-1-(
-  exp(runif(1000, QFC-r_QFC, QFC+r_QFC)) + 
-    exp(runif(1000, QGC-r_QGC, QGC+r_QGC)) +
-    exp(runif(1000, QLBC-r_QLBC, QLBC+r_QLBC)) +
-    exp(runif(1000, QKC-r_QKC, QKC+r_QKC)) +
-    exp(runif(1000, QSC-r_QSC, QSC+r_QSC)) +
-    exp(runif(1000, QMC-r_QMC, QMC+r_QMC)))
-plot(QRC)
-
-
-
-
-r_pc <- 1.2 # Use the small range to improve converge
-
+#
+exp(QFC+r_QFC)+exp(QGC+r_QGC)+exp(QLBC+r_QLBC)+exp(QKC+r_QKC)+exp(QSC+r_QSC)+exp(QMC+r_QMC)
 
 #
-binf<-c(Tg*exp(lwr), 
-        Tp*exp(lwr), 
-        CYP_Km*exp(lwr), 
-        CYP_VmaxC*exp(lwr), 
-        SULT_Km_apap*exp(lwr), 
-        SULT_Ki*exp(lwr),
-        SULT_Km_paps*exp(lwr), 
-        SULT_VmaxC*exp(lwr), 
-        UGT_Km*exp(lwr),
-        UGT_Ki*exp(lwr),
-        UGT_Km_GA*exp(lwr), 
-        UGT_VmaxC*exp(lwr), 
-        Km_AG*exp(lwr), 
-        Vmax_AG*exp(lwr), 
-        Km_AS*exp(lwr),
-        Vmax_AS*exp(lwr), 
-        kGA_syn*exp(lwr), 
-        kPAPS_syn*exp(lwr), 
-        CLC_APAP*exp(lwr), 
-        CLC_AG*exp(lwr), 
-        CLC_AS*exp(lwr),
-        QCC*exp(r_QCC),
-        VFC*exp(lwr_phy),
-        VKC*exp(lwr_phy),
-        VGC*exp(lwr_phy),
-        VLC*exp(lwr_phy),
-        VMC*exp(lwr_phy),
-        VBLAC*exp(lwr_phy),
-        VBLVC*exp(lwr_phy),
-        VSC*exp(lwr_phy),
-        QFC*exp(lwr_phy),
-        QKC*exp(lwr_phy),
-        QGC*exp(lwr_phy),
-        QLBC*exp(lwr_phy),
-        QMC*exp(lwr_phy),
-        QSC*exp(lwr_phy),  
+binf<-c(Tg-r, 
+        Tp-r, 
+        CYP_Km-r, 
+        -2, 
+        SULT_Km_apap-r, 
+        SULT_Ki-r,
+        SULT_Km_paps-r, 
+        0, 
+        UGT_Km-r,
+        UGT_Ki-r,
+        UGT_Km_GA-r, 
+        0, 
+        Km_AG-r, 
+        7, 
+        Km_AS-r,
+        7, 
+        0, 
+        0, 
+        -6, 
+        -6, 
+        -6,
+        QCC-r_QCC,
+        VFC-r_VFC,
+        VKC-r_VKC,
+        VGC-r_VGC,
+        VLC-r_VLC,
+        VMC-r_VMC,
+        VBLAC-r_VBLAC,
+        VBLVC-r_VBLVC,
+        VSC-r_VSC,
+        QFC-r_QFC,
+        QKC-r_QKC,
+        QGC-r_QGC,
+        QLBC-r_QLBC,
+        QMC-r_QMC,
+        QSC-r_QSC,  
         0.1,
-        PF_APAP*exp(lwr_p),
-        PG_APAP*exp(lwr_p),
-        PK_APAP*exp(lwr_p),
-        PL_APAP*exp(lwr_p),
-        PM_APAP*exp(lwr_p),
-        PR_APAP*exp(lwr_p),
-        PS_APAP*exp(lwr_p),
-        PF_AS*exp(lwr_p),
-        PG_AS*exp(lwr_p),
-        PK_AS*exp(lwr_p),
-        PL_AS*exp(lwr_p),
-        PM_AS*exp(lwr_p),
-        PR_AS*exp(lwr_p),
-        PS_AS*exp(lwr_p),
-        PF_AG*exp(lwr_p),
-        PG_AG*exp(lwr_p),
-        PK_AG*exp(lwr_p),
-        PL_AG*exp(lwr_p),
-        PM_AG*exp(lwr_p),
-        PR_AG*exp(lwr_p),
-        PS_AG*exp(lwr_p))
+        PF_APAP-r_pc,
+        PG_APAP-r_pc,
+        PK_APAP-r_pc,
+        PL_APAP-r_pc,
+        PM_APAP-r_pc,
+        PR_APAP-r_pc,
+        PS_APAP-r_pc,
+        PF_AS-r_pc,
+        PG_AS-r_pc,
+        PK_AS-r_pc,
+        PL_AS-r_pc,
+        PM_AS-r_pc,
+        PR_AS-r_pc,
+        PS_AS-r_pc,
+        PF_AG-r_pc,
+        PG_AG-r_pc,
+        PK_AG-r_pc,
+        PL_AG-r_pc,
+        PM_AG-r_pc,
+        PR_AG-r_pc,
+        PS_AG-r_pc)
 
-bsup<-c(Tg*exp(upr), 
-        Tp*exp(upr), 
-        CYP_Km*exp(upr), 
-        CYP_VmaxC*exp(upr), 
-        SULT_Km_apap*exp(upr), 
-        SULT_Ki*exp(upr),
-        SULT_Km_paps*exp(upr), 
-        SULT_VmaxC*exp(upr), 
-        UGT_Km*exp(upr),
-        UGT_Ki*exp(upr),
-        UGT_Km_GA*exp(upr), 
-        UGT_VmaxC*exp(upr), 
-        Km_AG*exp(upr), 
-        Vmax_AG*exp(upr), 
-        Km_AS*exp(upr),
-        Vmax_AS*exp(upr), 
-        kGA_syn*exp(upr), 
-        kPAPS_syn*exp(upr), 
-        CLC_APAP*exp(upr), 
-        CLC_AG*exp(upr), 
-        CLC_AS*exp(upr),
-        QCC*exp(-r_QCC),
-        VFC*exp(upr_phy),
-        VKC*exp(upr_phy),
-        VGC*exp(upr_phy),
-        VLC*exp(upr_phy),
-        VMC*exp(upr_phy),
-        VBLAC*exp(upr_phy),
-        VBLVC*exp(upr_phy),
-        VSC*exp(upr_phy),
-        QFC*exp(upr_phy),
-        QKC*exp(upr_phy),
-        QGC*exp(upr_phy),
-        QLBC*exp(upr_phy),
-        QMC*exp(upr_phy),
-        QSC*exp(upr_phy),  
+bsup<-c(Tg+r, 
+        Tp+r, 
+        CYP_Km+r, 
+        5, 
+        SULT_Km_apap+r, 
+        SULT_Ki+r,
+        SULT_Km_paps+r, 
+        10, 
+        UGT_Km+r,
+        UGT_Ki+r,
+        UGT_Km_GA+r, 
+        10, 
+        Km_AG+r, 
+        15, 
+        Km_AS+r,
+        15, 
+        13, 
+        13, 
+        1, 
+        1, 
         1,
-        PF_APAP*exp(upr_p),
-        PG_APAP*exp(upr_p),
-        PK_APAP*exp(upr_p),
-        PL_APAP*exp(upr_p),
-        PM_APAP*exp(upr_p),
-        PR_APAP*exp(upr_p),
-        PS_APAP*exp(upr_p),
-        PF_AS*exp(upr_p),
-        PG_AS*exp(upr_p),
-        PK_AS*exp(upr_p),
-        PL_AS*exp(upr_p),
-        PM_AS*exp(upr_p),
-        PR_AS*exp(upr_p),
-        PS_AS*exp(upr_p),
-        PF_AG*exp(upr_p),
-        PG_AG*exp(upr_p),
-        PK_AG*exp(upr_p),
-        PL_AG*exp(upr_p),
-        PM_AG*exp(upr_p),
-        PR_AG*exp(upr_p),
-        PS_AG*exp(upr_p))
+        QCC+r_QCC,
+        VFC+r_VFC,
+        VKC+r_VKC,
+        VGC+r_VGC,
+        VLC+r_VLC,
+        VMC+r_VMC,
+        VBLAC+r_VBLAC,
+        VBLVC+r_VBLVC,
+        VSC+r_VSC,
+        QFC+r_QFC,
+        QKC+r_QKC,
+        QGC+r_QGC,
+        QLBC+r_QLBC,
+        QMC+r_QMC,
+        QSC+r_QSC,  
+        1,
+        PF_APAP+r_pc,
+        PG_APAP+r_pc,
+        PK_APAP+r_pc,
+        PL_APAP+r_pc,
+        PM_APAP+r_pc,
+        PR_APAP+r_pc,
+        PS_APAP+r_pc,
+        PF_AS+r_pc,
+        PG_AS+r_pc,
+        PK_AS+r_pc,
+        PL_AS+r_pc,
+        PM_AS+r_pc,
+        PR_AS+r_pc,
+        PS_AS+r_pc,
+        PF_AG+r_pc,
+        PG_AG+r_pc,
+        PK_AG+r_pc,
+        PL_AG+r_pc,
+        PM_AG+r_pc,
+        PR_AG+r_pc,
+        PS_AG+r_pc)
 
 #round(log(binf), digits=4)
 #round(log(bsup), digits=4)
 
-morr <- morris(model = NULL, factors = 58, r = 1000, 
+morr <- morris(model = NULL, factors = 58, r = 1024, 
                design = list(type = "oat", levels = 5, grid.jump = 3), 
-               binf = log(binf), bsup = log(bsup))
+               binf = binf, bsup = bsup)
 morr.APAP.df <- cbind(1, morr$X)
 write.table(morr.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.apap.pbpk_v2 apap.setpoint_v2.in")
