@@ -80,8 +80,8 @@ TK.plt<-function(j, mtext, col, ylim, ylwr, yupr){
   }
 }
 
-pdf(file="fig2.pdf", width = 9, height = 7)
-#png(file="fig2.png",width=2000,height=1200,res=250)
+#pdf(file="fig2.pdf", width = 9, height = 7)
+png(file="fig2.png",width=2000,height=1600,res=250)
 par(mfrow=c(3,3), mar = c(2, 2, 3, 1), oma = c(3,3,2,0))
 TK.plt(C_exh_ug_1, expression(paste("Exhaled air, ",mu, "g/L")), "blue", c(1E-4, 1E4), -4, 4)
 TK.plt(C_exh_ug_2, expression(paste("Exhaled air, ",mu, "g/L")), "blue", c(1E-4, 1E4), -4, 4)
@@ -247,8 +247,9 @@ f2.table.2.3 <- fast.table(fst2.2.3)
 f2.table.3.3 <- fast.table(fst2.3.3)
 
 # 
-pdf(file="fig3.pdf", width = 9, height = 8)
-par(mfrow=c(3,3), mar = c(4, 2, 3, 1), oma = c(3,3,1,0))
+#pdf(file="fig3.pdf", width = 9, height = 8)
+png(file="fig3.png",width=3000,height=2400,res=320)
+par(mfrow=c(3,3), mar = c(4, 2, 3, 1), oma = c(3,3,2,0))
 bp11<-barplot(f.table.1.1, ylim = c(0,1), col=c("white","grey"))
 text(bp11, par('usr')[3], labels = labels, srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex=.9)
 bp21<-barplot(f.table.2.1, ylim = c(0,1), col=c("white","grey"))
@@ -325,9 +326,14 @@ text(mu.star.3.3, sigma.3.3, labels = labels, cex=0.8)
 
 mtext("Sobol sensitivity index", WEST<-2, line=0.7, cex=1.2, outer=TRUE) 
 mtext("Parameter", South<-1, line=0.7, cex=1.2, outer=TRUE) 
+mtext("Inhalation = 72 ppm", NORTH<-3, line=-1, adj=0.3, cex=1.2, outer=TRUE, col="blue")
+mtext("Ingestion = 72 mg", NORTH<-3, line=-1, adj=0.9, cex=1.2, outer=TRUE, col="red")
+
 dev.off()
 
-# Sensitivity ranking
+
+
+## Sensitivity ranking ######################
 labs<-c("LeanBodyWt", "Flow_pul", "Vent_Perf", 
        "Pct_M_fat", "Pct_LM_liv", "Pct_LM_wp",
        "Pct_Flow_fat", "Pct_Flow_liv", "Pct_Flow_pp",
@@ -431,7 +437,8 @@ for(i in 1:16){ # Total mean ranking G3
 order.mr3<-mean.rank3[order(-as.numeric(mean.rank3[,2])),] 
 
 
-pdf(file="fig4.pdf", width = 9, height = 8)
+#pdf(file="fig4.pdf", width = 9, height = 8)
+png(file="fig4.png",width=3000,height=2400,res=300)
 par(mfrow=c(3,2), mar=c(5,7,1,1))
 # G1
 plot(subset(df1, q_params == labs[1])[,2], type="b", col=colfunc(16)[8], 
@@ -537,7 +544,7 @@ plot(df2[1:96,2], df1[97:192,2], xlab = "", ylab="", pch = 19, cex=0.8)
 par(fig=c(0.84,0.99, 0.06,0.21), new=TRUE)
 plot(df3[1:96,2], df1[97:192,2], xlab = "", ylab="", pch = 19, cex=0.8)
 
-dev.off()
+dev.off() ######################
 
 cor(df1[1:96,2], df1[97:192,2])
 cor(df2[1:96,2], df2[97:192,2])
