@@ -128,7 +128,8 @@ EP.plt2<-function(X0, X1, X2, colval, main){
 }
 
 #
-pdf(file="fig5.pdf", width = 8, height = 6)
+#pdf(file="fig5.pdf", width = 8, height = 6)
+png(file="fig5.png",width=3000,height=1800,res=300)
 par(mfrow=c(2,3), mar = c(4, 2, 3, 1), oma = c(3,3,2,0))
 EP.plt(sim0, sim1, sim2, 1, "Exhaled air, AUC")
 legend("bottomleft", c("All parameter","High sensity parameter","Low sensity parameter"), cex=1, 
@@ -181,7 +182,8 @@ TK.plt2<-function(X0, X1, X2, j, xlab, ylab){
 }
 
 #
-pdf(file="fig6.pdf", width = 8, height = 3)
+#pdf(file="fig6.pdf", width = 8, height = 3)
+png(file="fig6.png",width=3000,height=1000,res=250)
 par(mfrow=c(1,3), mar = c(3,2,1, 1), oma = c(3,3,2,0))
 #EP.plt2(sim0, sim1, sim2, 3, "")
 #EP.plt2(sim0, sim1, sim2,7, "")
