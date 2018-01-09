@@ -419,13 +419,14 @@ p12<-ggplot(mt1, aes(Var4, Var1)) +
   scale_fill_gradient(low = "white", high = "red", limits = c(-0.05,1.00)) +
   labs(title="", x="Datasets", y="Parameters")+
   theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1, color=colCols), 
-        axis.text.y = element_text(size=10, color=colRows),
-        legend.position = "top", legend.title=element_blank())
+        axis.text.y = element_text(size=10, color=colRows), legend.title=element_blank())
 
-pdf(file="fig4.pdf", width = 14, height = 10)
-#png(file="fstv2.png",width=4000,height=3000,res=300)
+#pdf(file="figS3.pdf", width = 14, height = 10)
+png(file="figS3.png",width=4000,height=3000,res=300)
 p12
 dev.off()
+
+
 
 
 
