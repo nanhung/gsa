@@ -2,7 +2,7 @@
 # apap.setpoint_v1.in
 #-------------------------------------------------------------------------------
 
-#Integrate (Lsodes, 1e-5, 1e-8, 1);
+Integrate (Lsodes, 1e-7, 1e-9, 1);
 
 SetPoints (
 "apap_setpoint.csv", 
