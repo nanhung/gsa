@@ -65,8 +65,24 @@ PR_AG = log(0.364)
 PS_AG = log(0.351)
 
 r <- 2.0 # narrow down the range to prevent calculation error
-r_QCC<- 1.2 # exp(1.2)/exp(-1.2) ~ 11
-r_phy<- 0.08
+r_QCC <- 0.8 # From Chiu et al. (2009)
+
+r_VFC <- 0.45 # From Chiu et al. (2009)
+r_VKC <- 0.17 # From Chiu et al. (2009)
+r_VGC <- 0.08 # From Chiu et al. (2009)
+r_VLC <- 0.23 # From Chiu et al. (2009)
+r_VMC <-  0.34 # From Price et al. (2003), CV = 0.20
+r_VBLAC <- 0.12 # From Chiu et al. (2009)
+r_VBLVC <- 0.12 # From Chiu et al. (2009)
+r_VSC <- 0.34 # From Price et al. (2003), CV = 0.20
+
+r_QFC <- 0.46 # From Chiu et al. (2009)
+r_QGC <- 0.18 # From Chiu et al. (2009)
+r_QLBC <- 0.45 # From Chiu et al. (2009)
+r_QKC <- 0.12 # From Chiu et al. (2009)
+r_QSC <- 0.32 # From Chiu et al. (2009)
+r_QMC <- 0.35 # From Price et al. (2003), CV = 0.20
+
 r_pc <- 1.2 # Use the small range to improve converge
 
 #r<-1.0
@@ -101,20 +117,20 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(-6., 1),
              list(-6., 1),
              list(QCC-r_QCC, QCC+r_QCC, QCC),
-             list(VFC-r_phy, VFC+r_phy, VFC),
-             list(VKC-r_phy, VKC+r_phy, VKC),
-             list(VGC-r_phy, VGC+r_phy, VGC),
-             list(VLC-r_phy, VLC+r_phy, VLC),
-             list(VMC-r_phy, VMC+r_phy, VMC),
-             list(VBLAC-r_phy, VBLAC+r_phy, VBLAC),
-             list(VBLVC-r_phy, VBLVC+r_phy, VBLVC),
-             list(VSC-r_phy, VSC+r_phy, VSC),
-             list(QFC-r_phy, QFC+r_phy, QFC),
-             list(QKC-r_phy, QKC+r_phy, QKC),
-             list(QGC-r_phy, QGC+r_phy, QGC),
-             list(QLBC-r_phy, QLBC+r_phy, QLBC),
-             list(QMC-r_phy, QMC+r_phy, QMC),
-             list(QSC-r_phy, QSC+r_phy, QSC),
+             list(VFC-r_VFC, VFC+r_VFC, VFC),
+             list(VKC-r_VKC, VKC+r_VKC, VKC),
+             list(VGC-r_VGC, VGC+r_VGC, VGC),
+             list(VLC-r_VLC, VLC+r_VLC, VLC),
+             list(VMC-r_VMC, VMC+r_VMC, VMC),
+             list(VBLAC-r_VBLAC, VBLAC+r_VBLAC, VBLAC),
+             list(VBLVC-r_VBLVC, VBLVC+r_VBLVC, VBLVC),
+             list(VSC-r_VSC, VSC+r_VSC, VSC),
+             list(QFC-r_QFC, QFC+r_QFC, QFC),
+             list(QKC-r_QKC, QKC+r_QKC, QKC),
+             list(QGC-r_QGC, QGC+r_QGC, QGC),
+             list(QLBC-r_QLBC, QLBC+r_QLBC, QLBC),
+             list(QMC-r_QMC, QMC+r_QMC, QMC),
+             list(QSC-r_QSC, QSC+r_QSC, QSC),
              list(-4.6, 0, BP_APAP),
              list(PF_APAP-r_pc, PF_APAP+r_pc, PF_APAP),
              list(PG_APAP-r_pc, PG_APAP+r_pc, PG_APAP),
@@ -281,6 +297,7 @@ save(apap.mf.df.1.1, apap.mf.df.1.2, apap.mf.df.1.3, apap.mf.df.1.4,
 # n <- 8192
 #user  system elapsed 
 #167.16    2.03  589.53 
+
 # load("fstv2.rda") ----
 if(!require(gplots)) {
   install.packages("gplots"); require(gplots)} #heatmap.2

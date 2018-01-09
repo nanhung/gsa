@@ -87,7 +87,7 @@ r_pc <- 1.2 # Use the small range to improve converge
 
 
 #
-J.X.df <- function(n){
+O.X.df <- function(n){
   data.frame(X1 = rtri(n, Tg-r, Tg+r, Tg),
              X2 = rtri(n, Tp-r, Tp+r, Tp),
              X3 = rtri(n, CYP_Km-r, CYP_Km+r, CYP_Km),
@@ -149,39 +149,40 @@ J.X.df <- function(n){
   )
 }
 
-X1 <- J.X.df(8192); X2 <- J.X.df(8192);
-J.S <- soboljansen(NULL, X1, X2) # conf = 0.95, nboot = 1
-J.S.APAP.df <- cbind(1, J.S$X)
-write.table(J.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
+n<-8192
+X1 <- O.X.df(n); X2 <- O.X.df(n); X3 <- O.X.df(n);
+O.S <- sobolowen(NULL, X1, X2, X3)#, conf = 0.95, nboot = 1000)
+O.S.APAP.df <- cbind(1, O.S$X)
+write.table(O.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.apap.pbpk_v2 apap.setpoint_v2.in")
-J.S.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
+O.S.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
+#Read 1966080 rows and 83 (of 83) columns from 1.310 GB file in 00:02:02
 
 #Prior Jansen
-J.S.APAP.1.1 <- tell(J.S, J.S.APAP.mcsim.df[,60])
-J.S.APAP.1.2 <- tell(J.S, J.S.APAP.mcsim.df[,61])
-J.S.APAP.1.3 <- tell(J.S, J.S.APAP.mcsim.df[,62])
-J.S.APAP.1.4 <- tell(J.S, J.S.APAP.mcsim.df[,63])
-J.S.APAP.1.5 <- tell(J.S, J.S.APAP.mcsim.df[,64])
-J.S.APAP.1.6 <- tell(J.S, J.S.APAP.mcsim.df[,65])
-J.S.APAP.1.7 <- tell(J.S, J.S.APAP.mcsim.df[,66])
-J.S.APAP.1.8 <- tell(J.S, J.S.APAP.mcsim.df[,67])
-J.S.APAP.2.1 <- tell(J.S, J.S.APAP.mcsim.df[,68])
-J.S.APAP.2.2 <- tell(J.S, J.S.APAP.mcsim.df[,69])
-J.S.APAP.2.3 <- tell(J.S, J.S.APAP.mcsim.df[,70])
-J.S.APAP.2.4 <- tell(J.S, J.S.APAP.mcsim.df[,71])
-J.S.APAP.2.5 <- tell(J.S, J.S.APAP.mcsim.df[,72])
-J.S.APAP.2.6 <- tell(J.S, J.S.APAP.mcsim.df[,73])
-J.S.APAP.2.7 <- tell(J.S, J.S.APAP.mcsim.df[,74])
-J.S.APAP.2.8 <- tell(J.S, J.S.APAP.mcsim.df[,75])
-J.S.APAP.3.1 <- tell(J.S, J.S.APAP.mcsim.df[,76])
-J.S.APAP.3.2 <- tell(J.S, J.S.APAP.mcsim.df[,77])
-J.S.APAP.3.3 <- tell(J.S, J.S.APAP.mcsim.df[,78])
-J.S.APAP.3.4 <- tell(J.S, J.S.APAP.mcsim.df[,79])
-J.S.APAP.3.5 <- tell(J.S, J.S.APAP.mcsim.df[,80])
-J.S.APAP.3.6 <- tell(J.S, J.S.APAP.mcsim.df[,81])
-J.S.APAP.3.7 <- tell(J.S, J.S.APAP.mcsim.df[,82])
-J.S.APAP.3.8 <- tell(J.S, J.S.APAP.mcsim.df[,83])
-
+O.S.APAP.1.1 <- tell(O.S, O.S.APAP.mcsim.df[,60])
+O.S.APAP.1.2 <- tell(O.S, O.S.APAP.mcsim.df[,61])
+O.S.APAP.1.3 <- tell(O.S, O.S.APAP.mcsim.df[,62])
+O.S.APAP.1.4 <- tell(O.S, O.S.APAP.mcsim.df[,63])
+O.S.APAP.1.5 <- tell(O.S, O.S.APAP.mcsim.df[,64])
+O.S.APAP.1.6 <- tell(O.S, O.S.APAP.mcsim.df[,65])
+O.S.APAP.1.7 <- tell(O.S, O.S.APAP.mcsim.df[,66])
+O.S.APAP.1.8 <- tell(O.S, O.S.APAP.mcsim.df[,67])
+O.S.APAP.2.1 <- tell(O.S, O.S.APAP.mcsim.df[,68])
+O.S.APAP.2.2 <- tell(O.S, O.S.APAP.mcsim.df[,69])
+O.S.APAP.2.3 <- tell(O.S, O.S.APAP.mcsim.df[,70])
+O.S.APAP.2.4 <- tell(O.S, O.S.APAP.mcsim.df[,71])
+O.S.APAP.2.5 <- tell(O.S, O.S.APAP.mcsim.df[,72])
+O.S.APAP.2.6 <- tell(O.S, O.S.APAP.mcsim.df[,73])
+O.S.APAP.2.7 <- tell(O.S, O.S.APAP.mcsim.df[,74])
+O.S.APAP.2.8 <- tell(O.S, O.S.APAP.mcsim.df[,75])
+O.S.APAP.3.1 <- tell(O.S, O.S.APAP.mcsim.df[,76])
+O.S.APAP.3.2 <- tell(O.S, O.S.APAP.mcsim.df[,77])
+O.S.APAP.3.3 <- tell(O.S, O.S.APAP.mcsim.df[,78])
+O.S.APAP.3.4 <- tell(O.S, O.S.APAP.mcsim.df[,79])
+O.S.APAP.3.5 <- tell(O.S, O.S.APAP.mcsim.df[,80])
+O.S.APAP.3.6 <- tell(O.S, O.S.APAP.mcsim.df[,81])
+O.S.APAP.3.7 <- tell(O.S, O.S.APAP.mcsim.df[,82])
+O.S.APAP.3.8 <- tell(O.S, O.S.APAP.mcsim.df[,83])
 
 Parameter <- c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
                "SULT_Km_paps","SULT_VmaxC","UGT_Km","UGT_Ki",
@@ -193,70 +194,92 @@ Parameter <- c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
                "PF_AS","PG_AS","PK_AS","PL_AS","PM_AS","PR_AS","PS_AS",
                "PF_AG" ,"PG_AG","PK_AG","PL_AG","PM_AG","PR_AG","PS_AG")
 
-apap.mj.df.1.1 <- data.frame(Parameter, J.S.APAP.1.1$S)
-apap.mj.df.1.2 <- data.frame(Parameter, J.S.APAP.1.2$S)
-apap.mj.df.1.3 <- data.frame(Parameter, J.S.APAP.1.3$S)
-apap.mj.df.1.4 <- data.frame(Parameter, J.S.APAP.1.4$S)
-apap.mj.df.1.5 <- data.frame(Parameter, J.S.APAP.1.5$S)
-apap.mj.df.1.6 <- data.frame(Parameter, J.S.APAP.1.6$S)
-apap.mj.df.1.7 <- data.frame(Parameter, J.S.APAP.1.7$S)
-apap.mj.df.1.8 <- data.frame(Parameter, J.S.APAP.1.8$S)
+apap.mo.df.1.1 <- data.frame(Parameter, O.S.APAP.1.1$S)
+apap.mo.df.1.2 <- data.frame(Parameter, O.S.APAP.1.2$S)
+apap.mo.df.1.3 <- data.frame(Parameter, O.S.APAP.1.3$S)
+apap.mo.df.1.4 <- data.frame(Parameter, O.S.APAP.1.4$S)
+apap.mo.df.1.5 <- data.frame(Parameter, O.S.APAP.1.5$S)
+apap.mo.df.1.6 <- data.frame(Parameter, O.S.APAP.1.6$S)
+apap.mo.df.1.7 <- data.frame(Parameter, O.S.APAP.1.7$S)
+apap.mo.df.1.8 <- data.frame(Parameter, O.S.APAP.1.8$S)
 
-apap.mj.df.2.1 <- data.frame(Parameter, J.S.APAP.2.1$S)
-apap.mj.df.2.2 <- data.frame(Parameter, J.S.APAP.2.2$S)
-apap.mj.df.2.3 <- data.frame(Parameter, J.S.APAP.2.3$S)
-apap.mj.df.2.4 <- data.frame(Parameter, J.S.APAP.2.4$S)
-apap.mj.df.2.5 <- data.frame(Parameter, J.S.APAP.2.5$S)
-apap.mj.df.2.6 <- data.frame(Parameter, J.S.APAP.2.6$S)
-apap.mj.df.2.7 <- data.frame(Parameter, J.S.APAP.2.7$S)
-apap.mj.df.2.8 <- data.frame(Parameter, J.S.APAP.2.8$S)
+apap.mo.df.2.1 <- data.frame(Parameter, O.S.APAP.2.1$S)
+apap.mo.df.2.2 <- data.frame(Parameter, O.S.APAP.2.2$S)
+apap.mo.df.2.3 <- data.frame(Parameter, O.S.APAP.2.3$S)
+apap.mo.df.2.4 <- data.frame(Parameter, O.S.APAP.2.4$S)
+apap.mo.df.2.5 <- data.frame(Parameter, O.S.APAP.2.5$S)
+apap.mo.df.2.6 <- data.frame(Parameter, O.S.APAP.2.6$S)
+apap.mo.df.2.7 <- data.frame(Parameter, O.S.APAP.2.7$S)
+apap.mo.df.2.8 <- data.frame(Parameter, O.S.APAP.2.8$S)
 
-apap.mj.df.3.1 <- data.frame(Parameter, J.S.APAP.3.1$S)
-apap.mj.df.3.2 <- data.frame(Parameter, J.S.APAP.3.2$S)
-apap.mj.df.3.3 <- data.frame(Parameter, J.S.APAP.3.3$S)
-apap.mj.df.3.4 <- data.frame(Parameter, J.S.APAP.3.4$S)
-apap.mj.df.3.5 <- data.frame(Parameter, J.S.APAP.3.5$S)
-apap.mj.df.3.6 <- data.frame(Parameter, J.S.APAP.3.6$S)
-apap.mj.df.3.7 <- data.frame(Parameter, J.S.APAP.3.7$S)
-apap.mj.df.3.8 <- data.frame(Parameter, J.S.APAP.3.8$S)
+apap.mo.df.3.1 <- data.frame(Parameter, O.S.APAP.3.1$S)
+apap.mo.df.3.2 <- data.frame(Parameter, O.S.APAP.3.2$S)
+apap.mo.df.3.3 <- data.frame(Parameter, O.S.APAP.3.3$S)
+apap.mo.df.3.4 <- data.frame(Parameter, O.S.APAP.3.4$S)
+apap.mo.df.3.5 <- data.frame(Parameter, O.S.APAP.3.5$S)
+apap.mo.df.3.6 <- data.frame(Parameter, O.S.APAP.3.6$S)
+apap.mo.df.3.7 <- data.frame(Parameter, O.S.APAP.3.7$S)
+apap.mo.df.3.8 <- data.frame(Parameter, O.S.APAP.3.8$S)
 
-apap.tj.df.1.1 <- data.frame(Parameter, J.S.APAP.1.1$T)
-apap.tj.df.1.2 <- data.frame(Parameter, J.S.APAP.1.2$T)
-apap.tj.df.1.3 <- data.frame(Parameter, J.S.APAP.1.3$T)
-apap.tj.df.1.4 <- data.frame(Parameter, J.S.APAP.1.4$T)
-apap.tj.df.1.5 <- data.frame(Parameter, J.S.APAP.1.5$T)
-apap.tj.df.1.6 <- data.frame(Parameter, J.S.APAP.1.6$T)
-apap.tj.df.1.7 <- data.frame(Parameter, J.S.APAP.1.7$T)
-apap.tj.df.1.8 <- data.frame(Parameter, J.S.APAP.1.8$T)
+apap.to.df.1.1 <- data.frame(Parameter, O.S.APAP.1.1$T)
+apap.to.df.1.2 <- data.frame(Parameter, O.S.APAP.1.2$T)
+apap.to.df.1.3 <- data.frame(Parameter, O.S.APAP.1.3$T)
+apap.to.df.1.4 <- data.frame(Parameter, O.S.APAP.1.4$T)
+apap.to.df.1.5 <- data.frame(Parameter, O.S.APAP.1.5$T)
+apap.to.df.1.6 <- data.frame(Parameter, O.S.APAP.1.6$T)
+apap.to.df.1.7 <- data.frame(Parameter, O.S.APAP.1.7$T)
+apap.to.df.1.8 <- data.frame(Parameter, O.S.APAP.1.8$T)
 
-apap.tj.df.2.1 <- data.frame(Parameter, J.S.APAP.2.1$T)
-apap.tj.df.2.2 <- data.frame(Parameter, J.S.APAP.2.2$T)
-apap.tj.df.2.3 <- data.frame(Parameter, J.S.APAP.2.3$T)
-apap.tj.df.2.4 <- data.frame(Parameter, J.S.APAP.2.4$T)
-apap.tj.df.2.5 <- data.frame(Parameter, J.S.APAP.2.5$T)
-apap.tj.df.2.6 <- data.frame(Parameter, J.S.APAP.2.6$T)
-apap.tj.df.2.7 <- data.frame(Parameter, J.S.APAP.2.7$T)
-apap.tj.df.2.8 <- data.frame(Parameter, J.S.APAP.2.8$T)
+apap.to.df.2.1 <- data.frame(Parameter, O.S.APAP.2.1$T)
+apap.to.df.2.2 <- data.frame(Parameter, O.S.APAP.2.2$T)
+apap.to.df.2.3 <- data.frame(Parameter, O.S.APAP.2.3$T)
+apap.to.df.2.4 <- data.frame(Parameter, O.S.APAP.2.4$T)
+apap.to.df.2.5 <- data.frame(Parameter, O.S.APAP.2.5$T)
+apap.to.df.2.6 <- data.frame(Parameter, O.S.APAP.2.6$T)
+apap.to.df.2.7 <- data.frame(Parameter, O.S.APAP.2.7$T)
+apap.to.df.2.8 <- data.frame(Parameter, O.S.APAP.2.8$T)
 
-apap.tj.df.3.1 <- data.frame(Parameter, J.S.APAP.3.1$T)
-apap.tj.df.3.2 <- data.frame(Parameter, J.S.APAP.3.2$T)
-apap.tj.df.3.3 <- data.frame(Parameter, J.S.APAP.3.3$T)
-apap.tj.df.3.4 <- data.frame(Parameter, J.S.APAP.3.4$T)
-apap.tj.df.3.5 <- data.frame(Parameter, J.S.APAP.3.5$T)
-apap.tj.df.3.6 <- data.frame(Parameter, J.S.APAP.3.6$T)
-apap.tj.df.3.7 <- data.frame(Parameter, J.S.APAP.3.7$T)
-apap.tj.df.3.8 <- data.frame(Parameter, J.S.APAP.3.8$T)
+apap.to.df.3.1 <- data.frame(Parameter, O.S.APAP.3.1$T)
+apap.to.df.3.2 <- data.frame(Parameter, O.S.APAP.3.2$T)
+apap.to.df.3.3 <- data.frame(Parameter, O.S.APAP.3.3$T)
+apap.to.df.3.4 <- data.frame(Parameter, O.S.APAP.3.4$T)
+apap.to.df.3.5 <- data.frame(Parameter, O.S.APAP.3.5$T)
+apap.to.df.3.6 <- data.frame(Parameter, O.S.APAP.3.6$T)
+apap.to.df.3.7 <- data.frame(Parameter, O.S.APAP.3.7$T)
+apap.to.df.3.8 <- data.frame(Parameter, O.S.APAP.3.8$T)
 
-save(apap.mj.df.1.1, apap.mj.df.1.2, apap.mj.df.1.3, apap.mj.df.1.4,
-     apap.mj.df.1.5, apap.mj.df.1.6, apap.mj.df.1.7, apap.mj.df.1.8,
-     apap.mj.df.2.1, apap.mj.df.2.2, apap.mj.df.2.3, apap.mj.df.2.4,
-     apap.mj.df.2.5, apap.mj.df.2.6, apap.mj.df.2.7, apap.mj.df.2.8,
-     apap.mj.df.3.1, apap.mj.df.3.2, apap.mj.df.3.3, apap.mj.df.3.4,
-     apap.mj.df.3.5, apap.mj.df.3.6, apap.mj.df.3.7, apap.mj.df.3.8,
-     apap.tj.df.1.1, apap.tj.df.1.2, apap.tj.df.1.3, apap.tj.df.1.4,
-     apap.tj.df.1.5, apap.tj.df.1.6, apap.tj.df.1.7, apap.tj.df.1.8,
-     apap.tj.df.2.1, apap.tj.df.2.2, apap.tj.df.2.3, apap.tj.df.2.4,
-     apap.tj.df.2.5, apap.tj.df.2.6, apap.tj.df.2.7, apap.tj.df.2.8,
-     apap.tj.df.3.1, apap.tj.df.3.2, apap.tj.df.3.3, apap.tj.df.3.4,
-     apap.tj.df.3.5, apap.tj.df.3.6, apap.tj.df.3.7, apap.tj.df.3.8,
-     file = "jsnv2.rda")
+save(apap.mo.df.1.1, apap.mo.df.1.2, apap.mo.df.1.3, apap.mo.df.1.4,
+     apap.mo.df.1.5, apap.mo.df.1.6, apap.mo.df.1.7, apap.mo.df.1.8,
+     apap.mo.df.2.1, apap.mo.df.2.2, apap.mo.df.2.3, apap.mo.df.2.4,
+     apap.mo.df.2.5, apap.mo.df.2.6, apap.mo.df.2.7, apap.mo.df.2.8,
+     apap.mo.df.3.1, apap.mo.df.3.2, apap.mo.df.3.3, apap.mo.df.3.4,
+     apap.mo.df.3.5, apap.mo.df.3.6, apap.mo.df.3.7, apap.mo.df.3.8,
+     apap.to.df.1.1, apap.to.df.1.2, apap.to.df.1.3, apap.to.df.1.4,
+     apap.to.df.1.5, apap.to.df.1.6, apap.to.df.1.7, apap.to.df.1.8,
+     apap.to.df.2.1, apap.to.df.2.2, apap.to.df.2.3, apap.to.df.2.4,
+     apap.to.df.2.5, apap.to.df.2.6, apap.to.df.2.7, apap.to.df.2.8,
+     apap.to.df.3.1, apap.to.df.3.2, apap.to.df.3.3, apap.to.df.3.4,
+     apap.to.df.3.5, apap.to.df.3.6, apap.to.df.3.7, apap.to.df.3.8,
+     file = "ownv2.rda")
+
+# system.time(source("ownv2.R"))
+
+# OWN 1024
+# Read 61440 rows and 83 (of 83) columns from 0.041 GB file in 00:00:03
+# user  system elapsed 
+# 12.64    0.34   52.95 
+
+# OWN 2048
+#Read 360448 rows and 83 (of 83) columns from 0.247 GB file in 00:00:18
+#user  system elapsed 
+#100.23    9.59  342.67 
+
+# OWN 4096
+#Read 720896 rows and 83 (of 83) columns from 0.491 GB file in 00:00:35
+#user  system elapsed 
+#202.31   18.08  685.54
+
+# OWN 8192
+#Read 1441792 rows and 83 (of 83) columns from 0.986 GB file in 00:01:10
+#user  system elapsed 
+#402.77   45.02 1373.60 
