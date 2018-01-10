@@ -138,7 +138,7 @@ p12<-ggplot(mor, aes(Var2, Var1)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size=10, color=colCols),
         legend.position = "right", legend.title=element_blank())
 
-png(file="figS3.png",width=3200,height=3600,res=250)
+png(file="figS3.png",width=3200,height=2400,res=250)
 #pdf(file="fig2.pdf", width = 12, height = 6)
 p12
 dev.off()
