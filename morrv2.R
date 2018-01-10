@@ -5,6 +5,8 @@ if(!require(EnvStats)) {
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)}
 
+# system.time(source("morrv2.R"))
+
 #Nominal value
 Tg <- log(0.23)
 Tp <- log(0.033)

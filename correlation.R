@@ -160,7 +160,7 @@ g3<-ggpairs(df, title = "Main, all 58 parameters")
 g4<-ggpairs(df2, title = "Interaction, all 58 parameters")
 
 #
-png(file="fig2.png",width=4000,height=4000,res=250)
+png(file="fig2.png",width=3000,height=3000,res=300)
 plot_grid(
   ggmatrix_gtable(g1),
   ggmatrix_gtable(g2),
