@@ -71,9 +71,9 @@ Model<-c(rep("M21", 4), rep("M58", 4))
 est<-c(rep("Morris", 4), rep("Morris", 4))
 n<-c(1024, 2048, 4096, 8192, 1024, 2048, 4096, 8192)
 time<-c(0.5633333, 1.0816667, 2.1766667, 4.3883333,
-        1.592167, 3.071667,  6.233333, 12.728167)
+        1.5, 3.071667,  6.233333, 12.728167)
 ind<-c(0.075, 0.063, 0.04, 0.033,
-       0.07, 0.051, 0.032, 0.023)
+       0.096, 0.059, 0.04, 0.023)
 df1<-data.frame(Model,est,n, time, ind)
 
 
@@ -87,8 +87,8 @@ dft$linetype<-c(rep("2",4), rep("1",4), rep("2",4), rep("1",4),
 dft$color<-c(rep("2",16), rep("3",16), rep("4",16), rep("1",8))
 levels(dft$Model) <- c("Original 21 Parameters", "All 58 parameters")
 
-pdf(file="fig1.pdf", width = 10, height = 7)
-#png(file="fig2.png",width=2000,height=1200,res=250)
+#pdf(file="fig1.pdf", width = 10, height = 7)
+png(file="fig1.png",width=3200,height=2400,res=250)
 p1<-ggplot(dft, aes(x = n, y = ind)) + facet_grid(Model~.) + 
   geom_line(aes(color = color, linetype = linetype), size = 0.8) +
   geom_point(aes(color = color), size = 1.4) + theme_bw() +
