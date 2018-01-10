@@ -127,6 +127,7 @@ mor$Var1 = with(mor, factor(Var1, levels = rev(levels(Var1)))) # revert order
 mor$value2 <- mor$value
 mor$value2[mor$value2 < 1] <- NA
 
+colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("cadetblue2",8),rep("cadetblue3",8),rep("cadetblue4",8))
 
 p12<-ggplot(mor, aes(Var2, Var1)) +
@@ -135,10 +136,11 @@ p12<-ggplot(mor, aes(Var2, Var1)) +
   geom_text(aes(label = round(value2, 1)), size=2.5) +
   scale_fill_gradient(low = "white", high = "blue") +
   labs(title="", x="Datasets", y="Parameters")+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=10, color=colCols),
-        legend.position = "right", legend.title=element_blank())
+  theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1, color=colCols), 
+        axis.text.y = element_text(size=10, color=colRows), legend.title=element_blank(),
+        legend.position="top")
 
-png(file="figS3.png",width=3200,height=2400,res=250)
+png(file="figS3.png",width=3200,height=3200,res=250)
 #pdf(file="fig2.pdf", width = 12, height = 6)
 p12
 dev.off()
