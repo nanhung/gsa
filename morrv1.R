@@ -69,7 +69,7 @@ bsup<-c(Tg+r,
 #round(log(binf), digits=4)
 #round(log(bsup), digits=4)
 
-morr <- morris(model = NULL, factors = 21, r = 8192, 
+morr <- morris(model = NULL, factors = 21, r = 1024, 
                design = list(type = "oat", levels = 5, grid.jump = 3), 
                binf = binf, bsup = bsup)
 morr.APAP.df <- cbind(1, morr$X)

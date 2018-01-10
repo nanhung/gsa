@@ -107,7 +107,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.01] <- NA
+mt1$value2[mt1$value2 < 0.05] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
@@ -128,6 +128,7 @@ p11
 dev.off()
 
 ################### 
+rm(list=ls())
 load("jsnv2.rda")
 
 main1<-do.call(cbind, list(apap.mj.df.1.1[,2], apap.mj.df.1.2[,2], apap.mj.df.1.3[,2], apap.mj.df.1.4[,2],
@@ -227,7 +228,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.01] <- NA
+mt1$value2[mt1$value2 < 0.05] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
@@ -247,21 +248,22 @@ p12
 dev.off()
 
 ################### 
+rm(list=ls())
 load("ownv2.rda")
 
-main1<-do.call(cbind, list(apap.mj.df.1.1[,2], apap.mj.df.1.2[,2], apap.mj.df.1.3[,2], apap.mj.df.1.4[,2],
-                           apap.mj.df.1.5[,2], apap.mj.df.1.6[,2], apap.mj.df.1.7[,2], apap.mj.df.1.8[,2],
-                           apap.mj.df.2.1[,2], apap.mj.df.2.2[,2], apap.mj.df.2.3[,2], apap.mj.df.2.4[,2],
-                           apap.mj.df.2.5[,2], apap.mj.df.2.6[,2], apap.mj.df.2.7[,2], apap.mj.df.2.8[,2],
-                           apap.mj.df.3.1[,2], apap.mj.df.3.2[,2], apap.mj.df.3.3[,2], apap.mj.df.3.4[,2],
-                           apap.mj.df.3.5[,2], apap.mj.df.3.6[,2], apap.mj.df.3.7[,2], apap.mj.df.3.8[,2]))
+main1<-do.call(cbind, list(apap.mo.df.1.1[,2], apap.mo.df.1.2[,2], apap.mo.df.1.3[,2], apap.mo.df.1.4[,2],
+                           apap.mo.df.1.5[,2], apap.mo.df.1.6[,2], apap.mo.df.1.7[,2], apap.mo.df.1.8[,2],
+                           apap.mo.df.2.1[,2], apap.mo.df.2.2[,2], apap.mo.df.2.3[,2], apap.mo.df.2.4[,2],
+                           apap.mo.df.2.5[,2], apap.mo.df.2.6[,2], apap.mo.df.2.7[,2], apap.mo.df.2.8[,2],
+                           apap.mo.df.3.1[,2], apap.mo.df.3.2[,2], apap.mo.df.3.3[,2], apap.mo.df.3.4[,2],
+                           apap.mo.df.3.5[,2], apap.mo.df.3.6[,2], apap.mo.df.3.7[,2], apap.mo.df.3.8[,2]))
 
-totl1<-do.call(cbind, list(apap.tj.df.1.1[,2], apap.tj.df.1.2[,2], apap.tj.df.1.3[,2], apap.tj.df.1.4[,2],
-                           apap.tj.df.1.5[,2], apap.tj.df.1.6[,2], apap.tj.df.1.7[,2], apap.tj.df.1.8[,2],
-                           apap.tj.df.2.1[,2], apap.tj.df.2.2[,2], apap.tj.df.2.3[,2], apap.tj.df.2.4[,2],
-                           apap.tj.df.2.5[,2], apap.tj.df.2.6[,2], apap.tj.df.2.7[,2], apap.tj.df.2.8[,2],
-                           apap.tj.df.3.1[,2], apap.tj.df.3.2[,2], apap.tj.df.3.3[,2], apap.tj.df.3.4[,2],
-                           apap.tj.df.3.5[,2], apap.tj.df.3.6[,2], apap.tj.df.3.7[,2], apap.tj.df.3.8[,2]))
+totl1<-do.call(cbind, list(apap.to.df.1.1[,2], apap.to.df.1.2[,2], apap.to.df.1.3[,2], apap.to.df.1.4[,2],
+                           apap.to.df.1.5[,2], apap.to.df.1.6[,2], apap.to.df.1.7[,2], apap.to.df.1.8[,2],
+                           apap.to.df.2.1[,2], apap.to.df.2.2[,2], apap.to.df.2.3[,2], apap.to.df.2.4[,2],
+                           apap.to.df.2.5[,2], apap.to.df.2.6[,2], apap.to.df.2.7[,2], apap.to.df.2.8[,2],
+                           apap.to.df.3.1[,2], apap.to.df.3.2[,2], apap.to.df.3.3[,2], apap.to.df.3.4[,2],
+                           apap.to.df.3.5[,2], apap.to.df.3.6[,2], apap.to.df.3.7[,2], apap.to.df.3.8[,2]))
 
 colnames(main1)<-c("APAP_0.5h", "APAP_1h", "APAP_1.5h", "APAP_2h",
                    "APAP_4h", "APAP_6h", "APAP_8h", "APAP_12h",
@@ -270,7 +272,7 @@ colnames(main1)<-c("APAP_0.5h", "APAP_1h", "APAP_1.5h", "APAP_2h",
                    "APAP-S_0.5h", "APAP-S_1h", "APAP-S_1.5h", "APAP-S_2h",
                    "APAP-S_4h", "APAP-S_6h", "APAP-S_8h", "APAP-S_12h")
 
-rownames(main1)<-rownames(totl1)<-apap.mj.df.1.1[,1]
+rownames(main1)<-rownames(totl1)<-apap.mo.df.1.1[,1]
 colnames(totl1)<-colnames(main1)
 
 
@@ -346,7 +348,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.01] <- NA
+mt1$value2[mt1$value2 < 0.05] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))

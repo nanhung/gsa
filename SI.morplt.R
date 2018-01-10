@@ -76,6 +76,7 @@ p11
 dev.off()
 
 ################
+rm(list=ls())
 load("morv2.rda")
 
 Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2], apap.Mmu.df.1.2[,2], apap.Mmu.df.1.3[,2], apap.Mmu.df.1.4[,2],
