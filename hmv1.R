@@ -1,4 +1,3 @@
-load("morv1.rda")
 load("fstv1.rda")
 load("jsnv1.rda")
 load("ownv1.rda")
@@ -16,19 +15,6 @@ if(!require(ggplot2)) {
 #if(!require(gplots)) {
 #  install.packages("gplots"); require(gplots)} #heatmap.2
 
-Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2], apap.Mmu.df.1.2[,2], apap.Mmu.df.1.3[,2], apap.Mmu.df.1.4[,2],
-                          apap.Mmu.df.1.5[,2], apap.Mmu.df.1.6[,2], apap.Mmu.df.1.7[,2], apap.Mmu.df.1.8[,2],
-                          apap.Mmu.df.2.1[,2], apap.Mmu.df.2.2[,2], apap.Mmu.df.2.3[,2], apap.Mmu.df.2.4[,2],
-                          apap.Mmu.df.2.5[,2], apap.Mmu.df.2.6[,2], apap.Mmu.df.2.7[,2], apap.Mmu.df.2.8[,2],
-                          apap.Mmu.df.3.1[,2], apap.Mmu.df.3.2[,2], apap.Mmu.df.3.3[,2], apap.Mmu.df.3.4[,2],
-                          apap.Mmu.df.3.5[,2], apap.Mmu.df.3.6[,2], apap.Mmu.df.3.7[,2], apap.Mmu.df.3.8[,2]
-))
-sig1<-do.call(cbind, list(apap.sig.df.1.1[,2], apap.sig.df.1.2[,2], apap.sig.df.1.3[,2], apap.sig.df.1.4[,2],
-                          apap.sig.df.1.5[,2], apap.sig.df.1.6[,2], apap.sig.df.1.7[,2], apap.sig.df.1.8[,2],
-                          apap.sig.df.2.1[,2], apap.sig.df.2.2[,2], apap.sig.df.2.3[,2], apap.sig.df.2.4[,2],
-                          apap.sig.df.2.5[,2], apap.sig.df.2.6[,2], apap.sig.df.2.7[,2], apap.sig.df.2.8[,2],
-                          apap.sig.df.3.1[,2], apap.sig.df.3.2[,2], apap.sig.df.3.3[,2], apap.sig.df.3.4[,2],
-                          apap.sig.df.3.5[,2], apap.sig.df.3.6[,2], apap.sig.df.3.7[,2], apap.sig.df.3.8[,2]))
 main1<-do.call(cbind, list(apap.mf.df.1.1[,2], apap.mf.df.1.2[,2], apap.mf.df.1.3[,2], apap.mf.df.1.4[,2],
                            apap.mf.df.1.5[,2], apap.mf.df.1.6[,2], apap.mf.df.1.7[,2], apap.mf.df.1.8[,2],
                            apap.mf.df.2.1[,2], apap.mf.df.2.2[,2], apap.mf.df.2.3[,2], apap.mf.df.2.4[,2],
@@ -67,7 +53,7 @@ totl1<-do.call(cbind, list(apap.tf.df.1.1[,2], apap.tf.df.1.2[,2], apap.tf.df.1.
                            apap.to.df.3.1[,2], apap.to.df.3.2[,2], apap.to.df.3.3[,2], apap.to.df.3.4[,2],     
                            apap.to.df.3.5[,2], apap.to.df.3.6[,2], apap.to.df.3.7[,2], apap.to.df.3.8[,2]))
 
-rownames(main1)<-rownames(totl1)<-rownames(Mmu1)<-rownames(sig1)<-apap.mj.df.1.1[,1]
+rownames(main1)<-rownames(totl1)<-apap.mj.df.1.1[,1]
 
 colnames(main1)<-c("FST.APAP_0.5h", "FST.APAP_1h", "FST.APAP_1.5h", "FST.APAP_2h",
                    "FST.APAP_4h", "FST.APAP_6h", "FST.APAP_8h", "FST.APAP_12h",
@@ -89,12 +75,6 @@ colnames(main1)<-c("FST.APAP_0.5h", "FST.APAP_1h", "FST.APAP_1.5h", "FST.APAP_2h
                    "OWN.A-S_4h", "OWN.A-S_6h", "OWN.A-S_8h", "OWN.A-S_12h")
 
 colnames(totl1)<-colnames(main1)
-colnames(Mmu1)<-colnames(sig1)<-c("APAP_0.5h","APAP_1h","APAP_1.5h","APAP_2h",
-                                  "APAP_4h","APAP_6h","APAP_8h","APAP_12h",
-                                  "APAP-G_0.5h","APAP-G_1h", "APAP-G_1.5h","APAP-G_2h",
-                                  "APAP-G_4h","APAP-G_6h", "APAP-G_8h","APAP-G_12h",
-                                  "APAP-S_0.5h", "APAP-S_1h", "APAP-S_1.5h","APAP-S_2h",
-                                  "APAP-S_4h", "APAP-S_6h", "APAP-S_8h","APAP-S_12h")
 
 main4 <- as.data.frame(main1) %>%
   rownames_to_column('Var1') %>%
@@ -109,21 +89,6 @@ inte4 <- as.data.frame(inte1) %>%
   rownames_to_column('Var1') %>%
   gather(Var2, value, -Var1)
 
-Mmu4 <- as.data.frame(Mmu1) %>%
-  rownames_to_column('Var1') %>%
-  gather(Var2, value, -Var1) %>%
-  mutate(
-    Var1 = factor(Var1, level=row.names(Mmu1)),
-    Var2 = factor(gsub("V", "", Var2), level=colnames(Mmu1))
-  )
-
-sig4 <- as.data.frame(sig1) %>%
-  rownames_to_column('Var1') %>%
-  gather(Var2, value, -Var1) %>%
-  mutate(
-    Var1 = factor(Var1, level=row.names(sig1)),
-    Var2 = factor(gsub("V", "", Var2), level=colnames(sig1))
-  )
 
 # Remove mean and combind main and total
 main4$order<-"Main"
@@ -179,7 +144,7 @@ colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
 
 
 ### ----
-p12<-ggplot(mt1, aes(Var3, Var1)) +
+p11<-ggplot(mt1, aes(Var3, Var1)) +
   geom_tile(aes(fill = value)) + 
   facet_grid(est~order) +
   geom_text(aes(label = round(value2, 2)), size=2.5) +
@@ -189,37 +154,6 @@ p12<-ggplot(mt1, aes(Var3, Var1)) +
         legend.title=element_blank())
 
 #pdf(file="fig3.pdf", width = 14, height = 12)
-png(file="figS2.png",width=3600,height=3200,res=250)
-p12
-dev.off()
-
-
-#
-Mmu4$est<-"Morris"
-sig4$est<-"Morris"
-Mmu4$order<-"mu*"
-sig4$order<-"sigma"
-mor<-rbind(Mmu4, sig4)
-
-
-mor$Var1 = with(mor, factor(Var1, levels = rev(levels(Var1)))) # revert order
-
-mor$value2 <- mor$value
-mor$value2[mor$value2 < 1] <- NA
-
-colCols <-  c(rep("cadetblue2",8),rep("cadetblue3",8),rep("cadetblue4",8))
-
-p11<-ggplot(mor, aes(Var2, Var1)) +
-  geom_tile(aes(fill = value)) + 
-  facet_grid(.~order) +
-  geom_text(aes(label = round(value2, 1)), size=2.5) +
-  scale_fill_gradient(low = "white", high = "blue") +
-  labs(title="", x="Datasets", y="Parameters")+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=10, color=colCols),
-        legend.position = "right", legend.title=element_blank())
-
-
-png(file="figS2.png",width=3200,height=1200,res=250)
-#pdf(file="fig2.pdf", width = 12, height = 6)
+png(file="figS2.png",width=3200,height=4000,res=250)
 p11
 dev.off()
