@@ -21,10 +21,10 @@ APAP_10.3 <- as.data.frame(read_table2("apap10d.c03.out"))
 APAP_10.4 <- as.data.frame(read_table2("apap10d.c04.out"))
 
 # 20 Sensitivity parameters
-APAP_20.1 <- as.data.frame(read_table2("apap20d.c01.out"))
-APAP_20.2 <- as.data.frame(read_table2("apap20d.c02.out"))
-APAP_20.3 <- as.data.frame(read_table2("apap20d.c03.out"))
-APAP_20.4 <- as.data.frame(read_table2("apap20d.c04.out"))
+APAP_20.1 <- as.data.frame(read_table2("apap20d.c05.out"))
+APAP_20.2 <- as.data.frame(read_table2("apap20d.c06.out"))
+APAP_20.3 <- as.data.frame(read_table2("apap20d.c07.out"))
+APAP_20.4 <- as.data.frame(read_table2("apap20d.c08.out"))
 
 # 58  parameters
 APAP_58.1 <- as.data.frame(read_table2("apap58.c01.out"))
@@ -110,13 +110,13 @@ denplt2<-function(name1, name2, v){
 
 
 #pdf(file="fig5.pdf", width = 14, height = 12)
-png(file="paradistrb.png",width=3600,height=4200,res=300)
+png(file="paradistrb.png",width=3500,height=3000,res=300)
 layout(matrix(c(1,1,1,1,1,1,1,
                 2,3,4,5,6,7,8,
                 9,10,11,12,13,14,15,
                 16,16,16,16,16,16,16,
-                17,18,19,20,21,0,0,
-                22,22,22,22,22,22,22), ncol=7, byrow = T),
+                17,18,19,20,21,22,0,
+                23,23,23,23,23,23,23), ncol=7, byrow = T),
        heights=c(1.5,
                  3,
                  3,
@@ -150,6 +150,7 @@ denplt33("M_lnBP_APAP(1)", "lnBP_APAP", -0.1053605)
 denplt2("M_lnPF_APAP(1)", "lnPF_APAP", -0.8051967)
 denplt2("M_lnPL_APAP(1)", "lnPL_APAP", -0.3410828)
 denplt2("M_lnPM_APAP(1)", "lnPM_APAP", -0.375421)
+denplt2("M_lnPS_APAP(1)", "lnPS_APAP", -0.375421)
 
 par(mar=c(4,5,2,1))
 name1<-"LnData"
@@ -159,9 +160,9 @@ plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")),
      ylab="Density", xlab="LnData", frame.plot = FALSE, cex.lab=1.5, font.lab=2)
 mapply(lines, dens, col=c("red4", "red", "green", "springgreen3", "darkgreen"), lwd=2)
 
-text(110,0.06,"21 parameters / original set",cex=1.2, col="red4")
-text(40,0.06,"11 parameters / original set (0.05)",cex=1.2, col="red")
-text(30, 0.05,"10 parameters / full set (0.05)",cex=1.2, col="green")
+text(95,0.065,"21 parameters / original set",cex=1.2, col="red4")
+text(70,0.07,"11 parameters / original set (0.05)",cex=1.2, col="red")
+text(40, 0.06,"10 parameters / full set (0.05)",cex=1.2, col="green")
 text(135,0.05,"20 parameters / full set (0.01)",cex=1.2, col="springgreen3")
 text(190,0.05,"58 parameters / full set",cex=1.2, col="darkgreen")
 
