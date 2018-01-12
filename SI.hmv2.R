@@ -107,7 +107,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.05] <- NA
+mt1$value2[mt1$value2 < 0.01] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
@@ -228,7 +228,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.05] <- NA
+mt1$value2[mt1$value2 < 0.01] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
@@ -348,7 +348,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.05] <- NA
+mt1$value2[mt1$value2 < 0.01] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
