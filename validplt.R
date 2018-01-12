@@ -145,8 +145,8 @@ p3<-ggplot(df.b, aes(Obs, res)) +
 #p1
 #dev.off()
 
-pdf(file="fig6.pdf", width = 18, height = 10)
-#png(file="calib.png",width=3600,height=2400,res=250)
+#pdf(file="fig6.pdf", width = 18, height = 10)
+png(file="calib.png",width=3600,height=2400,res=250)
 #grid.arrange(p1,p11, ncol=1, heights=c(3,1))
 plot_grid(p1,p11, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
 dev.off()
