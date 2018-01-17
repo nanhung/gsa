@@ -12,6 +12,7 @@ if(!require(GGally)) {
   install.packages("GGally"); require(GGally)} # To use ggpairs
 if(!require(cowplot)) { 
   install.packages("cowplot"); require(cowplot)} # To use plot_grid
+font_install("fontcm")
 
 Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2], apap.Mmu.df.1.2[,2], apap.Mmu.df.1.3[,2], apap.Mmu.df.1.4[,2],
                           apap.Mmu.df.1.5[,2], apap.Mmu.df.1.6[,2], apap.Mmu.df.1.7[,2], apap.Mmu.df.1.8[,2],
@@ -173,6 +174,8 @@ dev.off()
 
 
 ##### SUPPLEMENT------------
+
+##########
 corplt<-function(df, v1, v2, col){
   plot(df[,v1], df[,v2], col = "white", xlab = names(df[v1]), ylab = names(df[v2]),
        xlim=range(df[,v1]), ylim=range(df[,v2]))
@@ -180,9 +183,10 @@ corplt<-function(df, v1, v2, col){
   polygon(x = c(min(df[,v1]), min(df[,v1]), max(df[,v1]), max(df[,v1])), 
           y = c(min(df[,v2]), max(df[,v2]), max(df[,v2]), min(df[,v2])), 
           col = col, border = NA)
+  text(3/5*max(df[,v1]), min(df[,v2]), font=3,
+       paste("r = ", format(cor(df[,v1],df[,v2]), digits=3) ,sep=""), pos = 4, cex=1.5)
 }
 
-####
 
 #####
 textplt<-function(mtext){
@@ -191,10 +195,10 @@ textplt<-function(mtext){
   plot(x, y, type="n", xaxt='n', yaxt='n')
   text(5,5, mtext, col=1, cex=5)  
 }
-#####
 
 
-png(file="corplt21.png",width=3000,height=3000,res=300)
+##
+png(file="corplt21.png", width=3000,height=3000,res=300)
 par(mfrow=c(4,4), mar=c(2,2,2,1), oma=c(0,0,2,0))
 corplt(df, 1, 4, rgb(0,0,0, alpha=0.1))
 mtext("21 original parameters", NORTH<-3, line=0.2, adj=0.5, cex=1.5, outer=TRUE)
