@@ -56,7 +56,7 @@ mor<-rbind(Mmu4, sig4)
 mor$Var1 = with(mor, factor(Var1, levels = rev(levels(Var1)))) # revert order
 
 mor$value2 <- mor$value
-mor$value2[mor$value2 < 1] <- NA
+mor$value2[mor$value2 < max(mor$value)*0.05] <- NA
 
 colCols <-  c(rep("cadetblue2",8),rep("cadetblue3",8),rep("cadetblue4",8))
 
@@ -126,7 +126,7 @@ mor<-rbind(Mmu4, sig4)
 mor$Var1 = with(mor, factor(Var1, levels = rev(levels(Var1)))) # revert order
 
 mor$value2 <- mor$value
-mor$value2[mor$value2 < 1] <- NA
+mor$value2[mor$value2 < max(mor$value)*0.05] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("cadetblue2",8),rep("cadetblue3",8),rep("cadetblue4",8))

@@ -12,7 +12,7 @@ if(!require(GGally)) {
   install.packages("GGally"); require(GGally)} # To use ggpairs
 if(!require(cowplot)) { 
   install.packages("cowplot"); require(cowplot)} # To use plot_grid
-font_install("fontcm")
+#font_install("fontcm")
 
 Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2], apap.Mmu.df.1.2[,2], apap.Mmu.df.1.3[,2], apap.Mmu.df.1.4[,2],
                           apap.Mmu.df.1.5[,2], apap.Mmu.df.1.6[,2], apap.Mmu.df.1.7[,2], apap.Mmu.df.1.8[,2],
