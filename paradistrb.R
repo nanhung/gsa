@@ -14,6 +14,12 @@ APAP_11.2 <- as.data.frame(read_table2("apap11s.c02.out"))
 APAP_11.3 <- as.data.frame(read_table2("apap11s.c03.out"))
 APAP_11.4 <- as.data.frame(read_table2("apap11s.c04.out"))
 
+# 14 Sensitivity parameters
+APAP_14.1 <- as.data.frame(read_table2("apap14s.c02.out"))
+APAP_14.2 <- as.data.frame(read_table2("apap14s.c02.out"))
+APAP_14.3 <- as.data.frame(read_table2("apap14s.c03.out"))
+APAP_14.4 <- as.data.frame(read_table2("apap14s.c04.out"))
+
 # 10 Sensitivity parameters
 APAP_10.1 <- as.data.frame(read_table2("apap10d.c01.out"))
 APAP_10.2 <- as.data.frame(read_table2("apap10d.c02.out"))
@@ -44,6 +50,12 @@ sen11.3<-tail(APAP_11.3, 100)
 sen11.4<-tail(APAP_11.4, 100)
 sen11.tot <- do.call(rbind, list(sen11.1,sen11.2,sen11.3,sen11.4))
 
+sen14.1<-tail(APAP_14.1, 100)
+sen14.2<-tail(APAP_14.2, 100)
+sen14.3<-tail(APAP_14.3, 100)
+sen14.4<-tail(APAP_14.4, 100)
+sen14.tot <- do.call(rbind, list(sen14.1,sen14.2,sen14.3,sen14.4))
+
 add10.1<-tail(APAP_10.1, 100)
 add10.2<-tail(APAP_10.2, 100)
 add10.3<-tail(APAP_10.3, 100)
@@ -68,26 +80,26 @@ add20.tot["M_lnTg(1)"]
 all58.tot["M_lnTg(1)"]
 
 denplt5<-function(name1, name2, v){
-  myData <- data.frame(org21.tot[name1], sen11.tot[name1], add10.tot[name1], add20.tot[name1], all58.tot[name1])
+  myData <- data.frame(org21.tot[name1], sen11.tot[name1], sen14.tot[name1], add10.tot[name1], add20.tot[name1], all58.tot[name1])
   dens <- apply(myData, 2, density)
   plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")), ylab="", xlab="", main = name2)
-  mapply(lines, dens, col=c("red4", "red", "green", "springgreen3", "darkgreen"), lwd=2)
+  mapply(lines, dens, col=c("red4", "pink", "red", "green", "springgreen3", "darkgreen"), lwd=2)
   abline(v = v, col="grey20")
 }
 
 denplt4<-function(name1, name2, v){
-  myData <- data.frame(org21.tot[name1], sen11.tot[name1], add20.tot[name1], all58.tot[name1])
+  myData <- data.frame(org21.tot[name1], sen11.tot[name1], sen14.tot[name1], add20.tot[name1], all58.tot[name1])
   dens <- apply(myData, 2, density)
   plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")), ylab="", xlab="", main = name2)
-  mapply(lines, dens, col=c("red4", "red", "springgreen3", "darkgreen"), lwd=2)
+  mapply(lines, dens, col=c("red4", "pink", "red", "springgreen3", "darkgreen"), lwd=2)
   abline(v = v, col="grey20")
 }
 
 denplt3<-function(name1, name2, v){
-  myData <- data.frame(org21.tot[name1], add20.tot[name1], all58.tot[name1])
+  myData <- data.frame(org21.tot[name1], sen14.tot[name1], add20.tot[name1], all58.tot[name1])
   dens <- apply(myData, 2, density)
   plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")), ylab="", xlab="", main = name2)
-  mapply(lines, dens, col=c("red4", "springgreen3", "darkgreen"), lwd=2)
+  mapply(lines, dens, col=c("red4", "red", "springgreen3", "darkgreen"), lwd=2)
   abline(v = v, col="grey20")
 }
 
@@ -154,14 +166,15 @@ denplt2("M_lnPS_APAP(1)", "lnPS_APAP", -0.375421)
 
 par(mar=c(4,5,2,1))
 name1<-"LnData"
-myData <- data.frame(org21.tot[name1], sen11.tot[name1], add10.tot[name1], add20.tot[name1], all58.tot[name1])
+myData <- data.frame(org21.tot[name1], sen11.tot[name1], sen14.tot[name1], add10.tot[name1], add20.tot[name1], all58.tot[name1])
 dens <- apply(myData, 2, density)
 plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")), 
      ylab="Density", xlab="LnData", frame.plot = FALSE, cex.lab=1.5, font.lab=2)
-mapply(lines, dens, col=c("red4", "red", "green", "springgreen3", "darkgreen"), lwd=2)
+mapply(lines, dens, col=c("red4", "pink", "red", "green", "springgreen3", "darkgreen"), lwd=2)
 
-text(95,0.065,"21 parameters / original set",cex=1.2, col="red4")
-text(70,0.07,"11 parameters / original set (0.05)",cex=1.2, col="red")
+text(105,0.055,"21 parameters / original set",cex=1.2, col="red4")
+text(85,0.062,"14 parameters / original set (0.01)",cex=1.2, col="red")
+text(70,0.07,"11 parameters / original set (0.05)",cex=1.2, col="pink")
 text(40, 0.06,"10 parameters / full set (0.05)",cex=1.2, col="green")
 text(135,0.05,"20 parameters / full set (0.01)",cex=1.2, col="springgreen3")
 text(190,0.05,"58 parameters / full set",cex=1.2, col="darkgreen")
