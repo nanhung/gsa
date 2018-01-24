@@ -96,32 +96,59 @@ sd(subset(df.b, prd.typ=="prd.d")$res) #0.0477
 sd(subset(df.b, prd.typ=="prd.a")$res) #0.0437
 sd(subset(df.b, prd.typ=="prd.d2")$res) #0.0689
 
-stat<-c(rep("Mean",5), rep("SD",5))
-gp<-rep(c("O21","O11(0.05)","F20(0.01)","F58","F10(0.05)"),2)
-value<-c(abs(mean(subset(df.b, prd.typ=="prd.o")$res)),
-         abs(mean(subset(df.b, prd.typ=="prd.s")$res)),
-         abs(mean(subset(df.b, prd.typ=="prd.d")$res)),
-         abs(mean(subset(df.b, prd.typ=="prd.a")$res)),
-         abs(mean(subset(df.b, prd.typ=="prd.d2")$res)),
-         sd(subset(df.b, prd.typ=="prd.o")$res),
-         sd(subset(df.b, prd.typ=="prd.s")$res),
-         sd(subset(df.b, prd.typ=="prd.a")$res),
-         sd(subset(df.b, prd.typ=="prd.a")$res), 
-         sd(subset(df.b, prd.typ=="prd.d2")$res))
+#stat<-c(rep("Mean",5), rep("SD",5))
+gp<-c("O21","O11(0.05)","F10(0.05)","F20(0.01)","F58")
+#value<-c(abs(mean(subset(df.b, prd.typ=="prd.o")$res)),
+#         abs(mean(subset(df.b, prd.typ=="prd.s")$res)),
+#         abs(mean(subset(df.b, prd.typ=="prd.d")$res)),
+#         abs(mean(subset(df.b, prd.typ=="prd.a")$res)),
+#         abs(mean(subset(df.b, prd.typ=="prd.d2")$res)),
+#         sd(subset(df.b, prd.typ=="prd.o")$res),
+#         sd(subset(df.b, prd.typ=="prd.s")$res),
+#         sd(subset(df.b, prd.typ=="prd.a")$res),
+#         sd(subset(df.b, prd.typ=="prd.a")$res), 
+#         sd(subset(df.b, prd.typ=="prd.d2")$res))
+#df.res <- data.frame(stat,gp,value)
+mean<-c(mean(subset(df.b, prd.typ=="prd.o")$res),
+        mean(subset(df.b, prd.typ=="prd.s")$res),
+        mean(subset(df.b, prd.typ=="prd.d2")$res),
+        mean(subset(df.b, prd.typ=="prd.d")$res),
+        mean(subset(df.b, prd.typ=="prd.a")$res))
+sd<-c(sd(subset(df.b, prd.typ=="prd.o")$res),
+      sd(subset(df.b, prd.typ=="prd.s")$res),
+      sd(subset(df.b, prd.typ=="prd.d2")$res),
+      sd(subset(df.b, prd.typ=="prd.d")$res),
+      sd(subset(df.b, prd.typ=="prd.a")$res))
+df.res<-data.frame(gp,mean,sd)
 
-df.res <- data.frame(stat,gp,value)
 df.res$gp <- with(df.res, factor(gp, levels = c("O21","O11(0.05)","F10(0.05)","F20(0.01)","F58")))
 
-p3<- ggplot(df.res, aes(x=gp, y=value, fill=stat)) + theme_bw() +
-  xlab("") + ylab(expression(Log[10] ~ residual)) + labs(fill = "") +
-  geom_bar(stat="identity", color="black", position=position_dodge()) +
-  scale_fill_manual(values =c("grey80", "grey40")) + 
-  theme(legend.justification=c("right", "top"), 
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position=c(1,1), 
+pd = position_dodge(0.8)
+p3<-ggplot(df.res, aes(x = gp, y = mean)) + 
+  xlab("") + ylab(expression(Log[10] ~ residual)) +
+  geom_abline(slope = 0, intercept = 0, linetype="dotted") +
+  ylim(-0.1, 0.1) +
+  geom_point(aes(colour = gp), size  = 4) +
+  geom_errorbar(aes(ymin  = mean - sd, ymax  = mean + sd), width = 0.2, size  = 0.4, position = pd) +
+  scale_colour_manual(values = c("grey","red","green","blue", "black")) + 
+  guides(fill=FALSE, colour=FALSE) + theme_bw() +
+  theme(axis.title = element_text(face = "bold"),
         text = element_text(size=20),
-        legend.background = element_rect(fill=alpha('white', 0.1)),
-        panel.grid.minor = element_blank())
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.minor=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.major.x=element_blank())
+
+#p3<- ggplot(df.res, aes(x=gp, y=value, fill=stat)) + theme_bw() +
+#  xlab("") + ylab(expression(Log[10] ~ residual)) + labs(fill = "") +
+#  geom_bar(stat="identity", color="black", position=position_dodge()) +
+#  scale_fill_manual(values =c("grey80", "grey40")) + 
+#  theme(legend.justification=c("right", "top"), 
+#        axis.text.x = element_text(angle = 45, hjust = 1),
+#        legend.position=c(1,1), 
+#        text = element_text(size=20),
+#        legend.background = element_rect(fill=alpha('white', 0.1)),
+#        panel.grid.minor = element_blank())
 
 g<-ggplotGrob(p3)
 
