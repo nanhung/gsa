@@ -17,25 +17,13 @@ APAP_21.2 <- as.data.frame(read_table2("apap21.c02.out"))
 APAP_21.3 <- as.data.frame(read_table2("apap21.c03.out"))
 APAP_21.4 <- as.data.frame(read_table2("apap21.c04.out"))
 
-# 11s Sensitivity parameters
+# 11 Sensitivity parameters
 APAP_11.1 <- as.data.frame(read_table2("apap11s.c01.out"))
 APAP_11.2 <- as.data.frame(read_table2("apap11s.c02.out"))
 APAP_11.3 <- as.data.frame(read_table2("apap11s.c03.out"))
 APAP_11.4 <- as.data.frame(read_table2("apap11s.c04.out"))
 
-# 14s Sensitivity parameters
-APAP_14.1 <- as.data.frame(read_table2("apap14s.c02.out"))
-APAP_14.2 <- as.data.frame(read_table2("apap14s.c02.out"))
-APAP_14.3 <- as.data.frame(read_table2("apap14s.c03.out"))
-APAP_14.4 <- as.data.frame(read_table2("apap14s.c04.out"))
-
-# 10d  parameters
-APAP_10.1 <- as.data.frame(read_table2("apap10d.c01.out"))
-APAP_10.2 <- as.data.frame(read_table2("apap10d.c02.out"))
-APAP_10.3 <- as.data.frame(read_table2("apap10d.c03.out"))
-APAP_10.4 <- as.data.frame(read_table2("apap10d.c04.out"))
-
-# 20d Sensitivity parameters
+# 20 Sensitivity parameters
 APAP_20.1 <- as.data.frame(read_table2("apap20d.c01.out"))
 APAP_20.2 <- as.data.frame(read_table2("apap20d.c02.out"))
 APAP_20.3 <- as.data.frame(read_table2("apap20d.c03.out"))
@@ -46,6 +34,13 @@ APAP_58.1 <- as.data.frame(read_table2("apap58.c01.out"))
 APAP_58.2 <- as.data.frame(read_table2("apap58.c02.out"))
 APAP_58.3 <- as.data.frame(read_table2("apap58.c03.out"))
 APAP_58.4 <- as.data.frame(read_table2("apap58.c04.out"))
+
+# 10  parameters
+APAP_10.1 <- as.data.frame(read_table2("apap10d.c01.out"))
+APAP_10.2 <- as.data.frame(read_table2("apap10d.c02.out"))
+APAP_10.3 <- as.data.frame(read_table2("apap10d.c03.out"))
+APAP_10.4 <- as.data.frame(read_table2("apap10d.c04.out"))
+
 
 #
 source("apap_data.R") # load data
@@ -63,7 +58,6 @@ sen<-rbind(tail(APAP_11.1, 25), tail(APAP_11.2, 25), tail(APAP_11.3, 25), tail(A
 add<-rbind(tail(APAP_20.1, 25), tail(APAP_20.2, 25), tail(APAP_20.3, 25), tail(APAP_20.4, 25))
 all<-rbind(tail(APAP_58.1, 25), tail(APAP_58.2, 25), tail(APAP_58.3, 25), tail(APAP_58.4, 25))
 
-sen2<-rbind(tail(APAP_14.1, 25), tail(APAP_14.2, 25), tail(APAP_14.3, 25), tail(APAP_14.4, 25))
 add2<-rbind(tail(APAP_10.1, 25), tail(APAP_10.2, 25), tail(APAP_10.3, 25), tail(APAP_10.4, 25))
 
 
@@ -217,37 +211,6 @@ add2.8<-setpt10.df(add2, "lnSULT_VmaxC(1.8)","lnBP_APAP(1.8)") # Do analysis
 add2.8.1<-add2.8[which(colnames(add2.8)=="lnCPL_APAP_mcgL_8.1"):which(colnames(add2.8)=="lnCPL_AS_mcgL_8.11")] # Extract output
 
 #
-setpt14.df<-function(data, par1st, parlast){
-  sim.str<-which(colnames(data)==par1st)
-  sim.end<-which(colnames(data)==parlast)
-  j<-sim.str:sim.end
-  
-  df0<-data.frame(data[,j])
-  
-  write.table(df0, file="apap.setpt.dat", row.names=TRUE, sep="\t")
-  system("./mcsim.apap.pbpk_v2 apap.setpt14s.in")
-  data.frame(fread(("apap.setpt14s.out")))
-}
-
-
-sen2.1<-setpt14.df(sen2, "lnTg(1.1)","lnCLC_AS(1.1)") # Do analysis
-sen2.1.1<-sen2.1[which(colnames(sen2.1)=="lnCPL_APAP_mcgL_1.1"):which(colnames(sen2.1)=="lnCPL_AS_mcgL_1.10")] # Extract output
-sen2.2<-setpt14.df(sen2, "lnTg(1.2)","lnCLC_AS(1.2)") # Do analysis
-sen2.2.1<-sen2.2[which(colnames(sen2.2)=="lnCPL_APAP_mcgL_2.1"):which(colnames(sen2.2)=="lnCPL_AS_mcgL_2.11")] # Extract output
-sen2.3<-setpt14.df(sen2, "lnTg(1.3)","lnCLC_AS(1.3)") # Do analysis
-sen2.3.1<-sen2.3[which(colnames(sen2.3)=="lnCPL_APAP_mcgL_3.1"):which(colnames(sen2.3)=="lnCPL_AS_mcgL_3.8")] # Extract output
-sen2.4<-setpt14.df(sen2, "lnTg(1.4)","lnCLC_AS(1.4)") # Do analysis
-sen2.4.1<-sen2.4[which(colnames(sen2.4)=="lnCPL_APAP_mcgL_4.1"):which(colnames(sen2.4)=="lnCPL_AS_mcgL_4.10")] # Extract output
-sen2.5<-setpt14.df(sen2, "lnTg(1.5)","lnCLC_AS(1.5)") # Do analysis
-sen2.5.1<-sen2.5[which(colnames(sen2.5)=="lnCPL_APAP_mcgL_5.1"):which(colnames(sen2.5)=="lnCPL_AS_mcgL_5.10")] # Extract output
-sen2.6<-setpt14.df(sen2, "lnTg(1.6)","lnCLC_AS(1.6)") # Do analysis
-sen2.6.1<-sen2.6[which(colnames(sen2.6)=="lnCPL_APAP_mcgL_6.1"):which(colnames(sen2.6)=="lnCPL_AS_mcgL_6.10")] # Extract output
-sen2.7<-setpt14.df(sen2, "lnTg(1.7)","lnCLC_AS(1.7)") # Do analysis
-sen2.7.1<-sen2.7[which(colnames(sen2.7)=="lnCPL_APAP_mcgL_7.1"):which(colnames(sen2.7)=="lnCPL_AS_mcgL_7.12")] # Extract output
-sen2.8<-setpt14.df(sen2, "lnTg(1.8)","lnCLC_AS(1.8)") # Do analysis
-sen2.8.1<-sen2.8[which(colnames(sen2.8)=="lnCPL_APAP_mcgL_8.1"):which(colnames(sen2.8)=="lnCPL_AS_mcgL_8.11")] # Extract output
-
-#
 R2 <- function(obs, prd){
   1 - (sum((obs-prd)^2, na.rm=TRUE)/sum((obs-mean(obs, na.rm=TRUE))^2, na.rm=TRUE))
 }
@@ -265,9 +228,8 @@ prd.s.1<-c(apply(sen.1.1[,j10], 2, median), apply(sen.1.1[,k10], 2, median), app
 prd.d.1<-c(apply(add.1.1[,j10], 2, median), apply(add.1.1[,k10], 2, median), apply(add.1.1[,l10], 2, median))
 prd.a.1<-c(apply(all.1.1[,j10], 2, median), apply(all.1.1[,k10], 2, median), apply(all.1.1[,l10], 2, median))
 prd.d2.1<-c(apply(add2.1.1[,j10], 2, median), apply(add2.1.1[,k10], 2, median), apply(add2.1.1[,l10], 2, median))
-prd.s2.1<-c(apply(sen2.1.1[,j10], 2, median), apply(sen2.1.1[,k10], 2, median), apply(sen2.1.1[,l10], 2, median))
 #df.1<-data.frame(obs.1, prd.o.1, prd.s.1, prd.d.1, prd.a.1, "A")
-df.1<-data.frame(obs.1, prd.o.1, prd.s.1, prd.d.1, prd.a.1, prd.d2.1, prd.s2.1, "A")
+df.1<-data.frame(obs.1, prd.o.1, prd.s.1, prd.d.1, prd.a.1, prd.d2.1, "A")
 
 obs.2<-melt(APAP.2, id.vars = "Time")
 prd.o.2<-c(apply(org.2.1[,j11], 2, median), apply(org.2.1[,k11], 2, median), apply(org.2.1[,l11], 2, median))
@@ -275,9 +237,8 @@ prd.s.2<-c(apply(sen.2.1[,j11], 2, median), apply(sen.2.1[,k11], 2, median), app
 prd.d.2<-c(apply(add.2.1[,j11], 2, median), apply(add.2.1[,k11], 2, median), apply(add.2.1[,l11], 2, median))
 prd.a.2<-c(apply(all.2.1[,j11], 2, median), apply(all.2.1[,k11], 2, median), apply(all.2.1[,l11], 2, median))
 prd.d2.2<-c(apply(add2.2.1[,j11], 2, median), apply(add2.2.1[,k11], 2, median), apply(add2.2.1[,l11], 2, median))
-prd.s2.2<-c(apply(sen2.2.1[,j11], 2, median), apply(sen2.2.1[,k11], 2, median), apply(sen2.2.1[,l11], 2, median))
 #df.2<-data.frame(obs.2, prd.o.2, prd.s.2, prd.d.2, prd.a.2, "B")
-df.2<-data.frame(obs.2, prd.o.2, prd.s.2, prd.d.2, prd.a.2, prd.d2.2, prd.s2.2, "B")
+df.2<-data.frame(obs.2, prd.o.2, prd.s.2, prd.d.2, prd.a.2, prd.d2.2, "B")
 
 obs.3<-melt(APAP.3, id.vars = "Time")
 prd.o.3<-c(apply(org.3.1[,j08], 2, median), apply(org.3.1[,k08], 2, median), apply(org.3.1[,l08], 2, median))
@@ -285,19 +246,17 @@ prd.s.3<-c(apply(sen.3.1[,j08], 2, median), apply(sen.3.1[,k08], 2, median), app
 prd.d.3<-c(apply(add.3.1[,j08], 2, median), apply(add.3.1[,k08], 2, median), apply(add.3.1[,l08], 2, median))
 prd.a.3<-c(apply(all.3.1[,j08], 2, median), apply(all.3.1[,k08], 2, median), apply(all.3.1[,l08], 2, median))
 prd.d2.3<-c(apply(add2.3.1[,j08], 2, median), apply(add2.3.1[,k08], 2, median), apply(add2.3.1[,l08], 2, median))
-prd.s2.3<-c(apply(sen2.3.1[,j08], 2, median), apply(sen2.3.1[,k08], 2, median), apply(sen2.3.1[,l08], 2, median))
 #df.3<-data.frame(obs.3, prd.o.3, prd.s.3, prd.d.3, prd.a.3, "C")
-df.3<-data.frame(obs.3, prd.o.3, prd.s.3, prd.d.3, prd.a.3, prd.d2.3, prd.s2.3, "C")
+df.3<-data.frame(obs.3, prd.o.3, prd.s.3, prd.d.3, prd.a.3, prd.d2.3, "C")
 
 obs.4<-melt(APAP.4, id.vars = "Time")
 prd.o.4<-c(apply(org.4.1[,j10], 2, median), apply(org.4.1[,k10], 2, median), apply(org.4.1[,l10], 2, median))
 prd.s.4<-c(apply(sen.4.1[,j10], 2, median), apply(sen.4.1[,k10], 2, median), apply(sen.4.1[,l10], 2, median))
 prd.d.4<-c(apply(add.4.1[,j10], 2, median), apply(add.4.1[,k10], 2, median), apply(add.4.1[,l10], 2, median))
 prd.a.4<-c(apply(all.4.1[,j10], 2, median), apply(all.4.1[,k10], 2, median), apply(all.4.1[,l10], 2, median))
-prd.d2.4<-c(apply(add2.4.1[,j10], 2, median), apply(add2.4.1[,k10], 2, median), apply(add2.4.1[,l10], 2, median))
-prd.s2.4<-c(apply(sen2.4.1[,j10], 2, median), apply(sen2.4.1[,k10], 2, median), apply(sen2.4.1[,l10], 2, median))
+prd.d2.4<-c(apply(add.4.1[,j10], 2, median), apply(add.4.1[,k10], 2, median), apply(add.4.1[,l10], 2, median))
 #df.4<-data.frame(obs.4, prd.o.4, prd.s.4, prd.d.4, prd.a.4, "D")
-df.4<-data.frame(obs.4, prd.o.4, prd.s.4, prd.d.4, prd.a.4, prd.d2.4, prd.s2.4, "D")
+df.4<-data.frame(obs.4, prd.o.4, prd.s.4, prd.d.4, prd.a.4, prd.d2.4, "D")
 
 obs.5<-melt(APAP.5, id.vars = "Time")
 prd.o.5<-c(apply(org.5.1[,j10], 2, median), apply(org.5.1[,k10], 2, median), apply(org.5.1[,l10], 2, median))
@@ -305,9 +264,9 @@ prd.s.5<-c(apply(sen.5.1[,j10], 2, median), apply(sen.5.1[,k10], 2, median), app
 prd.d.5<-c(apply(add.5.1[,j10], 2, median), apply(add.5.1[,k10], 2, median), apply(add.5.1[,l10], 2, median))
 prd.a.5<-c(apply(all.5.1[,j10], 2, median), apply(all.5.1[,k10], 2, median), apply(all.5.1[,l10], 2, median))
 prd.d2.5<-c(apply(add2.5.1[,j10], 2, median), apply(add2.5.1[,k10], 2, median), apply(add2.5.1[,l10], 2, median))
-prd.s2.5<-c(apply(sen2.5.1[,j10], 2, median), apply(sen2.5.1[,k10], 2, median), apply(sen2.5.1[,l10], 2, median))
+
 #df.5<-data.frame(obs.5, prd.o.5, prd.s.5, prd.d.5, prd.a.5, "E")
-df.5<-data.frame(obs.5, prd.o.5, prd.s.5, prd.d.5, prd.a.5, prd.d2.5, prd.s2.5, "E")
+df.5<-data.frame(obs.5, prd.o.5, prd.s.5, prd.d.5, prd.a.5, prd.d2.5, "E")
 
 obs.6<-melt(APAP.6, id.vars = "Time")
 prd.o.6<-c(apply(org.6.1[,j10], 2, median), apply(org.6.1[,k10], 2, median), apply(org.6.1[,l10], 2, median))
@@ -315,10 +274,8 @@ prd.s.6<-c(apply(sen.6.1[,j10], 2, median), apply(sen.6.1[,k10], 2, median), app
 prd.d.6<-c(apply(add.6.1[,j10], 2, median), apply(add.6.1[,k10], 2, median), apply(add.6.1[,l10], 2, median))
 prd.a.6<-c(apply(all.6.1[,j10], 2, median), apply(all.6.1[,k10], 2, median), apply(all.6.1[,l10], 2, median))
 prd.d2.6<-c(apply(add2.6.1[,j10], 2, median), apply(add2.6.1[,k10], 2, median), apply(add2.6.1[,l10], 2, median))
-prd.s2.6<-c(apply(sen2.6.1[,j10], 2, median), apply(sen2.6.1[,k10], 2, median), apply(sen2.6.1[,l10], 2, median))
-
 #df.6<-data.frame(obs.6, prd.o.6, prd.s.6, prd.d.6, prd.a.6, "F")
-df.6<-data.frame(obs.6, prd.o.6, prd.s.6, prd.d.6, prd.a.6, prd.d2.6, prd.s2.6, "F")
+df.6<-data.frame(obs.6, prd.o.6, prd.s.6, prd.d.6, prd.a.6, prd.d2.6, "F")
 
 obs.7<-melt(APAP.7, id.vars = "Time")
 prd.o.7<-c(apply(org.7.1[,j12], 2, median), apply(org.7.1[,k12], 2, median), apply(org.7.1[,l12], 2, median))
@@ -326,10 +283,9 @@ prd.s.7<-c(apply(sen.7.1[,j12], 2, median), apply(sen.7.1[,k12], 2, median), app
 prd.d.7<-c(apply(add.7.1[,j12], 2, median), apply(add.7.1[,k12], 2, median), apply(add.7.1[,l12], 2, median))
 prd.a.7<-c(apply(all.7.1[,j12], 2, median), apply(all.7.1[,k12], 2, median), apply(all.7.1[,l12], 2, median))
 prd.d2.7<-c(apply(add2.7.1[,j12], 2, median), apply(add2.7.1[,k12], 2, median), apply(add2.7.1[,l12], 2, median))
-prd.s2.7<-c(apply(sen2.7.1[,j12], 2, median), apply(sen2.7.1[,k12], 2, median), apply(sen2.7.1[,l12], 2, median))
 
 #df.7<-data.frame(obs.7, prd.o.7, prd.s.7, prd.d.7, prd.a.7, "G")
-df.7<-data.frame(obs.7, prd.o.7, prd.s.7, prd.d.7, prd.a.7, prd.d2.7, prd.s2.7, "G")
+df.7<-data.frame(obs.7, prd.o.7, prd.s.7, prd.d.7, prd.a.7, prd.d2.7, "G")
 
 obs.8<-melt(APAP.8, id.vars = "Time")
 prd.o.8<-c(apply(org.8.1[,j11], 2, median), apply(org.8.1[,k11], 2, median), apply(org.8.1[,l11], 2, median))
@@ -337,12 +293,11 @@ prd.s.8<-c(apply(sen.8.1[,j11], 2, median), apply(sen.8.1[,k11], 2, median), app
 prd.d.8<-c(apply(add.8.1[,j11], 2, median), apply(add.8.1[,k11], 2, median), apply(add.8.1[,l11], 2, median))
 prd.a.8<-c(apply(all.8.1[,j11], 2, median), apply(all.8.1[,k11], 2, median), apply(all.8.1[,l11], 2, median))
 prd.d2.8<-c(apply(add2.8.1[,j11], 2, median), apply(add2.8.1[,k11], 2, median), apply(add2.8.1[,l11], 2, median))
-prd.s2.8<-c(apply(sen2.8.1[,j11], 2, median), apply(sen2.8.1[,k11], 2, median), apply(sen2.8.1[,l11], 2, median))
 
 #df.8<-data.frame(obs.8, prd.o.8, prd.s.8, prd.d.8, prd.a.8, "H")
-df.8<-data.frame(obs.8, prd.o.8, prd.s.8, prd.d.8, prd.a.8, prd.d2.8, prd.s2.8, "H")
+df.8<-data.frame(obs.8, prd.o.8, prd.s.8, prd.d.8, prd.a.8, prd.d2.8, "H")
 
-names(df.1)<-names(df.2)<-names(df.3)<-names(df.4)<-names(df.5)<-names(df.6)<-names(df.7)<-names(df.8)<-c("Time","variable","value","prd.o","prd.s","prd.d", "prd.a", "prd.d2", "prd.s2", "exp")
+names(df.1)<-names(df.2)<-names(df.3)<-names(df.4)<-names(df.5)<-names(df.6)<-names(df.7)<-names(df.8)<-c("Time","variable","value","prd.o","prd.s","prd.d", "prd.a", "prd.d2", "exp")
 df.9<-do.call(rbind, list(df.1,df.2,df.3,df.4,df.5,df.6,df.7,df.8))
 
 # 
@@ -352,56 +307,49 @@ R2(obs.1$value, as.numeric(prd.s.1)) # .853
 R2(obs.1$value, as.numeric(prd.d.1)) # .949
 R2(obs.1$value, as.numeric(prd.a.1)) # .962
 R2(obs.1$value, as.numeric(prd.d2.1)) # .865
-R2(obs.1$value, as.numeric(prd.s2.1)) # .865
+#R2(obs.1.1$value, as.numeric(prd.o.1.1)) 
 
 R2(obs.2$value, as.numeric(prd.o.2)) # .983
 R2(obs.2$value, as.numeric(prd.s.2)) # .982
 R2(obs.2$value, as.numeric(prd.d.2)) # .994
 R2(obs.2$value, as.numeric(prd.a.2)) # .995
 R2(obs.2$value, as.numeric(prd.d2.2)) # .972
-R2(obs.2$value, as.numeric(prd.s2.2)) # .981
 
 R2(obs.3$value, as.numeric(prd.o.3)) # .939 
 R2(obs.3$value, as.numeric(prd.s.3)) # .921
 R2(obs.3$value, as.numeric(prd.d.3)) # .971
 R2(obs.3$value, as.numeric(prd.a.3)) # .981
 R2(obs.3$value, as.numeric(prd.d2.3)) # .938
-R2(obs.3$value, as.numeric(prd.s2.3)) # .928
 
 R2(obs.4$value, as.numeric(prd.o.4)) # .917
 R2(obs.4$value, as.numeric(prd.s.4)) # .803
 R2(obs.4$value, as.numeric(prd.d.4)) # .953
 R2(obs.4$value, as.numeric(prd.a.4)) # .956
 R2(obs.4$value, as.numeric(prd.d2.4)) # .953
-R2(obs.4$value, as.numeric(prd.s2.4)) # .853
 
 R2(obs.5$value, as.numeric(prd.o.5)) # .98
 R2(obs.5$value, as.numeric(prd.s.5)) # .976
 R2(obs.5$value, as.numeric(prd.d.5)) # .992
 R2(obs.5$value, as.numeric(prd.a.5)) # .992
 R2(obs.5$value, as.numeric(prd.d2.5)) # .958
-R2(obs.5$value, as.numeric(prd.s2.5)) # .981
 
 R2(obs.6$value, as.numeric(prd.o.6)) # .993
 R2(obs.6$value, as.numeric(prd.s.6)) # .991
 R2(obs.6$value, as.numeric(prd.d.6)) # .995
 R2(obs.6$value, as.numeric(prd.a.6)) # .995
 R2(obs.6$value, as.numeric(prd.d2.6)) # .987
-R2(obs.6$value, as.numeric(prd.s2.6)) # .992
 
 R2(obs.7$value, as.numeric(prd.o.7)) # .988
 R2(obs.7$value, as.numeric(prd.s.7)) # .986
 R2(obs.7$value, as.numeric(prd.d.7)) # .994
 R2(obs.7$value, as.numeric(prd.a.7)) # .996
 R2(obs.7$value, as.numeric(prd.d2.7)) # .987
-R2(obs.7$value, as.numeric(prd.s2.7)) # .987
 
 R2(obs.8$value, as.numeric(prd.o.8)) # .991
 R2(obs.8$value, as.numeric(prd.s.8)) # .989
 R2(obs.8$value, as.numeric(prd.d.8)) # .989
 R2(obs.8$value, as.numeric(prd.a.8)) # .995
 R2(obs.8$value, as.numeric(prd.d2.8)) # .979
-R2(obs.8$value, as.numeric(prd.s2.8)) # .990
 
 #
 OBS<-c(obs.1$value, obs.2$value, obs.3$value, obs.4$value, 
@@ -462,71 +410,62 @@ r2<-c(R2(obs.1$value, as.numeric(prd.o.1)), # .868
       R2(obs.1$value, as.numeric(prd.d.1)), # .949
       R2(obs.1$value, as.numeric(prd.a.1)), # .962
       R2(obs.1$value, as.numeric(prd.d2.1)),
-      R2(obs.1$value, as.numeric(prd.s2.1)),
       R2(obs.2$value, as.numeric(prd.o.2)), # .983
       R2(obs.2$value, as.numeric(prd.s.2)), # .982
       R2(obs.2$value, as.numeric(prd.d.2)), # .994
       R2(obs.2$value, as.numeric(prd.a.2)), # .995
       R2(obs.2$value, as.numeric(prd.d2.2)),
-      R2(obs.2$value, as.numeric(prd.s2.2)),
       R2(obs.3$value, as.numeric(prd.o.3)), # .939 
       R2(obs.3$value, as.numeric(prd.s.3)), # .921
       R2(obs.3$value, as.numeric(prd.d.3)), # .971
       R2(obs.3$value, as.numeric(prd.a.3)), # .981
       R2(obs.3$value, as.numeric(prd.d2.3)),
-      R2(obs.3$value, as.numeric(prd.s2.3)),
       R2(obs.4$value, as.numeric(prd.o.4)), # .917
       R2(obs.4$value, as.numeric(prd.s.4)), # .803
       R2(obs.4$value, as.numeric(prd.d.4)), # .953
       R2(obs.4$value, as.numeric(prd.a.4)), # .956
       R2(obs.4$value, as.numeric(prd.d2.4)),
-      R2(obs.4$value, as.numeric(prd.s2.4)),
       R2(obs.5$value, as.numeric(prd.o.5)), # .98
       R2(obs.5$value, as.numeric(prd.s.5)), # .976
       R2(obs.5$value, as.numeric(prd.d.5)), # .992
       R2(obs.5$value, as.numeric(prd.a.5)), # .992
-      R2(obs.5$value, as.numeric(prd.d2.5)),
-      R2(obs.5$value, as.numeric(prd.s2.5)),    
+      R2(obs.5$value, as.numeric(prd.d2.5)),      
       R2(obs.6$value, as.numeric(prd.o.6)), # .993
       R2(obs.6$value, as.numeric(prd.s.6)), # .991
       R2(obs.6$value, as.numeric(prd.d.6)), # .995
       R2(obs.6$value, as.numeric(prd.a.6)), # .995
       R2(obs.6$value, as.numeric(prd.d2.6)),
-      R2(obs.6$value, as.numeric(prd.s2.6)),
       R2(obs.7$value, as.numeric(prd.o.7)), # .988
       R2(obs.7$value, as.numeric(prd.s.7)), # .986
       R2(obs.7$value, as.numeric(prd.d.7)), # .994
       R2(obs.7$value, as.numeric(prd.a.7)), # .996
       R2(obs.7$value, as.numeric(prd.d2.7)),
-      R2(obs.7$value, as.numeric(prd.s2.7)),
       R2(obs.8$value, as.numeric(prd.o.8)), # .991
       R2(obs.8$value, as.numeric(prd.s.8)), # .989
       R2(obs.8$value, as.numeric(prd.d.8)), # .989
       R2(obs.8$value, as.numeric(prd.a.8)), # .995
-      R2(obs.8$value, as.numeric(prd.d2.8)),
-      R2(obs.8$value, as.numeric(prd.s2.8)))
+      R2(obs.8$value, as.numeric(prd.d2.8))
+) 
 
 set<-c(rep(c("Original all parameters",
-            "Original sensitive parameters (0.05)",
-            "All sensitive parameters (0.01)",
-            "All model parameters",
-            "All sensitive parameters (0.05)",
-            "Original sensitive parameters (0.01)"
-            ),8))
+             "Original sensitive parameters",
+             "All sensitive parameters (0.01)",
+             "All model parameters",
+             "All sensitive parameters (0.05)"
+),8))
 
-gp<-c(rep("Group A, 325 mg", 6),
-      rep("Group B, 1000 mg", 6),
-      rep("Group C, 1000 mg", 6),
-      rep("Group D, 1000 mg", 6),
-      rep("Group E, 20 mg/kg",6),
-      rep("Group F, 20 mg/kg",6),
-      rep("Group G, 20 mg/kg",6),
-      rep("Group H, 80 mg/kg",6))
+gp<-c(rep("Group A, 325 mg", 5),
+      rep("Group B, 1000 mg", 5),
+      rep("Group C, 1000 mg", 5),
+      rep("Group D, 1000 mg", 5),
+      rep("Group E, 20 mg/kg",5),
+      rep("Group F, 20 mg/kg",5),
+      rep("Group G, 20 mg/kg",5),
+      rep("Group H, 80 mg/kg",5))
 
 r2df<-data.frame("R2", set, gp, r2)
 r2df$set = with(r2df, factor(set, levels = c("Original all parameters",
-                            "Original sensitive parameters (0.05)",
-                            "Original sensitive parameters (0.01)",
-                            "All sensitive parameters (0.05)",
-                            "All sensitive parameters (0.01)",
-                            "All model parameters")))
+                                             "Original sensitive parameters",
+                                             "All sensitive parameters (0.05)",
+                                             "All sensitive parameters (0.01)",
+                                             "All model parameters")))
