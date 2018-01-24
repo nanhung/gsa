@@ -30,11 +30,11 @@ p1<-ggplot(df.9)+
                 labels = trans_format("log10", math_format(10^.x))) +
   facet_grid(variable~exp) + theme_bw() + xlim(0, 13) +
   theme(text = element_text(size=20)) + 
-  geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "red4") + 
+  geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "grey") + 
   geom_line(aes(x = Time, y = exp(prd.s)/1000), size = 0.6, color = "red", linetype = "dashed") +
   geom_line(aes(x = Time, y = exp(prd.d)/1000), size = 0.6, color = "green") +
-  geom_line(aes(x = Time, y = exp(prd.d2)/1000), size = 0.6, color = "springgreen3", linetype = "dotted") +
-  geom_line(aes(x = Time, y = exp(prd.a)/1000), size = 0.6, color = "darkgreen", linetype = "dashed") +
+  geom_line(aes(x = Time, y = exp(prd.d2)/1000), size = 0.6, color = "blue", linetype = "dotted") +
+  geom_line(aes(x = Time, y = exp(prd.a)/1000), size = 0.6, color = "black", linetype = "dashed") +
   geom_point(aes(x = Time, y = exp(value)/1000), size = 1.4)
 
 # r2
@@ -43,7 +43,7 @@ p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
        y=bquote(~italic(R)^2)) +
   geom_col(color = "white")+
   coord_cartesian(ylim=c(0.7,1.0)) +
-  scale_fill_manual(values = c("red4", "red", "green", "springgreen3", "darkgreen")) +
+  scale_fill_manual(values = c("grey", "red", "green", "blue", "black")) +
   guides(fill=FALSE) +
   facet_grid(~gp) + theme_bw()+
   theme(text = element_text(size=20),
@@ -82,6 +82,7 @@ prd_fit<-do.call(rbind, list(org_prd_fit, sen_prd_fit, add_prd_fit, all_prd_fit,
 
 df.b <-cbind(na.omit(df.a), prd_fit)
 df.b$res<-log(df.b$Obs, 10)-log(df.b$prd.val, 10)
+df.b$prd.typ<-with(df.b, factor(prd.typ, levels = c("prd.a","prd.d", "prd.d2","prd.s","prd.o")))
 
 abs(mean(subset(df.b, prd.typ=="prd.o")$res)) #0.000689
 abs(mean(subset(df.b, prd.typ=="prd.s")$res)) #0.0054
@@ -133,14 +134,14 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x)))+
   geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.1) +
-  scale_fill_manual(values=c("red4", "red", "green", "darkgreen", "springgreen3")) + 
+  scale_fill_manual(values=c("black", "blue", "green", "red", "grey")) + 
   guides(fill=FALSE) + # remove "fill" legend 
   geom_point(aes(colour = prd.typ), alpha = 0.6) +
   annotation_custom(grob=g, xmin = log(2), xmax = log(8),
                     ymin=log(0.4), ymax=log(1.5)) +
-  scale_color_manual(values=c("red4", "red", "green", "darkgreen", "springgreen3"),
+  scale_color_manual(values=c("black", "blue", "green", "red", "grey"),
                      name="",
-                     breaks=c("prd.o", "prd.s", "prd.d", "prd.d2", "prd.a"),
+                     breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
                      labels=c("21 parameters / original set", 
                               "11 parameters / original set (0.05)", 
                               "10 parameters / full set (0.05)",
@@ -155,7 +156,7 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
 p3<-ggplot(df.b, aes(Obs, res)) + 
   geom_abline(slope = 0, intercept = 0) +
   geom_point(aes(colour = prd.typ), alpha = 0.6) +
-  scale_colour_manual(values = c("red4", "red", "green", "darkgreen", "springgreen3")) + 
+  scale_colour_manual(values = c("black","blue","green","red", "grey")) + 
   guides(colour=FALSE) +
   labs(x="in-vivo observation",
        y=expression(Log[10] ~ residual)) +
