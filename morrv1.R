@@ -1,3 +1,5 @@
+# system.time(source("morrv1.R"))
+
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {

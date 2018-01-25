@@ -123,15 +123,36 @@ df.res<-data.frame(gp,mean,sd)
 
 df.res$gp <- with(df.res, factor(gp, levels = c("O21","O11(0.05)","F10(0.05)","F20(0.01)","F58")))
 
-pd = position_dodge(0.8)
-p3<-ggplot(df.res, aes(x = gp, y = mean)) + 
+# dot (mean sd)
+#pd = position_dodge(0.8)
+#p3<-ggplot(df.res, aes(x = gp, y = mean)) + 
+#  xlab("") + ylab(expression(Log[10] ~ residual)) +
+#  geom_abline(slope = 0, intercept = 0, linetype="dotted") +
+#  ylim(-0.1, 0.1) +
+#  geom_point(aes(colour = gp), size  = 4) +
+#  geom_errorbar(aes(ymin  = mean - sd, ymax  = mean + sd), width = 0.2, size  = 0.4, position = pd) +
+#  scale_colour_manual(values = c("grey","red","green","blue", "black")) + 
+#  guides(fill=FALSE, colour=FALSE) + theme_bw() +
+#  theme(axis.title = element_text(face = "bold"),
+#        text = element_text(size=20),
+#        axis.text.x = element_text(angle = 45, hjust = 1),
+#        panel.grid.minor=element_blank(),
+#        panel.grid.major.y=element_blank(),
+#        panel.grid.major.x=element_blank())
+
+df.b$prd.typ2<-with(df.b, factor(prd.typ, levels = rev(c("prd.a","prd.d", "prd.d2","prd.s","prd.o"))))
+p3<-ggplot(df.b, aes(prd.typ2, res)) + 
   xlab("") + ylab(expression(Log[10] ~ residual)) +
   geom_abline(slope = 0, intercept = 0, linetype="dotted") +
-  ylim(-0.1, 0.1) +
-  geom_point(aes(colour = gp), size  = 4) +
-  geom_errorbar(aes(ymin  = mean - sd, ymax  = mean + sd), width = 0.2, size  = 0.4, position = pd) +
-  scale_colour_manual(values = c("grey","red","green","blue", "black")) + 
-  guides(fill=FALSE, colour=FALSE) + theme_bw() +
+  geom_violin(aes(colour = prd.typ), alpha = 0.6) +
+  scale_colour_manual(values = c("black","blue","green","red", "grey")) +
+  scale_x_discrete(labels=c("prd.a" = "F58", 
+                            "prd.d" = "F20 (0.01)",
+                            "prd.d2" = "F10 (0.05)",
+                            "prd.s" = "O11 (0.05)",
+                            "prd.o" = "O21"))+
+  theme_bw()+ guides(colour=FALSE) +
+  geom_boxplot(aes(colour = prd.typ), width=0.2, fill="white")+
   theme(axis.title = element_text(face = "bold"),
         text = element_text(size=20),
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -193,6 +214,7 @@ p3<-ggplot(df.b, aes(Obs, res)) +
   ylim(-0.6, 0.6) +
   theme(text = element_text(size=20),
         panel.grid.minor = element_blank())
+
 
 #pdf(file="fig7.pdf", width = 10, height = 12)
 png(file="fig3.png",width=4200,height=4200,res=300)
