@@ -29,7 +29,7 @@ p1<-ggplot(df.9)+
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
   facet_grid(variable~exp) + theme_bw() + xlim(0, 13) +
-  theme(text = element_text(size=20)) + 
+  theme(text = element_text(size=15)) + 
   geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "grey") + 
   geom_line(aes(x = Time, y = exp(prd.s)/1000), size = 0.6, color = "red", linetype = "dashed") +
   geom_line(aes(x = Time, y = exp(prd.d)/1000), size = 0.6, color = "green") +
@@ -44,13 +44,18 @@ p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
   geom_col(color = "white")+
   coord_cartesian(ylim=c(0.7,1.0)) +
   scale_fill_manual(values = c("grey", "red", "green", "blue", "black")) +
+  scale_x_discrete(labels=c("OMP", 
+                            "OSP",
+                            expression(FSP[0.05]), 
+                            expression(FSP[0.01]),
+                            "FMP"))+
   guides(fill=FALSE) +
   facet_grid(~gp) + theme_bw()+
-  theme(text = element_text(size=20),
-        axis.text.x = element_blank())
+  theme(text = element_text(size=15),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 
 #pdf(file="EXP.pdf", width = 16, height = 9)
-png(file="EXP.png",width=4000,height=1600,res=250)
+png(file="setpt0.png",width=5600,height=2000,res=300)
 p1
 dev.off()
 
@@ -146,11 +151,11 @@ p3<-ggplot(df.b, aes(prd.typ2, res)) +
   geom_abline(slope = 0, intercept = 0, linetype="dotted") +
   geom_violin(aes(colour = prd.typ), alpha = 0.6) +
   scale_colour_manual(values = c("black","blue","green","red", "grey")) +
-  scale_x_discrete(labels=c("prd.a" = "F58", 
-                            "prd.d" = "F20 (0.01)",
-                            "prd.d2" = "F10 (0.05)",
-                            "prd.s" = "O11 (0.05)",
-                            "prd.o" = "O21"))+
+  scale_x_discrete(labels=c("prd.a" = "FMP", 
+                            "prd.d" = expression(FSP[0.01]),
+                            "prd.d2" = expression(FSP[0.05]),
+                            "prd.s" = "OSP",
+                            "prd.o" = "OMP"))+
   theme_bw()+ guides(colour=FALSE) +
   geom_boxplot(aes(colour = prd.typ), width=0.2, fill="white")+
   theme(axis.title = element_text(face = "bold"),
@@ -190,11 +195,11 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
   scale_color_manual(values=c("black", "blue", "green", "red", "grey"),
                      name="",
                      breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
-                     labels=c("21 parameters / original set", 
-                              "11 parameters / original set (0.05)", 
-                              "10 parameters / full set (0.05)",
-                              "20 parameters / full set (0.01)",
-                              "58 parameters / full set")) + 
+                     labels=c("OMP", 
+                              "OSP",
+                              expression(FSP[0.05]), 
+                              expression(FSP[0.01]),
+                              "FMP")) + 
   theme(legend.justification=c(0,1), 
         legend.position=c(0,1), 
         text = element_text(size=20),
@@ -217,7 +222,7 @@ p3<-ggplot(df.b, aes(Obs, res)) +
 
 
 #pdf(file="fig7.pdf", width = 10, height = 12)
-png(file="fig3.png",width=4200,height=4200,res=300)
+png(file="fig3.png",width=3600,height=4200,res=300)
 #grid.arrange(p2,p3, ncol=1, heights=c(3,1))
 plot_grid(p2,p3, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
 dev.off()
@@ -225,5 +230,5 @@ dev.off()
 #pdf(file="fig6.pdf", width = 18, height = 10)
 png(file="fig4.png",width=5400,height=3600,res=300)
 #grid.arrange(p1,p11, ncol=1, heights=c(3,1))
-plot_grid(p1,p11, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
+plot_grid(p1,p11, ncol=1, rel_heights=c(5,2), label_size = 20, labels="AUTO")
 dev.off()

@@ -160,11 +160,11 @@ plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")),
      ylab="Density", xlab="LnData", frame.plot = FALSE, cex.lab=1.5, font.lab=2)
 mapply(lines, dens, col=c("grey", "red", "green", "blue", "black"), lwd=2)
 
-text(95,0.065,"21 parameters / original set",cex=1.2, col="grey")
-text(70,0.07,"11 parameters / original set (0.05)",cex=1.2, col="red")
-text(40, 0.06,"10 parameters / full set (0.05)",cex=1.2, col="green")
-text(135,0.05,"20 parameters / full set (0.01)",cex=1.2, col="blue")
-text(190,0.05,"58 parameters / full set",cex=1.2, col="black")
+text(95,0.065,"OMP",cex=1.5, col="grey")
+text(70,0.07,"OSP",cex=1.5, col="red")
+text(40, 0.06, expression(FSP[0.05]),cex=1.5, col="green")
+text(145,0.05, expression(FSP[0.01]),cex=1.5, col="blue")
+text(185,0.05,"FMP",cex=1.5, col="black")
 
 dev.off()
 
