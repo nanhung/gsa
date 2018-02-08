@@ -1,0 +1,181 @@
+MonteCarlo ("apap21.mtc.out", 100, 1234);
+Integrate(Lsodes, 1e-9, 1e-11 , 1)
+
+Distrib(lnTg, TruncNormal, -1.4552, 0.5, -2.5, 0.);
+Distrib(lnTp, TruncNormal, -3.401, 0.5, -4.5, -2.5);
+
+Distrib(lnCYP_Km, TruncNormal, 4.867, 1., 4.1431, 5.347);
+Distrib(lnCYP_VmaxC, Uniform, -2., 5.); 
+
+Distrib(lnSULT_Km_apap, TruncNormal, 5.703, 1., 4.24, 8.);
+Distrib(lnSULT_Ki, TruncNormal, 6.265, 0.5, 5.4337, 6.7129);
+Distrib(lnSULT_Km_paps, TruncNormal, -0.6931, 0.5, -3., 0.);
+Distrib(lnSULT_VmaxC, Uniform, 0., 15.); 
+
+Distrib(lnUGT_Km, TruncNormal, 8.6995, 1., 7.6009, 9.3926);
+Distrib(lnUGT_Ki, TruncNormal, 10.968, 0.5, 9.998, 11.451);
+Distrib(lnUGT_Km_GA, TruncNormal, -0.6931, 0.5, -3., 0.);
+Distrib(lnUGT_VmaxC, Uniform, 0., 15.);
+
+Distrib(lnKm_AG, TruncNormal, 9.903, 0.3, 8.071, 10.513);
+Distrib(lnVmax_AG, Uniform, 7., 15.);
+Distrib(lnKm_AS, TruncNormal, 10.039, 0.22, 8.974, 10.5427);
+Distrib(lnVmax_AS, Uniform, 7., 15.);
+
+Distrib(lnkGA_syn, Uniform, 0., 13);
+Distrib(lnkPAPS_syn, Uniform, 0., 13);
+
+Distrib(lnCLC_APAP, Uniform, -6., 1);
+Distrib(lnCLC_AG, Uniform, -6., 1);
+Distrib(lnCLC_AS, Uniform, -6., 1);
+
+#---------------------------------------------------------
+# Simulation scenario 
+#---------------------------------------------------------
+
+Simulation { # Volak 325 mg 1
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 325;
+  lnOralDose_APAP_mg = 5.78383;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  BW = 68.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 6.0, 8.0, 10.0);
+  
+} # Volak 325 mg 1 End
+
+Simulation { # Jensen 2
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 1000.0;
+  lnOralDose_APAP_mg = 6.90776;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  BW = 68.;
+  
+  # Logged data
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0);
+  
+} # Jensen 2
+
+Simulation { #3 Shinoda 5
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 1000;
+  lnOralDose_APAP_mg = 6.9077;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  BW = 60.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 2.50E-01, 5.00E-01, 7.50E-01, 1.00E+00, 2.00E+00, 3.00E+00, 4.00E+00, 6.00E+00);
+  
+} #3 End
+
+Simulation { #4 Kim 
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 1000.;
+  lnOralDose_APAP_mg = 6.90776;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  
+  BW = 70.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.25, 0.5, 1, 1.5, 2, 3, 4, 6, 8, 10);
+} #4 End
+
+Simulation { #5 Prescott
+  
+  mgkg_flag = 1;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 20.0;
+  lnOralDose_APAP_mgkg = 2.99573;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 72.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0);
+  #Print(lnCU_APAP_mcg, lnCU_AG_mcg, lnCU_AS_mcg, 0.6, 1.6, 2.6, 3.6, 4.6, 5.6, 6.5, 7.5, 8.5, 9.6, 10.5, 11.5);
+  
+} #5 End
+
+Simulation { #6 Chan 
+  
+  mgkg_flag = 1;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 20.0;
+  lnOralDose_APAP_mgkg = 2.99573;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 57.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+} #6 End
+
+
+Simulation { #7 Grace 1
+  
+  mgkg_flag = 1;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 20.0;
+  lnOralDose_APAP_mgkg = 2.99573;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 57.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+} #7 End
+
+Simulation { #8 Chiew
+  # Example with mg dose
+  #=====================
+  mgkg_flag = 1.;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 79.;
+  lnOralDose_APAP_mgkg = 4.3694;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 73.11;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0, 12.0);
+} #8 End
+
+END.

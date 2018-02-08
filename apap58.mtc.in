@@ -1,0 +1,225 @@
+MonteCarlo ("apap58.mtc.out", 100, 1234);
+Integrate(Lsodes, 1e-9, 1e-11 , 1)
+
+Distrib(lnTg, TruncNormal, -1.4552, 0.5, -2.5, 0.);
+Distrib(lnTp, TruncNormal, -3.401, 0.5, -4.5, -2.5);
+
+Distrib(lnCYP_Km, TruncNormal, 4.867, 1., 4.1431, 5.347);
+Distrib(lnCYP_VmaxC, Uniform, -2., 5.); 
+
+Distrib(lnSULT_Km_apap, TruncNormal, 5.703, 1., 4.24, 8.);
+Distrib(lnSULT_Ki, TruncNormal, 6.265, 0.5, 5.4337, 6.7129);
+Distrib(lnSULT_Km_paps, TruncNormal, -0.6931, 0.5, -3., 0.);
+Distrib(lnSULT_VmaxC, Uniform, 0., 15.); 
+
+Distrib(lnUGT_Km, TruncNormal, 8.6995, 1., 7.6009, 9.3926);
+Distrib(lnUGT_Ki, TruncNormal, 10.968, 0.5, 9.998, 11.451);
+Distrib(lnUGT_Km_GA, TruncNormal, -0.6931, 0.5, -3., 0.);
+Distrib(lnUGT_VmaxC, Uniform, 0., 15.);
+
+Distrib(lnKm_AG, TruncNormal, 9.903, 0.3, 8.071, 10.513);
+Distrib(lnVmax_AG, Uniform, 7., 15.);
+Distrib(lnKm_AS, TruncNormal, 10.039, 0.22, 8.974, 10.5427);
+Distrib(lnVmax_AS, Uniform, 7., 15.);
+
+Distrib(lnkGA_syn, Uniform, 0., 13);
+Distrib(lnkPAPS_syn, Uniform, 0., 13);
+
+Distrib(lnCLC_APAP, Uniform, -6., 1);
+Distrib(lnCLC_AG, Uniform, -6., 1);
+Distrib(lnCLC_AS, Uniform, -6., 1);
+
+Distrib(lnQCC, TruncNormal, 2.785011 0.4167421 1.785011 3.785011)
+
+Distrib(lnVFC, TruncNormal, -1.541779 0.03275559 -1.621779 -1.461779);
+Distrib(lnVKC, TruncNormal, -5.426151 0.03269649 -5.506151 -5.346151);
+Distrib(lnVGC, TruncNormal, -4.240527 0.03268271 -4.320527 -4.160527);
+Distrib(lnVLC, TruncNormal, -3.661264 0.0329753 -3.741264 -3.581264);
+Distrib(lnVMC, TruncNormal, -0.9162907 0.03433436 -0.9962907 -0.8362907);
+Distrib(lnVBLAC, TruncNormal, -3.717279 0.03347345 -3.797279 -3.637279);
+Distrib(lnVBLVC TruncNormal, -2.887775 0.03273873 -2.967775 -2.807775);
+Distrib(lnVSC, TruncNormal, -1.687399 0.03359799 -1.767399 -1.607399); 
+
+Distrib(lnQFC, TruncNormal, -2.956512 0.03301722 -3.036512 -2.876512);
+Distrib(lnQKC, TruncNormal, -1.742969 0.0330541 -1.822969 -1.662969);
+Distrib(lnQGC, TruncNormal, -1.709258 0.03202148 -1.789258 -1.629258);
+Distrib(lnQLBC, TruncNormal, -3.079114 0.03290164 -3.159114 -2.999114);
+Distrib(lnQMC TruncNormal, -1.655482 0.03199564 -1.735482 -1.575482);
+Distrib(lnQSC, TruncNormal, -1.966113 0.03363265 -2.046113 -1.886113);  
+
+Distrib(lnBP_APAP, Uniform, -2.3, 0);
+
+Distrib(lnPF_APAP, TruncNormal, -0.8051967 0.3923243 -1.805197 0.1948033);
+Distrib(lnPG_APAP, TruncNormal, -0.09761283 0.4209822 -1.097613 0.9023872);
+Distrib(lnPK_APAP, TruncNormal, -0.3410828 0.4099462 -1.341083 0.6589172);
+Distrib(lnPL_APAP, TruncNormal, -0.375421 0.3996793 -1.375421 0.624579);
+Distrib(lnPM_APAP, TruncNormal, -0.375421 0.4138126 -1.375421 0.624579);
+Distrib(lnPR_APAP, TruncNormal, -0.3915622 0.4049084 -1.391562 0.6084378);
+Distrib(lnPS_APAP, TruncNormal, -0.5008753 0.3996192 -1.500875 0.4991247);
+
+Distrib(lnPF_AG, TruncNormal, -2.055725 0.4159407 -3.055725 -1.055725);
+Distrib(lnPG_AG, TruncNormal, -0.830113 0.410936 -1.830113 0.169887);
+Distrib(lnPK_AG, TruncNormal, -0.9364934 0.4095666 -1.936493 0.06350656);
+Distrib(lnPL_AG, TruncNormal, -1.136314 0.4195047 -2.136314 -0.1363142);
+Distrib(lnPM_AG, TruncNormal, -1.090644 0.4141211 -2.090644 -0.09064412);
+Distrib(lnPR_AG, TruncNormal, -1.010601 0.4105971 -2.010601 -0.01060141);
+Distrib(lnPS_AG, TruncNormal, -1.046969 0.397972 -2.046969 -0.04696906);
+
+Distrib(M_lnPF_AS, TruncNormal, -2.430418 0.4083209 -3.430418 -1.430418);
+Distrib(M_lnPG_AS, TruncNormal, -1.214023 0.4079434 -2.214023 -0.2140231);
+Distrib(M_lnPK_AS, TruncNormal, -1.343235 0.3982327 -2.343235 -0.3432349);
+Distrib(M_lnPL_AS, TruncNormal, -1.594549 0.3955258 -2.594549 -0.5945493);
+Distrib(M_lnPM_AS, TruncNormal, -1.61445 0.4101304 -2.61445 -0.6144505);
+Distrib(M_lnPR_AS, TruncNormal, -1.575036 0.412912 -2.575036 -0.5750365);
+Distrib(M_lnPS_AS, TruncNormal, -1.370421 0.4173879 -2.370421 -0.370421);
+
+#---------------------------------------------------------
+# Simulation scenario 
+#---------------------------------------------------------
+
+Simulation { # Volak 325 mg 1
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 325;
+  lnOralDose_APAP_mg = 5.78383;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  BW = 68.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 6.0, 8.0, 10.0);
+  
+} # Volak 325 mg 1 End
+
+Simulation { # Jensen 2
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 1000.0;
+  lnOralDose_APAP_mg = 6.90776;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  BW = 68.;
+  
+  # Logged data
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0);
+  
+} # Jensen 2
+
+Simulation { #3 Shinoda 5
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 1000;
+  lnOralDose_APAP_mg = 6.9077;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  BW = 60.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 2.50E-01, 5.00E-01, 7.50E-01, 1.00E+00, 2.00E+00, 3.00E+00, 4.00E+00, 6.00E+00);
+  
+} #3 End
+
+Simulation { #4 Kim 
+  
+  mgkg_flag = 0;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mg = 1000.;
+  lnOralDose_APAP_mg = 6.90776;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mg = 0.;
+  lnIVDose_APAP_mg = 0.;
+  
+  
+  BW = 70.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.25, 0.5, 1, 1.5, 2, 3, 4, 6, 8, 10);
+} #4 End
+
+Simulation { #5 Prescott
+  
+  mgkg_flag = 1;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 20.0;
+  lnOralDose_APAP_mgkg = 2.99573;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 72.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0);
+  #Print(lnCU_APAP_mcg, lnCU_AG_mcg, lnCU_AS_mcg, 0.6, 1.6, 2.6, 3.6, 4.6, 5.6, 6.5, 7.5, 8.5, 9.6, 10.5, 11.5);
+  
+} #5 End
+
+Simulation { #6 Chan 
+  
+  mgkg_flag = 1;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 20.0;
+  lnOralDose_APAP_mgkg = 2.99573;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 57.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+} #6 End
+
+
+Simulation { #7 Grace 1
+  
+  mgkg_flag = 1;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 20.0;
+  lnOralDose_APAP_mgkg = 2.99573;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 57.;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+} #7 End
+
+Simulation { #8 Chiew
+  # Example with mg dose
+  #=====================
+  mgkg_flag = 1.;
+  
+  OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+  OralDose_APAP_mgkg = 79.;
+  lnOralDose_APAP_mgkg = 4.3694;
+  
+  IVExp_APAP = 0.;
+  IVDose_APAP_mgkg = 0.;
+  lnIVDose_APAP_mgkg = 0.;
+  
+  BW = 73.11;
+  
+  Print(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0, 12.0);
+} #8 End
+
+END.
