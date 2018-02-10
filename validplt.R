@@ -46,8 +46,8 @@ p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
   scale_fill_manual(values = c("grey", "red", "green", "blue", "black")) +
   scale_x_discrete(labels=c("OMP", 
                             "OSP",
-                            expression(FSP[0.05]), 
-                            expression(FSP[0.01]),
+                            expression(FSP["05"]), 
+                            expression(FSP["01"]),
                             "FMP"))+
   guides(fill=FALSE) +
   facet_grid(~gp) + theme_bw()+
@@ -152,8 +152,8 @@ p3<-ggplot(df.b, aes(prd.typ2, res)) +
   geom_violin(aes(colour = prd.typ), alpha = 0.6) +
   scale_colour_manual(values = c("black","blue","green","red", "grey")) +
   scale_x_discrete(labels=c("prd.a" = "FMP", 
-                            "prd.d" = expression(FSP[0.01]),
-                            "prd.d2" = expression(FSP[0.05]),
+                            "prd.d" = expression(FSP["01"]),
+                            "prd.d2" = expression(FSP["05"]),
                             "prd.s" = "OSP",
                             "prd.o" = "OMP"))+
   theme_bw()+ guides(colour=FALSE) +
@@ -197,8 +197,8 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
                      breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
                      labels=c("OMP", 
                               "OSP",
-                              expression(FSP[0.05]), 
-                              expression(FSP[0.01]),
+                              expression(FSP["05"]), 
+                              expression(FSP["01"]),
                               "FMP")) + 
   theme(legend.justification=c(0,1), 
         legend.position=c(0,1), 

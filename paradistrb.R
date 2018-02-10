@@ -162,8 +162,8 @@ mapply(lines, dens, col=c("grey", "red", "green", "blue", "black"), lwd=2)
 
 text(95,0.065,"OMP",cex=1.5, col="grey")
 text(70,0.07,"OSP",cex=1.5, col="red")
-text(40, 0.06, expression(FSP[0.05]),cex=1.5, col="green")
-text(145,0.05, expression(FSP[0.01]),cex=1.5, col="blue")
+text(40, 0.06, expression(FSP["05"]),cex=1.5, col="green")
+text(145,0.05, expression(FSP["01"]),cex=1.5, col="blue")
 text(185,0.05,"FMP",cex=1.5, col="black")
 
 dev.off()
