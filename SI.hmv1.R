@@ -138,7 +138,7 @@ mt1$Var1 = with(mt1, factor(Var1, levels = rev(rownames(main1))))
 mt1$order <- factor(mt1$order, levels = c("Main","Interaction"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.05] <- NA
+mt1$value2[mt1$value2 < 0.01] <- NA
 
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
 
@@ -154,6 +154,6 @@ p11<-ggplot(mt1, aes(Var3, Var1)) +
         legend.title=element_blank())
 
 #pdf(file="fig3.pdf", width = 14, height = 12)
-png(file="figS2.png",width=3200,height=4000,res=250)
+jpeg(file="figS3.jpg",width=3600,height=4000,res=300)
 p11
 dev.off()

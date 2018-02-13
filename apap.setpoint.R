@@ -1,8 +1,11 @@
 #rm(list=ls())
 if(!require(readr)) {
-  install.packages("readr"); require(readr)
-}
+  install.packages("readr"); require(readr)}
+if(!require(cowplot)) {
+  install.packages("cowplot"); require(cowplot)} #plot_grid
+
 require(reshape2)
+
 source("valid.R")
 levels(df.9$variable)
 levels(df.9$variable) <- c("APAP", "APAP-G", "APAP-S")
@@ -38,7 +41,7 @@ names(mdata1)<-c("Time","variable","value","exp","sim.gp","sim.val")
 mdata2 <- melt(DF2, id=names(DF2)[1:4])  
 names(mdata2)<-c("Time","variable","value","exp","sim.gp","sim.val")
 
-png(file="setpt1.png",width=4800,height=1600,res=300)
+p1<-
 ggplot() +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
@@ -48,10 +51,8 @@ ggplot() +
   xlim(0, 13) +
   labs(x="Time, hr",
        y=expression("Plasma concentration, "~mu*g/L))
-dev.off()
-
-png(file="setpt2.png",width=4800,height=1600,res=300)
-ggplot() +
+p2<-
+  ggplot() +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
   geom_line(data = mdata2, aes(x = Time, y = exp(sim.val)/1000, group = sim.gp), color="grey")+
@@ -60,4 +61,10 @@ ggplot() +
   xlim(0, 13) +
   labs(x="Time, hr",
        y=expression("Plasma concentration, "~mu*g/L))
+
+
+jpeg(file="figs1.jpg",width=4000,height=2400,res=300)
+plot_grid(p1,p2, ncol=1, rel_heights=c(1,1), label_size = 20, labels="AUTO")
 dev.off()
+
+

@@ -222,13 +222,15 @@ p3<-ggplot(df.b, aes(Obs, res)) +
 
 
 #pdf(file="fig7.pdf", width = 10, height = 12)
-png(file="fig3.png",width=3600,height=4200,res=300)
+#png(file="fig3.png",width=3600,height=4200,res=300)
+jpeg(file="fig3.jpg",width=3600,height=4200,res=300)
 #grid.arrange(p2,p3, ncol=1, heights=c(3,1))
 plot_grid(p2,p3, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
 dev.off()
 
 #pdf(file="fig6.pdf", width = 18, height = 10)
-png(file="fig4.png",width=5400,height=3600,res=300)
+#png(file="fig4.png",width=5400,height=3600,res=300)
+jpeg(file="fig4.jpg",width=5400,height=3600,res=300)
 #grid.arrange(p1,p11, ncol=1, heights=c(3,1))
 plot_grid(p1,p11, ncol=1, rel_heights=c(5,2), label_size = 20, labels="AUTO")
 dev.off()

@@ -123,7 +123,7 @@ p11<-ggplot(mt1, aes(Var4, Var1)) +
         legend.position="top")
 
 #pdf(file="figS3.pdf", width = 14, height = 10)
-png(file="figS4.png",width=3200,height=3200,res=300)
+jpeg(file="figS6.jpg",width=4000,height=3200,res=300)
 p11
 dev.off()
 
@@ -243,7 +243,7 @@ p12<-ggplot(mt1, aes(Var4, Var1)) +
         axis.text.y = element_text(size=10, color=colRows), legend.title=element_blank(),
         legend.position="top")
 
-png(file="figS5.png",width=3200,height=3200,res=300)
+jpeg(file="figS8.jpg",width=4000,height=3200,res=300)
 p12
 dev.off()
 
@@ -348,7 +348,7 @@ mt1$Var1 <- with(mt1, factor(Var1, levels = rev(levels(Var1))))
 #mt1$order <- factor(mt1$order, levels = c("Main","Total"))
 
 mt1$value2 <- mt1$value
-mt1$value2[mt1$value2 < 0.01] <- NA
+mt1$value2[mt1$value2 < 0.05] <- NA
 
 colRows <-  c(rep("grey60", 37), rep("black", 21))
 colCols <-  c(rep("brown1",8),rep("brown3",8),rep("brown4",8))
@@ -363,6 +363,6 @@ p13<-ggplot(mt1, aes(Var4, Var1)) +
         axis.text.y = element_text(size=10, color=colRows), legend.title=element_blank(),
         legend.position="top")
 
-png(file="figS6.png",width=3200,height=3200,res=300)
+jpeg(file="figS11.jpg",width=4000,height=3200,res=300)
 p13
 dev.off()

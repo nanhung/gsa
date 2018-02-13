@@ -110,7 +110,7 @@ denplt2<-function(name1, name2, v){
 
 
 #pdf(file="fig5.pdf", width = 14, height = 12)
-png(file="paradistrb.png",width=3500,height=3000,res=300)
+jpeg(file="fig5.jpeg",width=3500,height=3000,res=300)
 layout(matrix(c(1,1,1,1,1,1,1,
                 2,3,4,5,6,7,8,
                 9,10,11,12,13,14,15,

@@ -70,7 +70,7 @@ p11<-ggplot(mor, aes(Var2, Var1)) +
         legend.position = "right", legend.title=element_blank())
 
 
-png(file="figS1.png",width=3200,height=1600,res=250)
+jpeg(file="figS2.jpeg",width=3200,height=1600,res=250)
 #pdf(file="fig2.pdf", width = 12, height = 6)
 p11
 dev.off()
@@ -141,7 +141,7 @@ p12<-ggplot(mor, aes(Var2, Var1)) +
         axis.text.y = element_text(size=10, color=colRows), legend.title=element_blank(),
         legend.position="top")
 
-png(file="figS3.png",width=3200,height=3200,res=250)
+jpeg(file="figS5.jpg",width=4000,height=3200,res=300)
 #pdf(file="fig2.pdf", width = 12, height = 6)
 p12
 dev.off()

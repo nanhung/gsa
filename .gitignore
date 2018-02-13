@@ -12,3 +12,5 @@ mcsim.perc
 .DS_Store
 /perc/mcsim.*
 mcsim.apap.pbpk_v2
+*.jpg
+*.jpeg

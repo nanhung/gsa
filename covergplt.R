@@ -88,7 +88,8 @@ dft$color<-c(rep("2",16), rep("3",16), rep("4",16), rep("1",8))
 levels(dft$Model) <- c("Original 21 Parameters", "All 58 parameters")
 
 #pdf(file="fig1.pdf", width = 10, height = 7)
-png(file="fig1.png",width=2400,height=1600,res=300)
+#png(file="fig1.png",width=2400,height=1600,res=300)
+jpeg(file="fig1.jpg",width=2400,height=1600,res=300)
 p1<-ggplot(dft, aes(x = n, y = ind)) + facet_grid(Model~.) + 
   geom_line(aes(color = color, linetype = linetype), size = 0.8) +
   geom_point(aes(color = color), size = 1.4) + theme_bw() +

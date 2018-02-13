@@ -241,5 +241,54 @@ corplt(df4, 3, 1, rgb(1,0,0, alpha=0.1))
 corplt(df4, 4, 1, rgb(1,0,0, alpha=0.1))
 dev.off()
 
-
-
+##
+jpeg(file="fig2.jpg",width=2800,height=5200,res=300)
+par(mar=c(2,2,2,1), oma=c(0,0,0,0))
+layout(matrix(c(1,1,1,1,
+                2,3,4,5,
+                6,7,8,9,
+                10,11,12,13,
+                14,15,16,17,
+                18,18,18,18,
+                19,20,21,22,
+                23,24,25,26,
+                27,28,29,30,
+                31,32,33,34), nrow = 10, ncol = 4, byrow = TRUE), 
+       heights=c(1,3,3,3,3,1,3,3,3,3))
+plot.new()
+mtext(text="A   21 original parameters", line = -3, adj=0, cex=1.5)
+corplt(df, 1, 4, rgb(0,0,0, alpha=0.1))
+corplt(df, 2, 4, rgb(0,0,0, alpha=0.1))
+corplt(df, 3, 4, rgb(0,0,0, alpha=0.1))
+textplt("Morris")
+corplt(df, 1, 3, rgb(0,0,0, alpha=0.1))
+corplt(df, 2, 3, rgb(0,0,0, alpha=0.1))
+textplt("eFAST")
+corplt(df2, 4, 3, rgb(1,0,0, alpha=0.1))
+corplt(df, 1, 2, rgb(0,0,0, alpha=0.1))
+textplt("Jansen")
+corplt(df2, 3, 2, rgb(1,0,0, alpha=0.1))
+corplt(df2, 4, 2, rgb(1,0,0, alpha=0.1))
+textplt("Owen")
+corplt(df2, 2, 1, rgb(1,0,0, alpha=0.1))
+corplt(df2, 3, 1, rgb(1,0,0, alpha=0.1))
+corplt(df2, 4, 1, rgb(1,0,0, alpha=0.1))
+plot.new()
+mtext(text="B   58 original parameters", line = -3, adj=0, cex=1.5)
+corplt(df3, 1, 4, rgb(0,0,0, alpha=0.1))
+corplt(df3, 2, 4, rgb(0,0,0, alpha=0.1))
+corplt(df3, 3, 4, rgb(0,0,0, alpha=0.1))
+textplt("Morris")
+corplt(df3, 1, 3, rgb(0,0,0, alpha=0.1))
+corplt(df3, 2, 3, rgb(0,0,0, alpha=0.1))
+textplt("eFAST")
+corplt(df4, 4, 3, rgb(1,0,0, alpha=0.1))
+corplt(df3, 1, 2, rgb(0,0,0, alpha=0.1))
+textplt("Jansen")
+corplt(df4, 3, 2, rgb(1,0,0, alpha=0.1))
+corplt(df4, 4, 2, rgb(1,0,0, alpha=0.1))
+textplt("Owen")
+corplt(df4, 2, 1, rgb(1,0,0, alpha=0.1))
+corplt(df4, 3, 1, rgb(1,0,0, alpha=0.1))
+corplt(df4, 4, 1, rgb(1,0,0, alpha=0.1))
+dev.off()
