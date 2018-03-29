@@ -4,6 +4,8 @@ if(!require(scales)) {
   install.packages("scales"); require(scales)} # to access break formatting functions
 if(!require(gridExtra)) {
   install.packages("gridExtra"); require(gridExtra)}
+if(!require(viridis)) {
+  install.packages("viridis"); require(viridis)}
 
 
 Model<-c(rep("M21", 8))
@@ -95,7 +97,11 @@ p1<-ggplot(dft, aes(x = n, y = ind)) + facet_grid(Model~.) +
   geom_point(aes(color = color), size = 1.4) + theme_bw() +
   xlab("Sample number, n") + ylab("Convergence index") +
   labs(colour="Estimator",linetype="Order") +
-  scale_color_discrete(labels=c("Morris","eFAST", "Jansen", "Owen")) +
+  scale_color_manual(labels=c("Morris","eFAST", "Jansen", "Owen"),
+                     values=c("#000000",
+                              viridis_pal()(8)[4],
+                              viridis_pal()(8)[6],
+                              viridis_pal()(8)[8])) +
   scale_linetype_discrete(labels=c("Total effect", "Main effect")) +
   theme(strip.background = element_blank(), # remove box
         strip.text.y = element_blank(), legend.box = "horizontal",
@@ -107,6 +113,11 @@ p2<-ggplot(dft, aes(x = time, y = ind)) + facet_grid(Model~.) +
                 labels = trans_format("log10", math_format(10^.x))) +
   geom_line(aes(color = color, linetype = linetype), size = 0.8) +
   geom_point(aes(color = color), size = 1.4) + theme_bw() +
+  scale_color_manual(labels=c("Morris","eFAST", "Jansen", "Owen"),
+                     values=c("#000000",
+                              viridis_pal()(8)[4],
+                              viridis_pal()(8)[6],
+                              viridis_pal()(8)[8])) +
   xlab("Computational time, t") +
   theme(axis.title.y=element_blank(),
         axis.text.y=element_blank(),
