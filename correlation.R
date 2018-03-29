@@ -157,19 +157,19 @@ colnames(df)<-c("Morris","eFAST","Jansen","Owen")
 df4<-data.frame(apply(sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
 colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
 
-g3<-ggpairs(df3, title = "Main, all 58 parameters")
-g4<-ggpairs(df4, title = "Interaction, all 58 parameters")
+#g3<-ggpairs(df3, title = "Main, all 58 parameters")
+#g4<-ggpairs(df4, title = "Interaction, all 58 parameters")
 
 #
-png(file="fig2.png",width=3000,height=3000,res=300)
-plot_grid(
-  ggmatrix_gtable(g1),
-  ggmatrix_gtable(g2),
-  ggmatrix_gtable(g3),
-  ggmatrix_gtable(g4),
-  ncol = 2
-)
-dev.off()
+#png(file="fig2.png",width=3000,height=3000,res=300)
+#plot_grid(
+#  ggmatrix_gtable(g1),
+#  ggmatrix_gtable(g2),
+#  ggmatrix_gtable(g3),
+#  ggmatrix_gtable(g4),
+#  ncol = 2
+#)
+#dev.off()
 
 
 
@@ -243,7 +243,7 @@ dev.off()
 
 ##
 jpeg(file="fig2.jpg",width=2800,height=5200,res=300)
-par(mar=c(2,2,2,1), oma=c(0,0,0,0))
+par(mar=c(2,2,2,1), oma=c(4,4,0,0))
 layout(matrix(c(1,1,1,1,
                 2,3,4,5,
                 6,7,8,9,
@@ -257,38 +257,41 @@ layout(matrix(c(1,1,1,1,
        heights=c(1,3,3,3,3,1,3,3,3,3))
 plot.new()
 mtext(text="A   21 original parameters", line = -3, adj=0, cex=1.5)
-corplt(df, 1, 4, rgb(0,0,0, alpha=0.1))
-corplt(df, 2, 4, rgb(0,0,0, alpha=0.1))
-corplt(df, 3, 4, rgb(0,0,0, alpha=0.1))
+corplt(df, 4, 1, rgb(0,0,0, alpha=0.1))
+corplt(df, 3, 1, rgb(0,0,0, alpha=0.1))
+corplt(df, 2, 1, rgb(0,0,0, alpha=0.1))
 textplt("Morris")
-corplt(df, 1, 3, rgb(0,0,0, alpha=0.1))
-corplt(df, 2, 3, rgb(0,0,0, alpha=0.1))
+corplt(df, 4, 2, rgb(0,0,0, alpha=0.1))
+corplt(df, 3, 2, rgb(0,0,0, alpha=0.1))
 textplt("eFAST")
-corplt(df2, 4, 3, rgb(1,0,0, alpha=0.1))
-corplt(df, 1, 2, rgb(0,0,0, alpha=0.1))
+corplt(df2, 1, 2, rgb(1,0,0, alpha=0.1))
+corplt(df, 4, 3, rgb(0,0,0, alpha=0.1))
 textplt("Jansen")
-corplt(df2, 3, 2, rgb(1,0,0, alpha=0.1))
-corplt(df2, 4, 2, rgb(1,0,0, alpha=0.1))
+corplt(df2, 2, 3, rgb(1,0,0, alpha=0.1))
+corplt(df2, 1, 3, rgb(1,0,0, alpha=0.1))
 textplt("Owen")
-corplt(df2, 2, 1, rgb(1,0,0, alpha=0.1))
-corplt(df2, 3, 1, rgb(1,0,0, alpha=0.1))
-corplt(df2, 4, 1, rgb(1,0,0, alpha=0.1))
+corplt(df2, 3, 4, rgb(1,0,0, alpha=0.1))
+corplt(df2, 2, 4, rgb(1,0,0, alpha=0.1))
+corplt(df2, 1, 4, rgb(1,0,0, alpha=0.1))
 plot.new()
 mtext(text="B   58 original parameters", line = -3, adj=0, cex=1.5)
-corplt(df3, 1, 4, rgb(0,0,0, alpha=0.1))
-corplt(df3, 2, 4, rgb(0,0,0, alpha=0.1))
-corplt(df3, 3, 4, rgb(0,0,0, alpha=0.1))
+corplt(df3, 4, 1, rgb(0,0,0, alpha=0.1))
+corplt(df3, 3, 1, rgb(0,0,0, alpha=0.1))
+corplt(df3, 2, 1, rgb(0,0,0, alpha=0.1))
 textplt("Morris")
-corplt(df3, 1, 3, rgb(0,0,0, alpha=0.1))
-corplt(df3, 2, 3, rgb(0,0,0, alpha=0.1))
+corplt(df3, 4, 2, rgb(0,0,0, alpha=0.1))
+corplt(df3, 3, 2, rgb(0,0,0, alpha=0.1))
 textplt("eFAST")
-corplt(df4, 4, 3, rgb(1,0,0, alpha=0.1))
-corplt(df3, 1, 2, rgb(0,0,0, alpha=0.1))
+corplt(df4, 1, 2, rgb(1,0,0, alpha=0.1))
+corplt(df3, 4, 3, rgb(0,0,0, alpha=0.1))
 textplt("Jansen")
-corplt(df4, 3, 2, rgb(1,0,0, alpha=0.1))
-corplt(df4, 4, 2, rgb(1,0,0, alpha=0.1))
+corplt(df4, 2, 3, rgb(1,0,0, alpha=0.1))
+corplt(df4, 1, 3, rgb(1,0,0, alpha=0.1))
 textplt("Owen")
-corplt(df4, 2, 1, rgb(1,0,0, alpha=0.1))
-corplt(df4, 3, 1, rgb(1,0,0, alpha=0.1))
-corplt(df4, 4, 1, rgb(1,0,0, alpha=0.1))
+corplt(df4, 3, 4, rgb(1,0,0, alpha=0.1))
+corplt(df4, 2, 4, rgb(1,0,0, alpha=0.1))
+corplt(df4, 1, 4, rgb(1,0,0, alpha=0.1))
+mtext("Sensitivity index", SOUTH<-1, line=2, adj=0.5, cex=1.5, outer=TRUE)
+mtext("Sensitivity index", WEST<-2, line=2, adj=0.2, cex=1.5, outer=TRUE) 
+mtext("Sensitivity index", WEST<-2, line=2, adj=0.75, cex=1.5, outer=TRUE) 
 dev.off()
