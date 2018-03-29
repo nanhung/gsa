@@ -28,8 +28,9 @@ p1<-ggplot(df.9)+
        y=expression("Plasma concentration, "~mu*g/L)) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
-  facet_grid(variable~exp) + theme_bw() + xlim(0, 13) +
-  theme(text = element_text(size=15)) + 
+  facet_grid(variable~exp) + theme_bw() + #xlim(0, 13) +
+  coord_cartesian(xlim=c(0,13),ylim=range(exp(df.9$value)/1000, na.rm=T))+
+  theme(text = element_text(size=15)) +
   geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "grey") + 
   geom_line(aes(x = Time, y = exp(prd.s)/1000), size = 0.6, color = "red", linetype = "dashed") +
   geom_line(aes(x = Time, y = exp(prd.d)/1000), size = 0.6, color = "green") +

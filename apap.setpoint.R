@@ -3,6 +3,9 @@ if(!require(readr)) {
   install.packages("readr"); require(readr)}
 if(!require(cowplot)) {
   install.packages("cowplot"); require(cowplot)} #plot_grid
+if(!require(scales)) {
+  install.packages("scales"); require(scales)} # to access break formatting functions
+
 
 require(reshape2)
 
@@ -48,7 +51,7 @@ ggplot() +
   geom_line(data = mdata1, aes(x = Time, y = exp(sim.val)/1000, group = sim.gp), color="grey")+
   facet_grid(variable~exp) + theme_bw()+
   geom_point(data = mdata1, aes(x = Time, y = exp(value)/1000), size = 1.4)+
-  xlim(0, 13) +
+  coord_cartesian(xlim=c(0,13),ylim=range(exp(df.9$value)/1000, na.rm=T))+
   labs(x="Time, hr",
        y=expression("Plasma concentration, "~mu*g/L))
 p2<-
@@ -58,7 +61,7 @@ p2<-
   geom_line(data = mdata2, aes(x = Time, y = exp(sim.val)/1000, group = sim.gp), color="grey")+
   facet_grid(variable~exp) + theme_bw()+
   geom_point(data = mdata2, aes(x = Time, y = exp(value)/1000), size = 1.4)+
-  xlim(0, 13) +
+  coord_cartesian(xlim=c(0,13),ylim=range(exp(df.9$value)/1000, na.rm=T))+
   labs(x="Time, hr",
        y=expression("Plasma concentration, "~mu*g/L))
 
