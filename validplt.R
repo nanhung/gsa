@@ -23,6 +23,18 @@ levels(df.9$exp) <- c("Group A, 325 mg",
                       "Group G, 20 mg/kg",
                       "Group H, 80 mg/kg")
 
+mdata <- melt(df.9, id=c("Time","variable","exp")) 
+names(mdata)<-c("Time","chem","exp","variable","value")
+
+#ggplot(data = mdata, aes(color = variable)) +
+#  geom_point(aes(x = Time, y = exp(value)/1000), size = 1.4)+
+#  labs(x="Time, hr",
+#       y=expression("Plasma concentration, "~mu*g/L)) +
+#  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+#                labels = trans_format("log10", math_format(10^.x))) +
+#  facet_grid(chem ~ exp) 
+
+
 p1<-ggplot(df.9)+ 
   labs(x="Time, hr",
        y=expression("Plasma concentration, "~mu*g/L)) +
