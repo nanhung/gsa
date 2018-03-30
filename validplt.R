@@ -25,30 +25,30 @@ levels(df.9$exp) <- c("Group A, 325 mg",
 
 mdata <- melt(df.9, id=c("Time","variable","exp")) 
 names(mdata)<-c("Time","chem","exp","variable","value")
+mdata$point<-c(mdata$value[1:246],rep(NA,1230))
+mdata$point2<-"Experiment data"
+mdata$line<-c(rep(NA,246),mdata$value[247:1476])
+mdata$line2<-c(rep("A",492), # OMP
+               rep("B",246), # OSP
+               rep("D",246), #FSP01
+               rep("E",246), #FMP
+               rep("C",246)) #FSP05
 
-#ggplot(data = mdata, aes(color = variable)) +
-#  geom_point(aes(x = Time, y = exp(value)/1000), size = 1.4)+
-#  labs(x="Time, hr",
-#       y=expression("Plasma concentration, "~mu*g/L)) +
-#  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
-#                labels = trans_format("log10", math_format(10^.x))) +
-#  facet_grid(chem ~ exp) 
 
-
-p1<-ggplot(df.9)+ 
-  labs(x="Time, hr",
-       y=expression("Plasma concentration, "~mu*g/L)) +
+p1<-ggplot(mdata) + geom_point(aes(x = Time, y = exp(point)/1000, shape=point2)) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
                 labels = trans_format("log10", math_format(10^.x))) +
-  facet_grid(variable~exp) + theme_bw() + #xlim(0, 13) +
-  coord_cartesian(xlim=c(0,13),ylim=range(exp(df.9$value)/1000, na.rm=T))+
-  theme(text = element_text(size=15)) +
-  geom_line(aes(x = Time, y = exp(prd.o)/1000), size = 0.6, color = "grey") + 
-  geom_line(aes(x = Time, y = exp(prd.s)/1000), size = 0.6, color = "red", linetype = "dashed") +
-  geom_line(aes(x = Time, y = exp(prd.d)/1000), size = 0.6, color = "green") +
-  geom_line(aes(x = Time, y = exp(prd.d2)/1000), size = 0.6, color = "blue", linetype = "dotted") +
-  geom_line(aes(x = Time, y = exp(prd.a)/1000), size = 0.6, color = "black", linetype = "dashed") +
-  geom_point(aes(x = Time, y = exp(value)/1000), size = 1.4)
+  geom_line(aes(x = Time, y = exp(line)/1000, color=line2)) +
+  scale_colour_manual(values = c("grey", "red", "green", "blue", "black"),
+                      labels=c("OMP", 
+                               "OSP",
+                               expression(FSP["05"]), 
+                               expression(FSP["01"]),
+                               "FMP")) +
+  facet_grid(chem~exp) + theme_bw() + xlim(0, 13) +
+  theme(legend.position="top", legend.title = element_blank(),text = element_text(size=15)) +
+  labs(x="Time, hr",
+       y=expression("Plasma concentration, "~mu*g/L))
 
 # r2
 p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
