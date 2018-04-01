@@ -1,11 +1,15 @@
-# system.time(source("morrv1.R"))
-
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
   install.packages("EnvStats"); require(EnvStats)}
 if(!require(data.table)) {
   install.packages("data.table"); require(data.table)}
+
+# Normalize 0401
+set.seed(0)
+x<-morris(model = NULL, factors = 21, r = 1024,
+          design = list(type = "oat", levels = 5, grid.jump = 3))
+r = 2.0 # set the range to 4
 
 #Nominal value
 Tg <- log(0.23)
@@ -20,11 +24,8 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-# r = 2.6 # exp(2.6)/exp(-2.6) ~ 181.3
-r = 2.0 # set the range to 4
-
 #
-binf<-c(Tg-r, 
+min<-c(Tg-r, 
         Tp-r, 
         CYP_Km-r, 
         -2, 
@@ -46,7 +47,7 @@ binf<-c(Tg-r,
         -6, 
         -6)
 
-bsup<-c(Tg+r, 
+max<-c(Tg+r, 
         Tp+r, 
         CYP_Km+r, 
         5, 
@@ -67,14 +68,15 @@ bsup<-c(Tg+r,
         1, 
         1, 
         1)
+para.range<-data.frame(min,max)
 
-#round(log(binf), digits=4)
-#round(log(bsup), digits=4)
-set.seed(0)
-morr <- morris(model = NULL, factors = 21, r = 1024, 
-               design = list(type = "oat", levels = 5, grid.jump = 3), 
-               binf = binf, bsup = bsup)
-morr.APAP.df <- cbind(1, morr$X)
+df<-data.frame()[1:nrow(x$X),]
+
+for(i in 1:21){
+  df[,i]<-para.range[i,1] + ((para.range[i,2]-para.range[i,1]) * x$X[,i])
+} 
+
+morr.APAP.df <- cbind(1, df)
 write.table(morr.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.apap.pbpk_v2 apap.setpoint_v1.in")
 mor.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
@@ -213,16 +215,5 @@ apap.sig.df.3.6 <- data.frame(Parameter, sig.3.6)
 apap.sig.df.3.7 <- data.frame(Parameter, sig.3.7)
 apap.sig.df.3.8 <- data.frame(Parameter, sig.3.8)
 
-save(apap.Mmu.df.1.1,apap.Mmu.df.1.2,apap.Mmu.df.1.3,apap.Mmu.df.1.4,
-     apap.Mmu.df.1.5,apap.Mmu.df.1.6,apap.Mmu.df.1.7,apap.Mmu.df.1.8,
-     apap.Mmu.df.2.1,apap.Mmu.df.2.2,apap.Mmu.df.2.3,apap.Mmu.df.2.4,
-     apap.Mmu.df.2.5,apap.Mmu.df.2.6,apap.Mmu.df.2.7,apap.Mmu.df.2.8,
-     apap.Mmu.df.3.1,apap.Mmu.df.3.2,apap.Mmu.df.3.3,apap.Mmu.df.3.4,
-     apap.Mmu.df.3.5,apap.Mmu.df.3.6,apap.Mmu.df.3.7,apap.Mmu.df.3.8,
-     apap.sig.df.1.1,apap.sig.df.1.2,apap.sig.df.1.3,apap.sig.df.1.4,
-     apap.sig.df.1.5,apap.sig.df.1.6,apap.sig.df.1.7,apap.sig.df.1.8,
-     apap.sig.df.2.1,apap.sig.df.2.2,apap.sig.df.2.3,apap.sig.df.2.4,
-     apap.sig.df.2.5,apap.sig.df.2.6,apap.sig.df.2.7,apap.sig.df.2.8,
-     apap.sig.df.3.1,apap.sig.df.3.2,apap.sig.df.3.3,apap.sig.df.3.4,
-     apap.sig.df.3.5,apap.sig.df.3.6,apap.sig.df.3.7,apap.sig.df.3.8,
-     file = "morv1.rda")
+
+
