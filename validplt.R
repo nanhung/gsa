@@ -192,7 +192,7 @@ p3<-ggplot(df.b, aes(prd.typ2, res)) +
 g<-ggplotGrob(p3)
 
 p2<-ggplot(df.b, aes(Obs, prd.val)) + 
-  xlab("") + ylab("in-silico prediction") +
+  xlab("") + ylab(expression("in-silico prediction of plasma concentration, "~mu*g/L)) +
   theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
   theme(legend.position="top") + annotation_logticks(sides = "lb") +
   scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
@@ -224,7 +224,7 @@ p3<-ggplot(df.b, aes(Obs, res)) +
   geom_point(aes(colour = prd.typ), alpha = 0.6) +
   scale_colour_manual(values = c("black","blue","green","red", "grey")) + 
   guides(colour=FALSE) +
-  labs(x="in-vivo observation",
+  labs(x=expression("in-vivo observation of plasma concentration, "~mu*g/L),
        y=expression(Log[10] ~ residual)) +
   theme_bw() + annotation_logticks(sides = "b") +
   scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
