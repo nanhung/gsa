@@ -1,0 +1,82 @@
+SetPoints ("apap.setpt58.out", "apap.setpt.dat", 0,
+lnTg,
+lnTp,
+lnCYP_Km,
+lnCYP_VmaxC,
+lnSULT_Km_apap,
+lnSULT_Ki,
+lnSULT_Km_paps,
+lnSULT_VmaxC,
+lnUGT_Km,
+lnUGT_Ki,
+lnUGT_Km_GA,
+lnUGT_VmaxC,
+lnKm_AG,
+lnVmax_AG,
+lnKm_AS,
+lnVmax_AS,
+lnkGA_syn,
+lnkPAPS_syn,
+lnCLC_APAP,
+lnCLC_AG,
+lnCLC_AS,
+lnQCC,  
+lnVFC,
+lnVKC,
+lnVGC,
+lnVLC,
+lnVMC,
+lnVBLAC,
+lnVBLVC,
+lnVSC,
+lnQFC,
+lnQKC,
+lnQGC,
+lnQLBC,
+lnQMC,
+lnQSC,
+lnBP_APAP,              
+lnPF_APAP,
+lnPG_APAP,
+lnPK_APAP,
+lnPL_APAP,           
+lnPM_APAP,
+lnPR_APAP,
+lnPS_APAP,
+lnPF_AG,
+lnPG_AG,
+lnPK_AG,
+lnPL_AG,           
+lnPM_AG,
+lnPR_AG,
+lnPS_AG,
+lnPF_AS,
+lnPG_AS,
+lnPK_AS,
+lnPL_AS,           
+lnPM_AS,
+lnPR_AS,
+lnPS_AS
+);
+
+#---------------------------------------------------------
+# Simulation scenario 
+#---------------------------------------------------------
+
+Simulation { # Volak 325 mg 1
+
+mgkg_flag = 0;
+
+OralExp_APAP = NDoses(2, 1 0, 0 0.001);
+OralDose_APAP_mg = 325;
+lnOralDose_APAP_mg = 5.78383;
+
+IVExp_APAP = 0.;
+IVDose_APAP_mg = 0.;
+lnIVDose_APAP_mg = 0.;
+
+BW = 68.;
+
+PrintStep(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.01, 10.11, 0.1);
+
+} # Volak 325 mg 1 End
