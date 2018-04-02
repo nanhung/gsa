@@ -29,10 +29,10 @@ mdata$point<-c(mdata$value[1:246],rep(NA,1230))
 mdata$point2<-"Experiment data"
 mdata$line<-c(rep(NA,246),mdata$value[247:1476])
 mdata$line2<-c(rep("A",492), # OMP
-               rep("B",246), # OSP
-               rep("D",246), #FSP01
+               rep("B",246), # OIP
+               rep("D",246), #FIP01
                rep("E",246), #FMP
-               rep("C",246)) #FSP05
+               rep("C",246)) #FIP05
 
 
 p1<-ggplot(mdata) + geom_point(aes(x = Time, y = exp(point)/1000, shape=point2)) +
@@ -41,9 +41,9 @@ p1<-ggplot(mdata) + geom_point(aes(x = Time, y = exp(point)/1000, shape=point2))
   geom_line(aes(x = Time, y = exp(line)/1000, color=line2)) +
   scale_colour_manual(values = c("grey", "red", "green", "blue", "black"),
                       labels=c("OMP", 
-                               "OSP",
-                               expression(FSP["05"]), 
-                               expression(FSP["01"]),
+                               "OIP",
+                               expression(FIP["05"]), 
+                               expression(FIP["01"]),
                                "FMP")) +
   facet_grid(chem~exp) + theme_bw() + xlim(0, 13) +
   theme(legend.position="top", legend.title = element_blank(),text = element_text(size=15)) +
@@ -58,9 +58,9 @@ p11<-ggplot(r2df, aes(x=set, y= r2, fill = set))+
   coord_cartesian(ylim=c(0.7,1.0)) +
   scale_fill_manual(values = c("grey", "red", "green", "blue", "black")) +
   scale_x_discrete(labels=c("OMP", 
-                            "OSP",
-                            expression(FSP["05"]), 
-                            expression(FSP["01"]),
+                            "OIP",
+                            expression(FIP["05"]), 
+                            expression(FIP["01"]),
                             "FMP"))+
   guides(fill=FALSE) +
   facet_grid(~gp) + theme_bw()+
@@ -165,9 +165,9 @@ p3<-ggplot(df.b, aes(prd.typ2, res)) +
   geom_violin(aes(colour = prd.typ), alpha = 0.6) +
   scale_colour_manual(values = c("black","blue","green","red", "grey")) +
   scale_x_discrete(labels=c("prd.a" = "FMP", 
-                            "prd.d" = expression(FSP["01"]),
-                            "prd.d2" = expression(FSP["05"]),
-                            "prd.s" = "OSP",
+                            "prd.d" = expression(FIP["01"]),
+                            "prd.d2" = expression(FIP["05"]),
+                            "prd.s" = "OIP",
                             "prd.o" = "OMP"))+
   theme_bw()+ guides(colour=FALSE) +
   geom_boxplot(aes(colour = prd.typ), width=0.2, fill="white")+
@@ -209,9 +209,9 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
                      name="",
                      breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
                      labels=c("OMP", 
-                              "OSP",
-                              expression(FSP["05"]), 
-                              expression(FSP["01"]),
+                              "OIP",
+                              expression(FIP["05"]), 
+                              expression(FIP["01"]),
                               "FMP")) + 
   theme(legend.justification=c(0,1), 
         legend.position=c(0,1), 
