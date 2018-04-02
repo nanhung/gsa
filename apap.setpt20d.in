@@ -24,7 +24,8 @@ lnQCC,
 lnBP_APAP,              
 lnPF_APAP,             
 lnPL_APAP,           
-lnPM_APAP
+lnPM_APAP,
+lnPS_APAP
 );
 
 lnTp = -3.401;

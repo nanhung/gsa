@@ -8,6 +8,7 @@ if(!require(gridExtra)) {
   install.packages("gridExtra"); require(gridExtra)}
 if(!require(cowplot)) {
   install.packages("cowplot"); require(cowplot)}
+#library(jpeg)
 
 # Change facet label
 levels(df.9$variable)
@@ -190,6 +191,8 @@ p3<-ggplot(df.b, aes(prd.typ2, res)) +
 #        panel.grid.minor = element_blank())
 
 g<-ggplotGrob(p3)
+#imgfile <- readJPEG("venn.jpg")
+#g2<- rasterGrob(imgfile, interpolate=TRUE)
 
 p2<-ggplot(df.b, aes(Obs, prd.val)) + 
   xlab("") + ylab(expression("in-silico prediction of plasma concentration, "~mu*g/L)) +
@@ -205,6 +208,8 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
   geom_point(aes(colour = prd.typ), alpha = 0.6) +
   annotation_custom(grob=g, xmin = log(2), xmax = log(8),
                     ymin=log(0.4), ymax=log(1.5)) +
+  #annotation_custom(grob=g2, xmin = log(0.6), xmax = log(1.8),
+  #                  ymin=log(2), ymax=log(15)) +
   scale_color_manual(values=c("black", "blue", "green", "red", "grey"),
                      name="",
                      breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
@@ -214,7 +219,7 @@ p2<-ggplot(df.b, aes(Obs, prd.val)) +
                               expression(FIP["01"]),
                               "FMP")) + 
   theme(legend.justification=c(0,1), 
-        legend.position=c(0,1), 
+        legend.position=c(0.8,0.7), 
         text = element_text(size=20),
         legend.background = element_rect(fill=alpha('white', 0.1)),
         panel.grid.minor = element_blank()) # Hide the minor grid lines because they don't align with the ticks
@@ -236,14 +241,14 @@ p3<-ggplot(df.b, aes(Obs, res)) +
 
 #pdf(file="fig7.pdf", width = 10, height = 12)
 #png(file="fig3.png",width=3600,height=4200,res=300)
-jpeg(file="fig3.jpg",width=3600,height=4200,res=300)
+jpeg(file="fig4.jpg",width=3600,height=4200,res=300)
 #grid.arrange(p2,p3, ncol=1, heights=c(3,1))
 plot_grid(p2,p3, ncol=1, rel_heights=c(3,1), label_size = 20, labels="AUTO")
 dev.off()
 
 #pdf(file="fig6.pdf", width = 18, height = 10)
 #png(file="fig4.png",width=5400,height=3600,res=300)
-jpeg(file="fig4.jpg",width=5400,height=3600,res=300)
+jpeg(file="fig5.jpg",width=5400,height=3600,res=300)
 #grid.arrange(p1,p11, ncol=1, heights=c(3,1))
 plot_grid(p1,p11, ncol=1, rel_heights=c(5,2), label_size = 20, labels="AUTO")
 dev.off()

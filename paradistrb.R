@@ -110,7 +110,7 @@ denplt2<-function(name1, name2, v){
 
 
 #pdf(file="fig5.pdf", width = 14, height = 12)
-jpeg(file="fig5.jpeg",width=3500,height=3000,res=300)
+jpeg(file="fig6.jpeg",width=3500,height=3000,res=300)
 layout(matrix(c(1,1,1,1,1,1,1,
                 2,3,4,5,6,7,8,
                 9,10,11,12,13,14,15,
@@ -161,9 +161,9 @@ plot(NA, xlim=range(sapply(dens, "[", "x")), ylim=range(sapply(dens, "[", "y")),
 mapply(lines, dens, col=c("grey", "red", "green", "blue", "black"), lwd=2)
 
 text(95,0.065,"OMP",cex=1.5, col="grey")
-text(70,0.07,"OSP",cex=1.5, col="red")
-text(40, 0.06, expression(FSP["05"]),cex=1.5, col="green")
-text(145,0.05, expression(FSP["01"]),cex=1.5, col="blue")
+text(70,0.07,"OIP",cex=1.5, col="red")
+text(40, 0.06, expression(FIP["05"]),cex=1.5, col="green")
+text(145,0.05, expression(FIP["01"]),cex=1.5, col="blue")
 text(185,0.05,"FMP",cex=1.5, col="black")
 
 dev.off()

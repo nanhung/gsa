@@ -24,10 +24,10 @@ APAP_11.3 <- as.data.frame(read_table2("apap11s.c03.out"))
 APAP_11.4 <- as.data.frame(read_table2("apap11s.c04.out"))
 
 # 20 Sensitivity parameters
-APAP_20.1 <- as.data.frame(read_table2("apap20d.c01.out"))
-APAP_20.2 <- as.data.frame(read_table2("apap20d.c02.out"))
-APAP_20.3 <- as.data.frame(read_table2("apap20d.c03.out"))
-APAP_20.4 <- as.data.frame(read_table2("apap20d.c04.out"))
+APAP_20.1 <- as.data.frame(read_table2("apap20d.c05.out"))
+APAP_20.2 <- as.data.frame(read_table2("apap20d.c06.out"))
+APAP_20.3 <- as.data.frame(read_table2("apap20d.c07.out"))
+APAP_20.4 <- as.data.frame(read_table2("apap20d.c08.out"))
 
 # 58  parameters
 APAP_58.1 <- as.data.frame(read_table2("apap58.c01.out"))
