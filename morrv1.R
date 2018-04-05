@@ -1,4 +1,9 @@
-# system.time(source("morrv1.R"))
+# library(microbenchmark)
+# library(ggplot2)
+# t<-microbenchmark(system.time(source("morrv1.R")), unit="s", times=10L)
+# t$time
+# mean(t$time*1e-9) 34.13958
+# sd(t$time*1e-9) 0.950774
 
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}

@@ -1,3 +1,10 @@
+# library(microbenchmark)
+# library(ggplot2)
+# t<-microbenchmark(system.time(source("ownv2.R")), unit="s", times=10L)
+# t$time
+# mean(t$time*1e-9) 34.13958
+# sd(t$time*1e-9) 0.950774
+
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
@@ -248,19 +255,19 @@ apap.to.df.3.6 <- data.frame(Parameter, O.S.APAP.3.6$T)
 apap.to.df.3.7 <- data.frame(Parameter, O.S.APAP.3.7$T)
 apap.to.df.3.8 <- data.frame(Parameter, O.S.APAP.3.8$T)
 
-save(apap.mo.df.1.1, apap.mo.df.1.2, apap.mo.df.1.3, apap.mo.df.1.4,
-     apap.mo.df.1.5, apap.mo.df.1.6, apap.mo.df.1.7, apap.mo.df.1.8,
-     apap.mo.df.2.1, apap.mo.df.2.2, apap.mo.df.2.3, apap.mo.df.2.4,
-     apap.mo.df.2.5, apap.mo.df.2.6, apap.mo.df.2.7, apap.mo.df.2.8,
-     apap.mo.df.3.1, apap.mo.df.3.2, apap.mo.df.3.3, apap.mo.df.3.4,
-     apap.mo.df.3.5, apap.mo.df.3.6, apap.mo.df.3.7, apap.mo.df.3.8,
-     apap.to.df.1.1, apap.to.df.1.2, apap.to.df.1.3, apap.to.df.1.4,
-     apap.to.df.1.5, apap.to.df.1.6, apap.to.df.1.7, apap.to.df.1.8,
-     apap.to.df.2.1, apap.to.df.2.2, apap.to.df.2.3, apap.to.df.2.4,
-     apap.to.df.2.5, apap.to.df.2.6, apap.to.df.2.7, apap.to.df.2.8,
-     apap.to.df.3.1, apap.to.df.3.2, apap.to.df.3.3, apap.to.df.3.4,
-     apap.to.df.3.5, apap.to.df.3.6, apap.to.df.3.7, apap.to.df.3.8,
-     file = "ownv2.rda")
+#save(apap.mo.df.1.1, apap.mo.df.1.2, apap.mo.df.1.3, apap.mo.df.1.4,
+#     apap.mo.df.1.5, apap.mo.df.1.6, apap.mo.df.1.7, apap.mo.df.1.8,
+#     apap.mo.df.2.1, apap.mo.df.2.2, apap.mo.df.2.3, apap.mo.df.2.4,
+#     apap.mo.df.2.5, apap.mo.df.2.6, apap.mo.df.2.7, apap.mo.df.2.8,
+#     apap.mo.df.3.1, apap.mo.df.3.2, apap.mo.df.3.3, apap.mo.df.3.4,
+#     apap.mo.df.3.5, apap.mo.df.3.6, apap.mo.df.3.7, apap.mo.df.3.8,
+#     apap.to.df.1.1, apap.to.df.1.2, apap.to.df.1.3, apap.to.df.1.4,
+#     apap.to.df.1.5, apap.to.df.1.6, apap.to.df.1.7, apap.to.df.1.8,
+#     apap.to.df.2.1, apap.to.df.2.2, apap.to.df.2.3, apap.to.df.2.4,
+#     apap.to.df.2.5, apap.to.df.2.6, apap.to.df.2.7, apap.to.df.2.8,
+#     apap.to.df.3.1, apap.to.df.3.2, apap.to.df.3.3, apap.to.df.3.4,
+#     apap.to.df.3.5, apap.to.df.3.6, apap.to.df.3.7, apap.to.df.3.8,
+#     file = "ownv2.rda")
 
 # system.time(source("ownv2.R"))
 
