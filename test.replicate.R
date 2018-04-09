@@ -80,8 +80,8 @@ normalize.max<-function(m){ # For eFAST assume that Max index = 1
   max(apply(m, 2, max)-apply(m, 2, min))
 }
 
-n <- 8192
-replicate <- 20
+n <- 500
+replicate <- 2
 m<-do.call(rbind, rlply(replicate, fun(n=n))) # replicate: 100; r = 1000
 
 #m1<-rbind(m[1:4,],m[6:10,])

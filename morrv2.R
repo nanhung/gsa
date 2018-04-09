@@ -1,3 +1,9 @@
+# library(microbenchmark)
+# t<-microbenchmark(system.time(source("morrv2.R")), unit="s", times=10L)
+# t$time
+# mean(t$time*1e-9) # 154.2148
+# sd(t$time*1e-9) # 1.519838
+
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
@@ -366,16 +372,16 @@ apap.sig.df.3.6 <- data.frame(Parameter, sig.3.6)
 apap.sig.df.3.7 <- data.frame(Parameter, sig.3.7)
 apap.sig.df.3.8 <- data.frame(Parameter, sig.3.8)
 
-save(apap.Mmu.df.1.1,apap.Mmu.df.1.2,apap.Mmu.df.1.3,apap.Mmu.df.1.4,
-     apap.Mmu.df.1.5,apap.Mmu.df.1.6,apap.Mmu.df.1.7,apap.Mmu.df.1.8,
-     apap.Mmu.df.2.1,apap.Mmu.df.2.2,apap.Mmu.df.2.3,apap.Mmu.df.2.4,
-     apap.Mmu.df.2.5,apap.Mmu.df.2.6,apap.Mmu.df.2.7,apap.Mmu.df.2.8,
-     apap.Mmu.df.3.1,apap.Mmu.df.3.2,apap.Mmu.df.3.3,apap.Mmu.df.3.4,
-     apap.Mmu.df.3.5,apap.Mmu.df.3.6,apap.Mmu.df.3.7,apap.Mmu.df.3.8,
-     apap.sig.df.1.1,apap.sig.df.1.2,apap.sig.df.1.3,apap.sig.df.1.4,
-     apap.sig.df.1.5,apap.sig.df.1.6,apap.sig.df.1.7,apap.sig.df.1.8,
-     apap.sig.df.2.1,apap.sig.df.2.2,apap.sig.df.2.3,apap.sig.df.2.4,
-     apap.sig.df.2.5,apap.sig.df.2.6,apap.sig.df.2.7,apap.sig.df.2.8,
-     apap.sig.df.3.1,apap.sig.df.3.2,apap.sig.df.3.3,apap.sig.df.3.4,
-     apap.sig.df.3.5,apap.sig.df.3.6,apap.sig.df.3.7,apap.sig.df.3.8,
-     file = "morv2.rda")
+#save(apap.Mmu.df.1.1,apap.Mmu.df.1.2,apap.Mmu.df.1.3,apap.Mmu.df.1.4,
+#     apap.Mmu.df.1.5,apap.Mmu.df.1.6,apap.Mmu.df.1.7,apap.Mmu.df.1.8,
+#     apap.Mmu.df.2.1,apap.Mmu.df.2.2,apap.Mmu.df.2.3,apap.Mmu.df.2.4,
+#     apap.Mmu.df.2.5,apap.Mmu.df.2.6,apap.Mmu.df.2.7,apap.Mmu.df.2.8,
+#     apap.Mmu.df.3.1,apap.Mmu.df.3.2,apap.Mmu.df.3.3,apap.Mmu.df.3.4,
+#     apap.Mmu.df.3.5,apap.Mmu.df.3.6,apap.Mmu.df.3.7,apap.Mmu.df.3.8,
+#     apap.sig.df.1.1,apap.sig.df.1.2,apap.sig.df.1.3,apap.sig.df.1.4,
+#     apap.sig.df.1.5,apap.sig.df.1.6,apap.sig.df.1.7,apap.sig.df.1.8,
+#     apap.sig.df.2.1,apap.sig.df.2.2,apap.sig.df.2.3,apap.sig.df.2.4,
+#     apap.sig.df.2.5,apap.sig.df.2.6,apap.sig.df.2.7,apap.sig.df.2.8,
+#     apap.sig.df.3.1,apap.sig.df.3.2,apap.sig.df.3.3,apap.sig.df.3.4,
+#     apap.sig.df.3.5,apap.sig.df.3.6,apap.sig.df.3.7,apap.sig.df.3.8,
+#     file = "morv2.rda")

@@ -1,3 +1,9 @@
+# library(microbenchmark)
+# t<-microbenchmark(system.time(source("jsnv1.R")), unit="s", times=10L)
+# t$time
+# mean(t$time*1e-9) # 269.6173
+# sd(t$time*1e-9) # 6.155541
+
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
@@ -137,18 +143,18 @@ apap.tj.df.3.6 <- data.frame(Parameter, J.S.APAP.3.6$T)
 apap.tj.df.3.7 <- data.frame(Parameter, J.S.APAP.3.7$T)
 apap.tj.df.3.8 <- data.frame(Parameter, J.S.APAP.3.8$T)
 
-save(apap.mj.df.1.1, apap.mj.df.1.2, apap.mj.df.1.3, apap.mj.df.1.4,
-     apap.mj.df.1.5, apap.mj.df.1.6, apap.mj.df.1.7, apap.mj.df.1.8,
-     apap.mj.df.2.1, apap.mj.df.2.2, apap.mj.df.2.3, apap.mj.df.2.4,
-     apap.mj.df.2.5, apap.mj.df.2.6, apap.mj.df.2.7, apap.mj.df.2.8,
-     apap.mj.df.3.1, apap.mj.df.3.2, apap.mj.df.3.3, apap.mj.df.3.4,
-     apap.mj.df.3.5, apap.mj.df.3.6, apap.mj.df.3.7, apap.mj.df.3.8,
-     apap.tj.df.1.1, apap.tj.df.1.2, apap.tj.df.1.3, apap.tj.df.1.4,
-     apap.tj.df.1.5, apap.tj.df.1.6, apap.tj.df.1.7, apap.tj.df.1.8,
-     apap.tj.df.2.1, apap.tj.df.2.2, apap.tj.df.2.3, apap.tj.df.2.4,
-     apap.tj.df.2.5, apap.tj.df.2.6, apap.tj.df.2.7, apap.tj.df.2.8,
-     apap.tj.df.3.1, apap.tj.df.3.2, apap.tj.df.3.3, apap.tj.df.3.4,
-     apap.tj.df.3.5, apap.tj.df.3.6, apap.tj.df.3.7, apap.tj.df.3.8,
-     file = "jsnv1.rda")
+#save(apap.mj.df.1.1, apap.mj.df.1.2, apap.mj.df.1.3, apap.mj.df.1.4,
+#     apap.mj.df.1.5, apap.mj.df.1.6, apap.mj.df.1.7, apap.mj.df.1.8,
+#     apap.mj.df.2.1, apap.mj.df.2.2, apap.mj.df.2.3, apap.mj.df.2.4,
+#     apap.mj.df.2.5, apap.mj.df.2.6, apap.mj.df.2.7, apap.mj.df.2.8,
+#     apap.mj.df.3.1, apap.mj.df.3.2, apap.mj.df.3.3, apap.mj.df.3.4,
+#     apap.mj.df.3.5, apap.mj.df.3.6, apap.mj.df.3.7, apap.mj.df.3.8,
+#     apap.tj.df.1.1, apap.tj.df.1.2, apap.tj.df.1.3, apap.tj.df.1.4,
+#     apap.tj.df.1.5, apap.tj.df.1.6, apap.tj.df.1.7, apap.tj.df.1.8,
+#     apap.tj.df.2.1, apap.tj.df.2.2, apap.tj.df.2.3, apap.tj.df.2.4,
+#     apap.tj.df.2.5, apap.tj.df.2.6, apap.tj.df.2.7, apap.tj.df.2.8,
+#     apap.tj.df.3.1, apap.tj.df.3.2, apap.tj.df.3.3, apap.tj.df.3.4,
+#     apap.tj.df.3.5, apap.tj.df.3.6, apap.tj.df.3.7, apap.tj.df.3.8,
+#     file = "jsnv1.rda")
 
 # system.time(source("jsnv1.R"))
