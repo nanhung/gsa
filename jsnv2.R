@@ -1,3 +1,9 @@
+# library(microbenchmark)
+# t<-microbenchmark(system.time(source("jsnv2.R")), unit="s", times=10L)
+# t$time
+# mean(t$time*1e-9) # 1177.57
+# sd(t$time*1e-9) # 17.32478
+
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {

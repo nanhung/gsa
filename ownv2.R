@@ -2,8 +2,8 @@
 # library(ggplot2)
 # t<-microbenchmark(system.time(source("ownv2.R")), unit="s", times=10L)
 # t$time
-# mean(t$time*1e-9) 
-# sd(t$time*1e-9)
+# mean(t$time*1e-9) # 3557.931
+# sd(t$time*1e-9) # 9.256979
 
 if(!require(sensitivity)) {
   install.packages("sensitivity"); require(sensitivity)}
