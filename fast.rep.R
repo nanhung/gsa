@@ -1,9 +1,9 @@
-library(sensitivity)
-library(plyr)
+if(!require(plyr)) {
+  install.packages("plyr"); require(plyr)}
 
 #
 fast99 <- function(model = NULL, factors, n, M = 4, omega = NULL,
-                   q = NULL, q.arg = NULL, ...) {
+                     q = NULL, q.arg = NULL, ...) {
   
   # factors numbers and names
   
@@ -67,15 +67,40 @@ fast99 <- function(model = NULL, factors, n, M = 4, omega = NULL,
             call = match.call())
   class(x) <- "fast99"
   
-  if (!is.null(x$model)) {
-    response(x, ...)
-    tell(x)
-  }
-  
   return(x)
 }
 
-#
+fast.rep<-function(n, rep=10, ci=.95){
+  capture.output(m<-do.call(rbind, rlply(rep, fun(n=n))))
+  s1<-ncol(m)/2
+  st<-ncol(m)/2+1
+  
+  p <- s1
+  X.labels <- paste("X", 1 : p, sep = "")
+  
+  S1.Median<- apply(m[,1:s1], 2, quantile, probs= c(.5))
+  S1.Lower.limit<- apply(m[,1:s1], 2, quantile, probs= c((1-ci)/2))
+  S1.Upper.limit<- apply(m[,1:s1], 2, quantile, probs= c(1-(1-ci)/2))
+  S1.Convergence.index <- S1.Upper.limit - S1.Lower.limit
+  cat("\n", "First order indices:", "\n")
+  X1<-data.frame(S1.Median, S1.Lower.limit, S1.Upper.limit, S1.Convergence.index, 
+                 row.names = X.labels)
+  names(X1)<-c("Median", "Lower limit", "Upper limit", "Convergence index")  
+  print(X1)
+  cat("Max. convergence index: ", round(max(S1.Upper.limit-S1.Lower.limit), 4), "\n")
+  St.Median<- apply(m[,st:ncol(m)], 2, quantile, probs= c(.5))
+  St.Lower.limit<- apply(m[,st:ncol(m)], 2, quantile, probs= c((1-ci)/2))
+  St.Upper.limit<- apply(m[,st:ncol(m)], 2, quantile, probs= c(1-(1-ci)/2))
+  St.Convergence.index <- St.Upper.limit - St.Lower.limit
+  cat("\n", "Total order indices:", "\n")
+  Xt<-data.frame(St.Median, St.Lower.limit, St.Upper.limit, St.Convergence.index, 
+                 row.names = X.labels)
+  names(Xt)<-names(X1)
+  print(Xt)
+  cat("Max. convergence index: ", round(max(St.Upper.limit-St.Lower.limit), 4), "\n")
+}
+
+
 fun <- function(n){
   x <- fast99(model = NULL, factors = 8, n = n,
               q = "qunif", q.arg = list(min = 0, max = 1))
@@ -84,44 +109,32 @@ fun <- function(n){
   print(x)[1:length(print(x))]
 }
 
-#
-rep.fast<-function(n, rep=10, ci=.95){
+fast.rep<-function(n, rep=10, ci=.95){
   capture.output(m<-do.call(rbind, rlply(rep, fun(n=n))))
   s1<-ncol(m)/2
   st<-ncol(m)/2+1
   
   p <- s1
   X.labels <- paste("X", 1 : p, sep = "")
-  
-  Median<- apply(m[,1:s1], 2, quantile, probs= c(.5))
-  Lower.limit<- apply(m[,1:s1], 2, quantile, probs= c((1-ci)/2))
-  Upper.limit<- apply(m[,1:s1], 2, quantile, probs= c(1-(1-ci)/2))
-  Convergence.index<-Upper.limit - Lower.limit
+
+  S1.Median<- apply(m[,1:s1], 2, quantile, probs= c(.5))
+  S1.Lower.limit<- apply(m[,1:s1], 2, quantile, probs= c((1-ci)/2))
+  S1.Upper.limit<- apply(m[,1:s1], 2, quantile, probs= c(1-(1-ci)/2))
+  S1.Convergence.index <- S1.Upper.limit - S1.Lower.limit
   cat("\n", "First order indices:", "\n")
-  print(data.frame(Median, Lower.limit, Upper.limit, Convergence.index, row.names = X.labels))
-  cat("Max. convergence index: ", round(max(Upper.limit-Lower.limit), 4), "\n")
-  
-  Median<- apply(m[,st:ncol(m)], 2, quantile, probs= c(.5))
-  Lower.limit<- apply(m[,st:ncol(m)], 2, quantile, probs= c((1-ci)/2))
-  Upper.limit<- apply(m[,st:ncol(m)], 2, quantile, probs= c(1-(1-ci)/2))
-  Convergence.index<-Upper.limit - Lower.limit
+  X1<-data.frame(S1.Median, S1.Lower.limit, S1.Upper.limit, S1.Convergence.index, 
+                 row.names = X.labels)
+  names(X1)<-c("Median", "Lower limit", "Upper limit", "Convergence index")  
+  print(X1)
+  cat("Max. convergence index: ", round(max(S1.Upper.limit-S1.Lower.limit), 4), "\n")
+  St.Median<- apply(m[,st:ncol(m)], 2, quantile, probs= c(.5))
+  St.Lower.limit<- apply(m[,st:ncol(m)], 2, quantile, probs= c((1-ci)/2))
+  St.Upper.limit<- apply(m[,st:ncol(m)], 2, quantile, probs= c(1-(1-ci)/2))
+  St.Convergence.index <- St.Upper.limit - St.Lower.limit
   cat("\n", "Total order indices:", "\n")
-  print(data.frame(Median, Lower.limit, Upper.limit, Convergence.index, row.names = X.labels))
-  cat("Max. convergence index: ", round(max(Upper.limit-Lower.limit), 4), "\n")
+  Xt<-data.frame(St.Median, St.Lower.limit, St.Upper.limit, St.Convergence.index, 
+                 row.names = X.labels)
+  names(Xt)<-names(X1)
+  print(Xt)
+  cat("Max. convergence index: ", round(max(St.Upper.limit-St.Lower.limit), 4), "\n")
 }
-
-#
-n <- 100
-rep <- 100
-set.seed(1234)
-rep.fast(n, rep) # seed = 1234, convergence index = c(0.3379, 0.2484)
-
-
-#
-set.seed(1234); rep.fast(n=200, rep) # convergence index = c(0.0837, 0.0649)
-set.seed(1234); rep.fast(n=400, rep) # convergence index = c(0.0831, 0.0633)
-set.seed(1234); rep.fast(n=800, rep) # convergence index = c(0.0692, 0.0516)
-set.seed(1234); rep.fast(n=1600, rep) # convergence index = c(0.0324, 0.0265)
-
-#
-set.seed(1234); rep.fast(n=200, rep, ci=.99) #  seed = 1234, convergence index = c(0.0969, 0.0698)
