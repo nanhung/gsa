@@ -7,25 +7,22 @@ output:
 ---
 
 
-```{r message = FALSE}
+```{r message = FALSE, warning=FALSE}
 # Install the ViSA
-# devtools::install_github("nanhung/ViSA")
+devtools::install_github("nanhung/ViSA")
 ```
 
-## R Markdown
+# Import the packages
 
 ```{r message = FALSE, warning=FALSE}
-# Import the packages
-library(ViSA)
-library(sensitivity)
-library(tidyverse)
-
+library(ViSA) # Visualization of sensitivity analysis
+library(sensitivity) # Sensitivity analysis for model output
+library(tidyverse) # Data science toolkits
 ```
 
-
+# Use the add-in function (sobol) and do the testing
 
 ```{r message = FALSE}
-# 
 n <- 1000
 set.seed(1234)
 X1 <- data.frame(matrix(runif(8 * n), nrow = n))
@@ -36,33 +33,46 @@ tell(x,y)
 x
 ```
 
+# Plot the result of sensitivity analysis
 
 ```{r message = FALSE}
 # 
 tell(x,y) %>% plot
 ```
 
+# Check the coverge
+Use the `converge` function (built in ViSA package)
 
 ```{r message = FALSE}
 # 
 tell(x,y) %>% converge
 ```
 
+# Visualization of converge result
+
+Use the `plot.converge` function (built in ViSA package)
+
 ```{r message = FALSE}
-# 
 tell(x,y) %>% converge %>% plot.converge
 ```
+
+# Customize the parameter label
 
 ```{r message = FALSE}
 parameters<-c("k01","k12", "k23", "k34", "k45","k56", "k67", "k78")
 tell(x,y) %>% converge(parameters) %>% plot.converge
 ```
 
+# 
+Use `convergejansen` to make the serious output
+! This method might take long time for the complex computing
 
 ```{r message = FALSE}
 set.seed(1234)
-convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) 
+convergejansen(n = 8000, n.factors = 8, X = sobol.X, fun = sobol.fun) # The defaut output is total effect
 ```
+
+# Plot 
 
 ```{r message = FALSE}
 set.seed(1234)
@@ -70,12 +80,16 @@ convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>%
   converge.plot
 ```
 
+Use `order = "S"` to check the main effect
+
 ```{r message = FALSE}
 set.seed(1234)
 convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun, order = "S") %>% 
   converge.plot
 ```
 
+# Customize the parameter number and distribution
+Increase the number of parameter to 10 as example
 ```{r message = FALSE}
 #
 test.X<- function(n){
@@ -92,13 +106,15 @@ test.X<- function(n){
 }
 ```
 
+# RUN
 
 ```{r message = FALSE}
 set.seed(1234)
-convergejansen(n = 1000, n.factors = 10, X = test.X, fun = sobol.fun, order = "S") %>% 
+convergejansen(n = 8000, n.factors = 10, X = test.X, fun = sobol.fun, order = "S") %>% 
   converge.plot
+
 set.seed(1234)
-convergejansen(n = 1000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+convergejansen(n = 8000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
   converge.plot
 ```
 
