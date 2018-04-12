@@ -1,11 +1,32 @@
-# rm(list=ls())
-# devtools::install_github("nanhung/ViSA")
+---
+title: "ViSA_NB"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+---
 
+
+```{r message = FALSE}
+# Install the ViSA
+# devtools::install_github("nanhung/ViSA")
+```
+
+## R Markdown
+
+```{r message = FALSE, warning=FALSE}
+# Import the packages
 library(ViSA)
 library(sensitivity)
 library(tidyverse)
 
-n <- 4000
+```
+
+
+
+```{r message = FALSE}
+# 
+n <- 1000
 set.seed(1234)
 X1 <- data.frame(matrix(runif(8 * n), nrow = n))
 X2 <- data.frame(matrix(runif(8 * n), nrow = n))
@@ -13,31 +34,49 @@ x <- soboljansen(model = NULL, X1, X2, nboot = 100)
 y <- sobol.fun(x$X)
 tell(x,y)
 x
+```
 
-#
+
+```{r message = FALSE}
+# 
 tell(x,y) %>% plot
+```
 
-#
+
+```{r message = FALSE}
+# 
 tell(x,y) %>% converge
+```
 
+```{r message = FALSE}
+# 
 tell(x,y) %>% converge %>% plot.converge
+```
 
-#
+```{r message = FALSE}
 parameters<-c("k01","k12", "k23", "k34", "k45","k56", "k67", "k78")
-tell(x,y) %>% converge(parameters)
+tell(x,y) %>% converge(parameters) %>% plot.converge
+```
 
-#
+
+```{r message = FALSE}
 set.seed(1234)
 convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) 
+```
 
+```{r message = FALSE}
 set.seed(1234)
 convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
   converge.plot
+```
 
+```{r message = FALSE}
 set.seed(1234)
 convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun, order = "S") %>% 
   converge.plot
+```
 
+```{r message = FALSE}
 #
 test.X<- function(n){
   data.frame(k01 = runif(n, 0, 1),
@@ -51,7 +90,16 @@ test.X<- function(n){
              k89 = runif(n, 0, 1),
              k90 = runif(n, 0, 1))
 }
+```
 
+
+```{r message = FALSE}
 set.seed(1234)
-convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+convergejansen(n = 1000, n.factors = 10, X = test.X, fun = sobol.fun, order = "S") %>% 
   converge.plot
+set.seed(1234)
+convergejansen(n = 1000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot
+```
+
+
