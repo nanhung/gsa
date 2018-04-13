@@ -16,15 +16,10 @@ x
 
 #
 tell(x,y) %>% plot
+abline(0.01, 0 ,lty=2)
 
 #
 tell(x,y) %>% converge
-
-tell(x,y) %>% converge %>% plot.converge
-
-#
-parameters<-c("k01","k12", "k23", "k34", "k45","k56", "k67", "k78")
-tell(x,y) %>% converge(parameters)
 
 #
 set.seed(1234)
@@ -35,8 +30,14 @@ convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>%
   converge.plot
 
 set.seed(1234)
-convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun, order = "S") %>% 
-  converge.plot
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
+  converge.plot(index = "M-ci")
+set.seed(1234)
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
+  converge.plot(index = "M-si")
+set.seed(1234)
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
+  converge.plot(index = "T-si")
 
 #
 test.X<- function(n){
@@ -52,6 +53,12 @@ test.X<- function(n){
              k90 = runif(n, 0, 1))
 }
 
-set.seed(1234)
+#set.seed(1234)
 convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
-  converge.plot
+  converge.plot()
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot(index = "M-ci")
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot(index = "T-si")
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot(index = "M-si")
