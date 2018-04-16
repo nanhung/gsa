@@ -36,11 +36,11 @@ x
 # Plot the result of sensitivity analysis
 
 ```{r message = FALSE}
-# 
 tell(x,y) %>% plot
+abline(0.01, 0 ,lty=2) # add threshold
 ```
 
-# Check the coverge
+# Check and plot the coverge
 Use the `converge` function (built in ViSA package)
 
 ```{r message = FALSE}
@@ -48,44 +48,47 @@ Use the `converge` function (built in ViSA package)
 tell(x,y) %>% converge
 ```
 
-# Visualization of converge result
 
-Use the `plot.converge` function (built in ViSA package)
-
-```{r message = FALSE}
-tell(x,y) %>% converge %>% plot.converge
-```
-
-# Customize the parameter label
-
-```{r message = FALSE}
-parameters<-c("k01","k12", "k23", "k34", "k45","k56", "k67", "k78")
-tell(x,y) %>% converge(parameters) %>% plot.converge
-```
-
-# 
+# Convergence plot - trace output
 Use `convergejansen` to make the serious output
 ! This method might take long time for the complex computing
 
 ```{r message = FALSE}
 set.seed(1234)
-convergejansen(n = 8000, n.factors = 8, X = sobol.X, fun = sobol.fun) # The defaut output is total effect
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) # Output the data frame of sensitivity index (main: S_si, total: T_si) convergence index (main: S_ci, total: T_ci) 
 ```
 
-# Plot 
+## Plot result - convergence index of total effect
 
 ```{r message = FALSE}
 set.seed(1234)
 convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
-  converge.plot
+  converge.plot # The default output is convergence index of total effect
 ```
 
-Use `order = "S"` to check the main effect
+## Convergence index of main effect
+
+```{r message = FALSE}
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
+  converge.plot(index = "M-ci")
+```
+
+## Sensitivity index of total effect
+Use `converge.plot(index = "T-si")` 
 
 ```{r message = FALSE}
 set.seed(1234)
-convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun, order = "S") %>% 
-  converge.plot
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
+  converge.plot(index = "T-si")
+```
+
+## Sensitivity index of Main effect
+Use `converge.plot(index = "M-si")` 
+
+```{r message = FALSE}
+set.seed(1234)
+convergejansen(n = 1000, n.factors = 8, X = sobol.X, fun = sobol.fun) %>% 
+  converge.plot(index = "M-si")
 ```
 
 # Customize the parameter number and distribution
@@ -110,12 +113,21 @@ test.X<- function(n){
 
 ```{r message = FALSE}
 set.seed(1234)
-convergejansen(n = 8000, n.factors = 10, X = test.X, fun = sobol.fun, order = "S") %>% 
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
   converge.plot
 
 set.seed(1234)
-convergejansen(n = 8000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
-  converge.plot
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot("M-ci")
+
+set.seed(1234)
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot("T-si")
+
+set.seed(1234)
+convergejansen(n = 4000, n.factors = 10, X = test.X, fun = sobol.fun) %>% 
+  converge.plot("M-si")
+
 ```
 
 

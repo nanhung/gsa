@@ -76,15 +76,72 @@ inte3<-totl3-main3
 rownames(main1)<-rownames(main2)<-rownames(main3)<-rownames(Mmu1)<-apap.mj.df.1.1[,1]
 rownames(inte1)<-rownames(inte2)<-rownames(inte3)<-rownames(sig1)<-apap.mj.df.1.1[,1]
 
+
 df<-data.frame(apply(Mmu1, 1, max), apply(main1, 1, max), apply(main2, 1, max), apply(main3, 1, max))
 colnames(df)<-c("Morris","eFAST","Jansen","Owen")
 df2<-data.frame(apply(sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
 colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
 
-g1<-ggpairs(df, title = "Main, 21  parameters")
-g2<-ggpairs(df2, title = "Interaction, 21 parameters")
+#g1<-ggpairs(df, title = "Main, 21  parameters")
+#g2<-ggpairs(df2, title = "Interaction, 21 parameters")
 
-#
+## 0413 ###############
+N.Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2]/max(apap.Mmu.df.1.1[,2]),
+                            apap.Mmu.df.1.2[,2]/max(apap.Mmu.df.1.2[,2]),
+                            apap.Mmu.df.1.3[,2]/max(apap.Mmu.df.1.3[,2]),
+                            apap.Mmu.df.1.4[,2]/max(apap.Mmu.df.1.4[,2]),
+                            apap.Mmu.df.1.5[,2]/max(apap.Mmu.df.1.5[,2]),
+                            apap.Mmu.df.1.6[,2]/max(apap.Mmu.df.1.6[,2]), 
+                            apap.Mmu.df.1.7[,2]/max(apap.Mmu.df.1.7[,2]), 
+                            apap.Mmu.df.1.8[,2]/max(apap.Mmu.df.1.8[,2]),
+                            apap.Mmu.df.2.1[,2]/max(apap.Mmu.df.2.1[,2]), 
+                            apap.Mmu.df.2.2[,2]/max(apap.Mmu.df.2.2[,2]), 
+                            apap.Mmu.df.2.3[,2]/max(apap.Mmu.df.2.3[,2]), 
+                            apap.Mmu.df.2.4[,2]/max(apap.Mmu.df.2.4[,2]),
+                            apap.Mmu.df.2.5[,2]/max(apap.Mmu.df.2.5[,2]), 
+                            apap.Mmu.df.2.6[,2]/max(apap.Mmu.df.2.6[,2]), 
+                            apap.Mmu.df.2.7[,2]/max(apap.Mmu.df.2.7[,2]),
+                            apap.Mmu.df.2.8[,2]/max(apap.Mmu.df.2.8[,2]),
+                            apap.Mmu.df.3.1[,2]/max(apap.Mmu.df.3.1[,2]), 
+                            apap.Mmu.df.3.2[,2]/max(apap.Mmu.df.3.2[,2]), 
+                            apap.Mmu.df.3.3[,2]/max(apap.Mmu.df.3.3[,2]),
+                            apap.Mmu.df.3.4[,2]/max(apap.Mmu.df.3.4[,2]),
+                            apap.Mmu.df.3.5[,2]/max(apap.Mmu.df.3.5[,2]),
+                            apap.Mmu.df.3.6[,2]/max(apap.Mmu.df.3.6[,2]),
+                            apap.Mmu.df.3.7[,2]/max(apap.Mmu.df.3.7[,2]),
+                            apap.Mmu.df.3.8[,2]/max(apap.Mmu.df.3.8[,2])))
+N.sig1<-do.call(cbind, list(apap.sig.df.1.1[,2]/max(apap.sig.df.1.1[,2]), 
+                          apap.sig.df.1.2[,2]/max(apap.sig.df.1.2[,2]), 
+                          apap.sig.df.1.3[,2]/max(apap.sig.df.1.3[,2]), 
+                          apap.sig.df.1.4[,2]/max(apap.sig.df.1.4[,2]),
+                          apap.sig.df.1.5[,2]/max(apap.sig.df.1.5[,2]), 
+                          apap.sig.df.1.6[,2]/max(apap.sig.df.1.6[,2]), 
+                          apap.sig.df.1.7[,2]/max(apap.sig.df.1.7[,2]), 
+                          apap.sig.df.1.8[,2]/max(apap.sig.df.1.8[,2]),
+                          apap.sig.df.2.1[,2]/max(apap.sig.df.2.1[,2]), 
+                          apap.sig.df.2.2[,2]/max(apap.sig.df.2.2[,2]), 
+                          apap.sig.df.2.3[,2]/max(apap.sig.df.2.3[,2]), 
+                          apap.sig.df.2.4[,2]/max(apap.sig.df.2.4[,2]),
+                          apap.sig.df.2.5[,2]/max(apap.sig.df.2.5[,2]), 
+                          apap.sig.df.2.6[,2]/max(apap.sig.df.2.6[,2]), 
+                          apap.sig.df.2.7[,2]/max(apap.sig.df.2.7[,2]), 
+                          apap.sig.df.2.8[,2]/max(apap.sig.df.2.8[,2]),
+                          apap.sig.df.3.1[,2]/max(apap.sig.df.3.1[,2]), 
+                          apap.sig.df.3.2[,2]/max(apap.sig.df.3.2[,2]), 
+                          apap.sig.df.3.3[,2]/max(apap.sig.df.3.3[,2]), 
+                          apap.sig.df.3.4[,2]/max(apap.sig.df.3.4[,2]),
+                          apap.sig.df.3.5[,2]/max(apap.sig.df.3.5[,2]), 
+                          apap.sig.df.3.6[,2]/max(apap.sig.df.3.6[,2]), 
+                          apap.sig.df.3.7[,2]/max(apap.sig.df.3.7[,2]), 
+                          apap.sig.df.3.8[,2]/max(apap.sig.df.3.8[,2])))
+
+df<-data.frame(apply(N.Mmu1, 1, max), apply(main1, 1, max), apply(main2, 1, max), apply(main3, 1, max))
+colnames(df)<-c("Morris","eFAST","Jansen","Owen")
+df2<-data.frame(apply(N.sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
+colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
+
+
+###########################
 load("morv2.rda")
 load("fstv2.rda")
 load("jsnv2.rda")
@@ -153,9 +210,9 @@ rownames(main1)<-rownames(main2)<-rownames(main3)<-rownames(Mmu1)<-apap.mj.df.1.
 rownames(inte1)<-rownames(inte2)<-rownames(inte3)<-rownames(sig1)<-apap.mj.df.1.1[,1]
 
 df3<-data.frame(apply(Mmu1, 1, max), apply(main1, 1, max), apply(main2, 1, max), apply(main3, 1, max))
-colnames(df)<-c("Morris","eFAST","Jansen","Owen")
+colnames(df3)<-c("Morris","eFAST","Jansen","Owen")
 df4<-data.frame(apply(sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
-colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
+colnames(df4)<-c("Morris","eFAST","Jansen","Owen")
 
 #g3<-ggpairs(df3, title = "Main, all 58 parameters")
 #g4<-ggpairs(df4, title = "Interaction, all 58 parameters")
@@ -171,6 +228,62 @@ colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
 #)
 #dev.off()
 
+## 0413
+N.Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2]/max(apap.Mmu.df.1.1[,2]),
+                            apap.Mmu.df.1.2[,2]/max(apap.Mmu.df.1.2[,2]),
+                            apap.Mmu.df.1.3[,2]/max(apap.Mmu.df.1.3[,2]),
+                            apap.Mmu.df.1.4[,2]/max(apap.Mmu.df.1.4[,2]),
+                            apap.Mmu.df.1.5[,2]/max(apap.Mmu.df.1.5[,2]),
+                            apap.Mmu.df.1.6[,2]/max(apap.Mmu.df.1.6[,2]), 
+                            apap.Mmu.df.1.7[,2]/max(apap.Mmu.df.1.7[,2]), 
+                            apap.Mmu.df.1.8[,2]/max(apap.Mmu.df.1.8[,2]),
+                            apap.Mmu.df.2.1[,2]/max(apap.Mmu.df.2.1[,2]), 
+                            apap.Mmu.df.2.2[,2]/max(apap.Mmu.df.2.2[,2]), 
+                            apap.Mmu.df.2.3[,2]/max(apap.Mmu.df.2.3[,2]), 
+                            apap.Mmu.df.2.4[,2]/max(apap.Mmu.df.2.4[,2]),
+                            apap.Mmu.df.2.5[,2]/max(apap.Mmu.df.2.5[,2]), 
+                            apap.Mmu.df.2.6[,2]/max(apap.Mmu.df.2.6[,2]), 
+                            apap.Mmu.df.2.7[,2]/max(apap.Mmu.df.2.7[,2]),
+                            apap.Mmu.df.2.8[,2]/max(apap.Mmu.df.2.8[,2]),
+                            apap.Mmu.df.3.1[,2]/max(apap.Mmu.df.3.1[,2]), 
+                            apap.Mmu.df.3.2[,2]/max(apap.Mmu.df.3.2[,2]), 
+                            apap.Mmu.df.3.3[,2]/max(apap.Mmu.df.3.3[,2]),
+                            apap.Mmu.df.3.4[,2]/max(apap.Mmu.df.3.4[,2]),
+                            apap.Mmu.df.3.5[,2]/max(apap.Mmu.df.3.5[,2]),
+                            apap.Mmu.df.3.6[,2]/max(apap.Mmu.df.3.6[,2]),
+                            apap.Mmu.df.3.7[,2]/max(apap.Mmu.df.3.7[,2]),
+                            apap.Mmu.df.3.8[,2]/max(apap.Mmu.df.3.8[,2])))
+N.sig1<-do.call(cbind, list(apap.sig.df.1.1[,2]/max(apap.sig.df.1.1[,2]), 
+                            apap.sig.df.1.2[,2]/max(apap.sig.df.1.2[,2]), 
+                            apap.sig.df.1.3[,2]/max(apap.sig.df.1.3[,2]), 
+                            apap.sig.df.1.4[,2]/max(apap.sig.df.1.4[,2]),
+                            apap.sig.df.1.5[,2]/max(apap.sig.df.1.5[,2]), 
+                            apap.sig.df.1.6[,2]/max(apap.sig.df.1.6[,2]), 
+                            apap.sig.df.1.7[,2]/max(apap.sig.df.1.7[,2]), 
+                            apap.sig.df.1.8[,2]/max(apap.sig.df.1.8[,2]),
+                            apap.sig.df.2.1[,2]/max(apap.sig.df.2.1[,2]), 
+                            apap.sig.df.2.2[,2]/max(apap.sig.df.2.2[,2]), 
+                            apap.sig.df.2.3[,2]/max(apap.sig.df.2.3[,2]), 
+                            apap.sig.df.2.4[,2]/max(apap.sig.df.2.4[,2]),
+                            apap.sig.df.2.5[,2]/max(apap.sig.df.2.5[,2]), 
+                            apap.sig.df.2.6[,2]/max(apap.sig.df.2.6[,2]), 
+                            apap.sig.df.2.7[,2]/max(apap.sig.df.2.7[,2]), 
+                            apap.sig.df.2.8[,2]/max(apap.sig.df.2.8[,2]),
+                            apap.sig.df.3.1[,2]/max(apap.sig.df.3.1[,2]), 
+                            apap.sig.df.3.2[,2]/max(apap.sig.df.3.2[,2]), 
+                            apap.sig.df.3.3[,2]/max(apap.sig.df.3.3[,2]), 
+                            apap.sig.df.3.4[,2]/max(apap.sig.df.3.4[,2]),
+                            apap.sig.df.3.5[,2]/max(apap.sig.df.3.5[,2]), 
+                            apap.sig.df.3.6[,2]/max(apap.sig.df.3.6[,2]), 
+                            apap.sig.df.3.7[,2]/max(apap.sig.df.3.7[,2]), 
+                            apap.sig.df.3.8[,2]/max(apap.sig.df.3.8[,2])))
+
+df3<-data.frame(apply(N.Mmu1, 1, max), apply(main1, 1, max), apply(main2, 1, max), apply(main3, 1, max))
+colnames(df3)<-c("Morris","eFAST","Jansen","Owen")
+df4<-data.frame(apply(N.sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
+colnames(df4)<-c("Morris","eFAST","Jansen","Owen")
+
+
 
 
 ##### SUPPLEMENT------------
@@ -183,10 +296,14 @@ corplt<-function(df, v1, v2, col){
   polygon(x = c(min(df[,v1]), min(df[,v1]), max(df[,v1]), max(df[,v1])), 
           y = c(min(df[,v2]), max(df[,v2]), max(df[,v2]), min(df[,v2])), 
           col = col, border = NA)
-  text(3/5*max(df[,v1]), min(df[,v2]), font=3,
-       paste("r = ", format(cor(df[,v1],df[,v2]), digits=3) ,sep=""), pos = 4, cex=1.5)
-}
+  text(min(df[,v1]), 0.95*max(df[,v2]), font=3,
+       bquote(r == .(format(cor(df[,v1],df[,v2]), digits=3))), pos = 4, cex=1.5)
+  text(min(df[,v1]), 0.8*max(df[,v2]), font=3,
+       bquote(rho == .(format(cor(df[,v1],df[,v2], method = c("spearman")), digits=3))), pos = 4, cex=1.5)
+       #paste(bquote(rho, format(cor(df[,v1],df[,v2], method = c("spearman")), digits=3) ,sep=""), pos = 4, cex=1.5)
+       #paste("r = ", format(cor(df[,v1],df[,v2]), digits=3) ,sep=""), pos = 4, cex=1.5)
 
+}
 
 #####
 textplt<-function(mtext){
@@ -196,50 +313,6 @@ textplt<-function(mtext){
   text(5,5, mtext, col=1, cex=5)  
 }
 
-
-##
-png(file="corplt21.png", width=3000,height=3000,res=300)
-par(mfrow=c(4,4), mar=c(2,2,2,1), oma=c(0,0,2,0))
-corplt(df, 1, 4, rgb(0,0,0, alpha=0.1))
-mtext("21 original parameters", NORTH<-3, line=0.2, adj=0.5, cex=1.5, outer=TRUE)
-corplt(df, 2, 4, rgb(0,0,0, alpha=0.1))
-corplt(df, 3, 4, rgb(0,0,0, alpha=0.1))
-textplt("Morris")
-corplt(df, 1, 3, rgb(0,0,0, alpha=0.1))
-corplt(df, 2, 3, rgb(0,0,0, alpha=0.1))
-textplt("eFAST")
-corplt(df2, 4, 3, rgb(1,0,0, alpha=0.1))
-corplt(df, 1, 2, rgb(0,0,0, alpha=0.1))
-textplt("Jansen")
-corplt(df2, 3, 2, rgb(1,0,0, alpha=0.1))
-corplt(df2, 4, 2, rgb(1,0,0, alpha=0.1))
-textplt("Owen")
-corplt(df2, 2, 1, rgb(1,0,0, alpha=0.1))
-corplt(df2, 3, 1, rgb(1,0,0, alpha=0.1))
-corplt(df2, 4, 1, rgb(1,0,0, alpha=0.1))
-dev.off()
-
-
-png(file="corplt58.png",width=3000,height=3000,res=300)
-par(mfrow=c(4,4), mar=c(2,2,2,1), oma=c(0,0,2,0))
-corplt(df3, 1, 4, rgb(0,0,0, alpha=0.1))
-mtext("58 original parameters", NORTH<-3, line=0.2, adj=0.5, cex=1.5, outer=TRUE)
-corplt(df3, 2, 4, rgb(0,0,0, alpha=0.1))
-corplt(df3, 3, 4, rgb(0,0,0, alpha=0.1))
-textplt("Morris")
-corplt(df3, 1, 3, rgb(0,0,0, alpha=0.1))
-corplt(df3, 2, 3, rgb(0,0,0, alpha=0.1))
-textplt("eFAST")
-corplt(df4, 4, 3, rgb(1,0,0, alpha=0.1))
-corplt(df3, 1, 2, rgb(0,0,0, alpha=0.1))
-textplt("Jansen")
-corplt(df4, 3, 2, rgb(1,0,0, alpha=0.1))
-corplt(df4, 4, 2, rgb(1,0,0, alpha=0.1))
-textplt("Owen")
-corplt(df4, 2, 1, rgb(1,0,0, alpha=0.1))
-corplt(df4, 3, 1, rgb(1,0,0, alpha=0.1))
-corplt(df4, 4, 1, rgb(1,0,0, alpha=0.1))
-dev.off()
 
 ##
 jpeg(file="fig2.jpg",width=2800,height=5200,res=300)
