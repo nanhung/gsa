@@ -1,5 +1,3 @@
-if(!require(sensitivity)) {
-  install.packages("sensitivity"); require(sensitivity)}
 if(!require(EnvStats)) {
   install.packages("EnvStats"); require(EnvStats)} # to access break formatting functions
 if(!require(data.table)) {
@@ -42,8 +40,8 @@ Km = 16
 # min
 
 Pct_M <- exp(0.6)
-#Pct_Flow_gsd <- exp(0.6) # 1.8 this parameter can cause "out of bound" problem 
-Pct_Flow_gsd <- exp(1.0) # test "out of bound"
+Pct_Flow_gsd <- exp(0.6) # 1.8 this parameter can cause "out of bound" problem 
+#Pct_Flow_gsd <- exp(1.0) # test "out of bound"
 PC_gsd <- exp(1.2) # 3.3
 MM_gsd <- exp(3.9) # 99.4
 

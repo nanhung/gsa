@@ -1,4 +1,4 @@
-Integrate (Lsodes, 1e-4, 1e-6, 1);
+#Integrate (Lsodes, 1e-4, 1e-6, 1);
 
 SetPoints ("perc.setpoint.out", "perc.setpoint.dat", 0,
            lnLeanBodyWt, lnFlow_pul, lnVent_Perf, 
@@ -30,29 +30,30 @@ Simulation { # 1: Short-term exposure Human experiment
   Print (AUC_exh_ug, 2880);
   Print (AUC_ven_ug, 2880);
   Print (Q_met_ug, 2880);
+  Print (Q_tot, 2880);
 }
 
 
-Simulation { # 2: Long-term exposure predicted
+#Simulation { # 2: Long-term exposure predicted
 
-  InhMag = 72;          # ppm
-  Period = 1e10;           # Only one dose
-  Exposure = 2880;        # 2 days exposure
+#  InhMag = 72;          # ppm
+#  Period = 1e10;           # Only one dose
+#  Exposure = 2880;        # 2 days exposure
 
-  Print (C_exh_ug, 2880);
-  Print (C_ven_ug, 2880);
-  Print (Q_met_ug, 2880);
-}
+#  Print (C_exh_ug, 2880);
+#  Print (C_ven_ug, 2880);
+#  Print (Q_met_ug, 2880);
+#}
 
-Simulation { # 3: Ingested exposure predicted
+#Simulation { # 3: Ingested exposure predicted
 
-  IngDose = 72.0; # ingested dose
+#  IngDose = 72.0; # ingested dose
   
   # Ingested dose (instantaneous bolus dose) in mg
-  Q_ing =  NDoses(2, IngDose 0, 0 1);
-  Print (AUC_exh_ug, 2880);
-  Print (AUC_ven_ug, 2880);
-  Print (Q_met_ug, 2880);
-}
+#  Q_ing =  NDoses(2, IngDose 0, 0 1);
+#  Print (AUC_exh_ug, 2880);
+#  Print (AUC_ven_ug, 2880);
+#  Print (Q_met_ug, 2880);
+#}
 
 END.
