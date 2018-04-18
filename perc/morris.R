@@ -1,5 +1,5 @@
 set.seed(1234)
-morr <- morris(model = NULL, factors = 16, r = 1024, 
+morr <- morris(model = NULL, factors = 16, r = 100, 
                design = list(type = "oat", levels = 5, grid.jump = 3), 
                binf = c(log(LeanBodyWt_min),
                         log(Flow_pul_min),
