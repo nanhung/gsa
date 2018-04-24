@@ -17,6 +17,9 @@ for (i in 1 : x$rep) {
 }
 
 tell(x, y)
+
+x
+
 x %>% plot; abline(0.01, 0, lty = 2)
 
 x %>% converge
