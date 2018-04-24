@@ -14,3 +14,5 @@ mcsim.perc
 mcsim.*
 *.jpg
 *.jpeg
+*.o
+*.so
