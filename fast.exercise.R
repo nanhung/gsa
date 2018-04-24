@@ -2,17 +2,9 @@ library(sensitivity) # sobol.fun
 library(ViSA)
 library(dplyr)
 
-#repfast(fun = sobol.fun, n=100, factors = 8, q = "qunif",
-#           q.arg = list(min = 0, max = 1), rep=100, ci=.95) %>% converge
-
-#repfast(fun = NULL, n=100, factors = 8, q = "qunif",
-#        q.arg = list(min = 0, max = 1), rep=100, ci=.95)
-
-
-
-# library(foreach)
-x<-rfast99(factors = 8, n = 1000,
-           q = "qunif", q.arg = list(min = 0, max = 1), rep = 10)
+set.seed(1234)
+x<-rfast99(factors = 40, n = 100,
+           q = "qunif", q.arg = list(min = 0, max = 1), rep = 10, conf = 0.99)
 
 n <- length(x$s)
 factors <- x$factors
@@ -25,8 +17,9 @@ for (i in 1 : x$rep) {
 }
 
 tell(x, y)
+x %>% plot; abline(0.01, 0, lty = 2)
 
-x
+x %>% converge
 
 
 
