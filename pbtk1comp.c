@@ -48,18 +48,12 @@ kgutabs = 1,
 #define ke parms[1]
 #define kgutabs parms[2]
 
-
-
-
 /*----- Initializers */
   void initmod1comp (void (* odeparms)(int *, double *))
 {
   int N=3;
   odeparms(&N, parms);
   }
-
-
-
 
 void getParms_1comp (double *inParms, double *out, int *nout) {
   /*----- Model scaling */
