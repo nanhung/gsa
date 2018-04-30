@@ -6,8 +6,16 @@ verhulst <- function(K, Y0, a, t)
   return(output)
 }
 
-T <- seq(from = 5, to = 100, by = 5)
-verhulst2 <- function(X, t = T)
+t <- seq(from = 5, to = 100, by = 5)
+
+x <- fast99(model = NULL, factors = c("K","Y0","a"), n = 1000,
+            q = "qunif", q.arg = list(list(min=100, max=1000), 
+                                      list(min=1, max=40),
+                                      list(min = 0.05, max = 0.2)))
+X<-x$X
+
+#####
+verhulst2 <- function(X, t = t)
 {
   out <- matrix(nrow = nrow(X), ncol = length(t), NA)
   for (i in 1:nrow(X))
@@ -18,6 +26,51 @@ verhulst2 <- function(X, t = T)
   names(out) <- paste("t", t, sep = "")
   return(out)
 }
+##########################
+
+source("pbtk1comp_inits.R")
+
+mName <- "pbtk1comp"
+system (paste("R CMD SHLIB ", mName, ".c", sep = "")) # create .o and .so files
+if (is.loaded("derivs", PACKAGE=mName))
+  dyn.unload(paste0(mName,.Platform$dynlib.ext))
+dyn.load(paste(mName, .Platform$dynlib.ext, sep=""))
+
+times <- seq(from = 0.5, to = 24.5, by = 1)
+parameters<-initparms1comp()
+parameters <- c(1,0.5,0.5)
+
+initState <- initState1comp(parms=parameters)
+initState[1] <- 1
+
+Y <- ode(initState, times, parms = parameters, dllname = mName, nout=1,
+    func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp", outnames = "Ccompartment")
+Y[,"Ccompartment"]
+
+verhulst2 <- function(X, t = t)
+{
+  out <- matrix(nrow = nrow(X), ncol = length(t), NA)
+  for (i in 1:nrow(X))
+  {
+    out[i, ] <- verhulst(X$K[i], X$Y0[i], X$a[i], t)
+  }
+  out <- as.data.frame(out)
+  names(out) <- paste("t", t, sep = "")
+  return(out)
+}
+
+
+
+multisensi(design = fast99, model = pbtk,
+           center = FALSE, reduction = NULL, analysis = analysis.sensitivity,
+           design.args=list( factors=c("vdist","ke","kgutabs"), n=1000, q = "qunif",
+                             q.arg = list(list(min = 0.7, max = 1.3), 
+                                          list(min = 0.1, max = 0.4),
+                                          list(min = 0.9, max = 1.2))),
+           analysis.args=list(keep.outputs=FALSE))
+
+
+#####
 
 verhulst.seq.fast <- multisensi(design = fast99, model = verhulst2,
                                 center = FALSE, reduction = NULL, analysis = analysis.sensitivity,
@@ -48,20 +101,3 @@ title(xlab = "Time in half-decades")
 
 par(mfrow=c(1,2))
 
-
-#####
-# with dimension reduction by o-splines basis
-# and sensitivity analysis with sensitivity:fast99
-resG3 <- multisensi(design=fast99, model=biomasse,
-                    analysis=analysis.sensitivity,
-                    design.args=list(factors = names(biomasseX), n = 100,
-                                     q = "qunif", q.arg = list(list(min = 0.9, max = 2.8),
-                                                               list(min = 0.9, max = 0.99), list(min = 0.6, max = 0.8),
-                                                               list(min = 3, max = 12), list(min = 0.0035, max = 0.01),
-                                                               list(min = 0.0011, max = 0.0025),
-                                                               list(min = 700, max = 1100))), 
-                    climdata=Climat,
-                    reduction=basis.osplines,
-                    basis.args=list(knots=7, mdegree=3),
-                    center=FALSE,scale=FALSE,dimension=NULL)
-summary(resG3)

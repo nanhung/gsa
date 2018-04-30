@@ -3,6 +3,7 @@ library(ViSA)
 library(dplyr)
 library(deSolve)
 
+
 set.seed(1234)
 x<-rfast99(factors = 40, n = 100,
            q = "qunif", q.arg = list(min = 0, max = 1), replicate = 10, conf = 0.99)
@@ -59,10 +60,12 @@ y<-solve_ODE(x, times, parameters = parameters, initState,
 # tell(x, y[,,"0.5"]) %>% converge
 # x
 
-
 #####
 
 tell2 <- function(x, y){
+  
+  id <- deparse(substitute(x))
+
   for ( i in 1:length(dimnames(y)[[3]])){
     X <- tell(x, y[,,i])
     if ( i == 1) { # initialize
@@ -77,19 +80,27 @@ tell2 <- function(x, y){
       x$tCI <- rbind(x$tCI, X$T[,"max. c.i."] - X$T[,"min. c.i."])
     }
   }
-  colnames(x$mSI) <- colnames(x$tSI) <- colnames(x$mCI) <- colnames(x$tCI) <- names(parameters)
+  colnames(x$mSI) <- colnames(x$tSI) <- colnames(x$mCI) <- colnames(x$tCI) <- rownames(x$S)
   rownames(x$mSI) <- rownames(x$tSI) <- rownames(x$mCI) <- rownames(x$tCI) <- dimnames(y)[[3]]
+  
+  x$S<-NULL
+  x$I<-NULL
+  x$T<-NULL
+  
+  assign(id, x, parent.frame())
 }
 
-tell2(x, y)
+a<-tell2(x,y)
 
+plot(rownames(x$mSI), x$mSI[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
+lines(rownames(x$mSI), x$mSI[,2])
+lines(rownames(x$mSI), x$mSI[,3])
+abline(0.05, 0, lty = 2); abline(0.01, 0, lty = 3)
 
-
-plot(rownames(results), results[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
-lines(rownames(results), results[,2])
-lines(rownames(results), results[,3])
-abline(0.01, 0, lty = 2)
-
+plot(rownames(x$tSI), x$tSI[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
+lines(rownames(x$tSI), x$tSI[,2])
+lines(rownames(x$tSI), x$tSI[,3])
+abline(0.05, 0, lty = 2); abline(0.01, 0, lty = 3)
 
 #####
 
