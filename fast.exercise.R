@@ -46,7 +46,7 @@ q.arg = list(list(min = 0.7, max = 1.3),
              list(min = 0.9, max = 1.2))
 
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
-           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters<-initparms1comp()
@@ -90,7 +90,7 @@ tell2 <- function(x, y){
   assign(id, x, parent.frame())
 }
 
-a<-tell2(x,y)
+tell2(x,y)
 
 plot(rownames(x$mSI), x$mSI[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
 lines(rownames(x$mSI), x$mSI[,2])

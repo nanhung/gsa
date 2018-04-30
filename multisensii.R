@@ -1,33 +1,5 @@
 library(multisensi)
 
-verhulst <- function(K, Y0, a, t)
-{
-  output <- K/(1 + (K/Y0 - 1) * exp(-a * t))
-  return(output)
-}
-
-t <- seq(from = 5, to = 100, by = 5)
-
-x <- fast99(model = NULL, factors = c("K","Y0","a"), n = 1000,
-            q = "qunif", q.arg = list(list(min=100, max=1000), 
-                                      list(min=1, max=40),
-                                      list(min = 0.05, max = 0.2)))
-X<-x$X
-
-#####
-verhulst2 <- function(X, t = t)
-{
-  out <- matrix(nrow = nrow(X), ncol = length(t), NA)
-  for (i in 1:nrow(X))
-  {
-    out[i, ] <- verhulst(X$K[i], X$Y0[i], X$a[i], t)
-  }
-  out <- as.data.frame(out)
-  names(out) <- paste("t", t, sep = "")
-  return(out)
-}
-##########################
-
 source("pbtk1comp_inits.R")
 
 mName <- "pbtk1comp"
@@ -42,7 +14,6 @@ parameters <- c(1,0.5,0.5)
 
 initState <- initState1comp(parms=parameters)
 initState[1] <- 1
-
 
 pbtk <- function(X, t = T)
 {
@@ -64,13 +35,13 @@ q.arg = list(list(min = 0.7, max = 1.3),
              list(min = 0.1, max = 0.4),
              list(min = 0.8, max = 1.2))
 
-
-x <- fast99(model = NULL, factors = c("K","Y0","a"), n = 1000,
+x <- fast99(model = NULL, factors = c("vdist","ke","kgutabs"), n = 400,
             q = "qunif", q.arg = q.arg)
 X<-x$X
 
 pbtk(X)
 
+# Test
 pbtk.seq.fast <- multisensi(design = fast99, model = pbtk,
                             center = FALSE, reduction = NULL, analysis = analysis.sensitivity,
                             design.args=list( factors=c("vdist","ke","kgutabs"), n=1000, q = "qunif",
@@ -82,36 +53,21 @@ pbtk.seq.fast <- multisensi(design = fast99, model = pbtk,
 pbtk.seq.fast
 print(pbtk.seq.fast,digits=2)
 plot(pbtk.seq.fast, normalized = TRUE, color = terrain.colors, gsi.plot = FALSE)
-title(xlab = "Time in half-decades")
-
-#####
-
-verhulst.seq.fast <- multisensi(design = fast99, model = verhulst2,
-                                center = FALSE, reduction = NULL, analysis = analysis.sensitivity,
-                                design.args=list( factors=c("K","Y0","a"), n=1000, q = "qunif",
-                                                  q.arg = list(list(min=100, max=1000), list(min=1, max=40),
-                                                               list(min = 0.05, max = 0.2))),
-                                analysis.args=list(keep.outputs=FALSE))
-
-verhulst.seq.fast
-print(verhulst.seq.fast,digits=2)
-plot(verhulst.seq.fast, normalized = TRUE, color = terrain.colors, gsi.plot = FALSE)
-title(xlab = "Time in half-decades")
+title(xlab = "Time")
 
 #####
 m <- 10000
-Xb <- data.frame(K = runif(m, min = 100, max = 1000), Y0 = runif(m, min = 1,
-                                                                 max = 40), a = runif(m, min = 0.05, max = 0.2))
+Xb <- data.frame(vdist = runif(m, min = 0.7, max = 1.3), 
+                 ke = runif(m, min = 0.1, max = 0.4),
+                 kgutabs = runif(m, min = 0.8, max = 1.2))
 
-verhulst.seq.sobol <- multisensi(design = soboljansen, model = verhulst2,
+pbtk.seq.sobol <- multisensi(design = soboljansen, model = pbtk,
                                  reduction = NULL, analysis = analysis.sensitivity, center = TRUE,
                                  design.args = list(X1 = Xb[1:(m/2), ], X2 = Xb[(1 + m/2):m, ], nboot = 100),
                                  analysis.args = list(keep.outputs = FALSE))
 
-verhulst.seq.sobol
-print(verhulst.seq.sobol,digits=2)
-plot(verhulst.seq.sobol, normalized = TRUE, color = terrain.colors, gsi.plot = FALSE)
-title(xlab = "Time in half-decades")
-
-par(mfrow=c(1,2))
+pbtk.seq.sobol
+print(pbtk.seq.sobol,digits=2)
+plot(pbtk.seq.sobol, normalized = TRUE, color = terrain.colors, gsi.plot = FALSE)
+title(xlab = "Time")
 
