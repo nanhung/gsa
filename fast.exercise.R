@@ -55,45 +55,34 @@ initState[1] <- 1
 y<-solve_ODE(x, times, parameters = parameters, initState,
              func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp", outnames = "Ccompartment")
 
-par(mar=c(3,5,2,1) ,oma=c(4,1,1,0))
-
-for ( i in 1:dim(y)[3]){
-  tell(x, y[,,i]) %>% plot; abline(0.01, 0, lty = 2); abline(0.01, 0, lty = 2); abline(0.05, 0, lty = 3)
-  mtext(paste("Time = ", dimnames(y)[[3]][i],"hr")) 
-}
-
-tell(x, y[,,i]) %>% plot; abline(0.01, 0, lty = 2); abline(0.01, 0, lty = 2); abline(0.05, 0, lty = 3)
-mtext(paste("Time = ", dimnames(y)[[3]][i],"hr")) 
+## Check each time point; time = 0.5
+# tell(x, y[,,"0.5"]) %>% converge
+# x
 
 
-p<-dim(x$a)[3]
-mtext(print(round(x$S[,1], digits = 2)), 1, line=3, at=c(1:p), col= "grey50")
-mtext(print(round(I, digits = 2)), 1, line=4, at=c(1:p), col= "grey30")
-mtext(print(round(x$T[,1], digits = 2)), 1, line=5, at=c(1:p))
+#####
 
-
-mtext("main", side=1, line=0, adj=.0, cex=1, font = 2, outer=TRUE)  
-mtext("interaction", side=1, line=1, adj=.0, cex=1, font = 2, outer=TRUE)  
-mtext("total", side=1, line=2, adj=.0, cex=1, font = 2, outer=TRUE)  
-
-
-mtext(print(round(x$S[,1], digits = 2)), 1, line=3, at=c(1,2,3))
-
-mtext(c("A","B","C"),1,line=3,at=c(1,2,3))
-mtext(c("A","B","C"),1,line=3,at=c(1,2,3))
-mtext(c("A","B","C"),1,line=4,at=c(1,2,3))
-mtext(c("A","B","C"),1,line=5,at=c(1,2,3))
-
-##
-for ( i in 1:length(times)){
-  if ( i == 1) { # initialize
-    results <- tell(x, y[,,i])$S[,"original"]
-  } else { # accumulate
-    results <- rbind(results, tell(x, y[,,i])$S[,"original"])
+tell2 <- function(x, y){
+  for ( i in 1:length(dimnames(y)[[3]])){
+    X <- tell(x, y[,,i])
+    if ( i == 1) { # initialize
+      x$mSI <- X$S[,"original"]
+      x$tSI <- X$T[,"original"]
+      x$mCI <- X$S[,"max. c.i."] - X$S[,"min. c.i."]
+      x$tCI <- X$T[,"max. c.i."] - X$T[,"min. c.i."]
+    } else { # accumulate
+      x$mSI <- rbind(x$mSI, X$S[,"original"])
+      x$tSI <- rbind(x$tSI, X$T[,"original"])
+      x$mCI <- rbind(x$mCI, X$S[,"max. c.i."] - X$S[,"min. c.i."])
+      x$tCI <- rbind(x$tCI, X$T[,"max. c.i."] - X$T[,"min. c.i."])
+    }
   }
+  colnames(x$mSI) <- colnames(x$tSI) <- colnames(x$mCI) <- colnames(x$tCI) <- names(parameters)
+  rownames(x$mSI) <- rownames(x$tSI) <- rownames(x$mCI) <- rownames(x$tCI) <- dimnames(y)[[3]]
 }
-colnames(results) <- names(parameters)
-rownames(results) <- times
+
+tell2(x, y)
+
 
 
 plot(rownames(results), results[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
@@ -102,7 +91,14 @@ lines(rownames(results), results[,3])
 abline(0.01, 0, lty = 2)
 
 
+#####
 
+for ( i in 1:dim(y)[3]){
+  tell(x, y[,,i]) %>% plot; abline(0.01, 0, lty = 2); abline(0.01, 0, lty = 2); abline(0.05, 0, lty = 3)
+  mtext(paste("Time = ", dimnames(y)[[3]][i],"hr")) 
+}
+
+####
 tell(x, y[,,1]) %>% converge
 tell(x, y[,,2]) %>% converge
 tell(x, y[,,3]) %>% converge
