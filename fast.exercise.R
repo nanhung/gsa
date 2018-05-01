@@ -1,8 +1,21 @@
 library(ViSA)
 library(dplyr)
 library(deSolve)
+library(sensitivity)
 
-# Sobol model
+
+####
+
+
+n <- 4000
+set.seed(1234)
+X1 <- data.frame(matrix(runif(8 * n), nrow = n))
+X2 <- data.frame(matrix(runif(8 * n), nrow = n))
+x <- soboljansen(model = NULL, X1, X2, nboot = 100)
+y <- sobol.fun(x$X)
+tell(x,y) %>% converge
+
+#### Sobol model
 
 set.seed(1234)
 x<-rfast99(factors = 20, n = 100,
@@ -26,13 +39,13 @@ x
 
 x %>% plot; abline(0.01, 0, lty = 2)
 
-x %>% converge
+x %>% converge # broke
 
 ##### the Verhulst model of population dynamics
 
-Verhulst <- function(parameters, t)
+Verhulst <- function(parameters, times)
 {
-  output <- parameters[1]/(1 + (parameters[1]/parameters[2] - 1) * exp(-parameters[3] * t))
+  output <- parameters[1]/(1 + (parameters[1]/parameters[2] - 1) * exp(-parameters[3] * times))
   return(output)
 }
 
@@ -49,8 +62,6 @@ x<-rfast99(factors=c("K","Y0","a"),
 times <- seq(from = 5, to = 100, by = 5)
 
 y<-solve_DE(x, times, fun = Verhulst)
-
-
 
 tell2(x,y)
 
@@ -104,7 +115,7 @@ abline(0.05, 0, lty = 2); abline(0.01, 0, lty = 3)
 #####
 
 for ( i in 1:dim(y)[3]){
-  tell(x, y[,,i]) %>% plot; abline(0.01, 0, lty = 2); abline(0.01, 0, lty = 2); abline(0.05, 0, lty = 3)
+  tell.rfast99(x, y[,,i]) %>% plot; abline(0.01, 0, lty = 2); abline(0.01, 0, lty = 2); abline(0.05, 0, lty = 3)
   mtext(paste("Time = ", dimnames(y)[[3]][i],"hr")) 
 }
 
