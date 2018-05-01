@@ -1,33 +1,65 @@
-library(sensitivity) # sobol.fun
 library(ViSA)
 library(dplyr)
 library(deSolve)
 
+# Sobol model
 
 set.seed(1234)
-x<-rfast99(factors = 40, n = 100,
+x<-rfast99(factors = 20, n = 100,
            q = "qunif", q.arg = list(min = 0, max = 1), replicate = 10, conf = 0.99)
 
-
-
-
 n <- length(x$s)
-factors <- length(x$factors)
+factors <- x$factors
 replicate <- x$replicate
 
-y <- array(1:replicate*n*factors, dim = c(n * factors, replicate))
+out <- 1 # Not time dependent
+
+y <- array(dim = c(n * factors, replicate, out), NA)
 
 for (i in 1 : x$rep) {
-  y[,i]<-sensitivity::sobol.fun(x$a[,i,]) 
+  y[,i,]<-sensitivity::sobol.fun(x$a[,i,]) 
 }
 
-tell(x, y)
+tell(x, y[,,1])
 
 x
 
 x %>% plot; abline(0.01, 0, lty = 2)
 
 x %>% converge
+
+##### the Verhulst model of population dynamics
+
+fun <- function(parameters, t)
+{
+  output <- parameters[1]/(1 + (parameters[1]/parameters[2] - 1) * exp(-parameters[3] * t))
+  return(output)
+}
+
+#
+q = "qunif"
+q.arg = list(list(min=100, max=1000), 
+             list(min=1, max=40),
+             list(min = 0.05, max = 0.2))
+
+set.seed(1234)
+x<-rfast99(factors=c("K","Y0","a"),
+           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+
+times <- seq(from = 5, to = 100, by = 5)
+n <- length(x$s)
+factors <- ifelse (class(x$factors) == "character", length(x$factors), factors) 
+replicate <- x$replicate
+out <- length(times)
+y <- array(dim = c(n * factors, replicate, out), NA)
+
+
+dimnames(y)[[3]]<-times
+return(y)
+
+
+tell2(x,y)
+
 
 #####
 
@@ -62,33 +94,6 @@ y<-solve_ODE(x, times, parameters = parameters, initState,
 
 #####
 
-tell2 <- function(x, y){
-  
-  id <- deparse(substitute(x))
-
-  for ( i in 1:length(dimnames(y)[[3]])){
-    X <- tell(x, y[,,i])
-    if ( i == 1) { # initialize
-      x$mSI <- X$S[,"original"]
-      x$tSI <- X$T[,"original"]
-      x$mCI <- X$S[,"max. c.i."] - X$S[,"min. c.i."]
-      x$tCI <- X$T[,"max. c.i."] - X$T[,"min. c.i."]
-    } else { # accumulate
-      x$mSI <- rbind(x$mSI, X$S[,"original"])
-      x$tSI <- rbind(x$tSI, X$T[,"original"])
-      x$mCI <- rbind(x$mCI, X$S[,"max. c.i."] - X$S[,"min. c.i."])
-      x$tCI <- rbind(x$tCI, X$T[,"max. c.i."] - X$T[,"min. c.i."])
-    }
-  }
-  colnames(x$mSI) <- colnames(x$tSI) <- colnames(x$mCI) <- colnames(x$tCI) <- rownames(x$S)
-  rownames(x$mSI) <- rownames(x$tSI) <- rownames(x$mCI) <- rownames(x$tCI) <- dimnames(y)[[3]]
-  
-  x$S<-NULL
-  x$I<-NULL
-  x$T<-NULL
-  
-  assign(id, x, parent.frame())
-}
 
 tell2(x,y)
 
