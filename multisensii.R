@@ -54,8 +54,14 @@ pbtk.seq.fast <- multisensi(design = fast99, model = pbtk,
 
 pbtk.seq.fast
 print(pbtk.seq.fast,digits=2)
+
+colnames(pbtk.seq.fast$Y) <- as.character(T[-1])
+
+
+pdf(file="pbtk.seq.fast.pdf", width = 8, height = 6)
 plot(pbtk.seq.fast, normalized = TRUE, color = terrain.colors, gsi.plot = FALSE)
-title(xlab = "Time")
+title(xlab = "Time (hr)")
+dev.off()
 
 #####
 m <- 10000
