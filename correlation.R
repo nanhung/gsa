@@ -85,61 +85,6 @@ colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
 #g1<-ggpairs(df, title = "Main, 21  parameters")
 #g2<-ggpairs(df2, title = "Interaction, 21 parameters")
 
-## 0413 ###############
-N.Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2]/max(apap.Mmu.df.1.1[,2]),
-                            apap.Mmu.df.1.2[,2]/max(apap.Mmu.df.1.2[,2]),
-                            apap.Mmu.df.1.3[,2]/max(apap.Mmu.df.1.3[,2]),
-                            apap.Mmu.df.1.4[,2]/max(apap.Mmu.df.1.4[,2]),
-                            apap.Mmu.df.1.5[,2]/max(apap.Mmu.df.1.5[,2]),
-                            apap.Mmu.df.1.6[,2]/max(apap.Mmu.df.1.6[,2]), 
-                            apap.Mmu.df.1.7[,2]/max(apap.Mmu.df.1.7[,2]), 
-                            apap.Mmu.df.1.8[,2]/max(apap.Mmu.df.1.8[,2]),
-                            apap.Mmu.df.2.1[,2]/max(apap.Mmu.df.2.1[,2]), 
-                            apap.Mmu.df.2.2[,2]/max(apap.Mmu.df.2.2[,2]), 
-                            apap.Mmu.df.2.3[,2]/max(apap.Mmu.df.2.3[,2]), 
-                            apap.Mmu.df.2.4[,2]/max(apap.Mmu.df.2.4[,2]),
-                            apap.Mmu.df.2.5[,2]/max(apap.Mmu.df.2.5[,2]), 
-                            apap.Mmu.df.2.6[,2]/max(apap.Mmu.df.2.6[,2]), 
-                            apap.Mmu.df.2.7[,2]/max(apap.Mmu.df.2.7[,2]),
-                            apap.Mmu.df.2.8[,2]/max(apap.Mmu.df.2.8[,2]),
-                            apap.Mmu.df.3.1[,2]/max(apap.Mmu.df.3.1[,2]), 
-                            apap.Mmu.df.3.2[,2]/max(apap.Mmu.df.3.2[,2]), 
-                            apap.Mmu.df.3.3[,2]/max(apap.Mmu.df.3.3[,2]),
-                            apap.Mmu.df.3.4[,2]/max(apap.Mmu.df.3.4[,2]),
-                            apap.Mmu.df.3.5[,2]/max(apap.Mmu.df.3.5[,2]),
-                            apap.Mmu.df.3.6[,2]/max(apap.Mmu.df.3.6[,2]),
-                            apap.Mmu.df.3.7[,2]/max(apap.Mmu.df.3.7[,2]),
-                            apap.Mmu.df.3.8[,2]/max(apap.Mmu.df.3.8[,2])))
-N.sig1<-do.call(cbind, list(apap.sig.df.1.1[,2]/max(apap.sig.df.1.1[,2]), 
-                          apap.sig.df.1.2[,2]/max(apap.sig.df.1.2[,2]), 
-                          apap.sig.df.1.3[,2]/max(apap.sig.df.1.3[,2]), 
-                          apap.sig.df.1.4[,2]/max(apap.sig.df.1.4[,2]),
-                          apap.sig.df.1.5[,2]/max(apap.sig.df.1.5[,2]), 
-                          apap.sig.df.1.6[,2]/max(apap.sig.df.1.6[,2]), 
-                          apap.sig.df.1.7[,2]/max(apap.sig.df.1.7[,2]), 
-                          apap.sig.df.1.8[,2]/max(apap.sig.df.1.8[,2]),
-                          apap.sig.df.2.1[,2]/max(apap.sig.df.2.1[,2]), 
-                          apap.sig.df.2.2[,2]/max(apap.sig.df.2.2[,2]), 
-                          apap.sig.df.2.3[,2]/max(apap.sig.df.2.3[,2]), 
-                          apap.sig.df.2.4[,2]/max(apap.sig.df.2.4[,2]),
-                          apap.sig.df.2.5[,2]/max(apap.sig.df.2.5[,2]), 
-                          apap.sig.df.2.6[,2]/max(apap.sig.df.2.6[,2]), 
-                          apap.sig.df.2.7[,2]/max(apap.sig.df.2.7[,2]), 
-                          apap.sig.df.2.8[,2]/max(apap.sig.df.2.8[,2]),
-                          apap.sig.df.3.1[,2]/max(apap.sig.df.3.1[,2]), 
-                          apap.sig.df.3.2[,2]/max(apap.sig.df.3.2[,2]), 
-                          apap.sig.df.3.3[,2]/max(apap.sig.df.3.3[,2]), 
-                          apap.sig.df.3.4[,2]/max(apap.sig.df.3.4[,2]),
-                          apap.sig.df.3.5[,2]/max(apap.sig.df.3.5[,2]), 
-                          apap.sig.df.3.6[,2]/max(apap.sig.df.3.6[,2]), 
-                          apap.sig.df.3.7[,2]/max(apap.sig.df.3.7[,2]), 
-                          apap.sig.df.3.8[,2]/max(apap.sig.df.3.8[,2])))
-
-df<-data.frame(apply(N.Mmu1, 1, max), apply(main1, 1, max), apply(main2, 1, max), apply(main3, 1, max))
-colnames(df)<-c("Morris","eFAST","Jansen","Owen")
-df2<-data.frame(apply(N.sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
-colnames(df2)<-c("Morris","eFAST","Jansen","Owen")
-
 
 ###########################
 load("morv2.rda")
@@ -227,63 +172,6 @@ colnames(df4)<-c("Morris","eFAST","Jansen","Owen")
 #  ncol = 2
 #)
 #dev.off()
-
-## 0413
-N.Mmu1<-do.call(cbind, list(apap.Mmu.df.1.1[,2]/max(apap.Mmu.df.1.1[,2]),
-                            apap.Mmu.df.1.2[,2]/max(apap.Mmu.df.1.2[,2]),
-                            apap.Mmu.df.1.3[,2]/max(apap.Mmu.df.1.3[,2]),
-                            apap.Mmu.df.1.4[,2]/max(apap.Mmu.df.1.4[,2]),
-                            apap.Mmu.df.1.5[,2]/max(apap.Mmu.df.1.5[,2]),
-                            apap.Mmu.df.1.6[,2]/max(apap.Mmu.df.1.6[,2]), 
-                            apap.Mmu.df.1.7[,2]/max(apap.Mmu.df.1.7[,2]), 
-                            apap.Mmu.df.1.8[,2]/max(apap.Mmu.df.1.8[,2]),
-                            apap.Mmu.df.2.1[,2]/max(apap.Mmu.df.2.1[,2]), 
-                            apap.Mmu.df.2.2[,2]/max(apap.Mmu.df.2.2[,2]), 
-                            apap.Mmu.df.2.3[,2]/max(apap.Mmu.df.2.3[,2]), 
-                            apap.Mmu.df.2.4[,2]/max(apap.Mmu.df.2.4[,2]),
-                            apap.Mmu.df.2.5[,2]/max(apap.Mmu.df.2.5[,2]), 
-                            apap.Mmu.df.2.6[,2]/max(apap.Mmu.df.2.6[,2]), 
-                            apap.Mmu.df.2.7[,2]/max(apap.Mmu.df.2.7[,2]),
-                            apap.Mmu.df.2.8[,2]/max(apap.Mmu.df.2.8[,2]),
-                            apap.Mmu.df.3.1[,2]/max(apap.Mmu.df.3.1[,2]), 
-                            apap.Mmu.df.3.2[,2]/max(apap.Mmu.df.3.2[,2]), 
-                            apap.Mmu.df.3.3[,2]/max(apap.Mmu.df.3.3[,2]),
-                            apap.Mmu.df.3.4[,2]/max(apap.Mmu.df.3.4[,2]),
-                            apap.Mmu.df.3.5[,2]/max(apap.Mmu.df.3.5[,2]),
-                            apap.Mmu.df.3.6[,2]/max(apap.Mmu.df.3.6[,2]),
-                            apap.Mmu.df.3.7[,2]/max(apap.Mmu.df.3.7[,2]),
-                            apap.Mmu.df.3.8[,2]/max(apap.Mmu.df.3.8[,2])))
-N.sig1<-do.call(cbind, list(apap.sig.df.1.1[,2]/max(apap.sig.df.1.1[,2]), 
-                            apap.sig.df.1.2[,2]/max(apap.sig.df.1.2[,2]), 
-                            apap.sig.df.1.3[,2]/max(apap.sig.df.1.3[,2]), 
-                            apap.sig.df.1.4[,2]/max(apap.sig.df.1.4[,2]),
-                            apap.sig.df.1.5[,2]/max(apap.sig.df.1.5[,2]), 
-                            apap.sig.df.1.6[,2]/max(apap.sig.df.1.6[,2]), 
-                            apap.sig.df.1.7[,2]/max(apap.sig.df.1.7[,2]), 
-                            apap.sig.df.1.8[,2]/max(apap.sig.df.1.8[,2]),
-                            apap.sig.df.2.1[,2]/max(apap.sig.df.2.1[,2]), 
-                            apap.sig.df.2.2[,2]/max(apap.sig.df.2.2[,2]), 
-                            apap.sig.df.2.3[,2]/max(apap.sig.df.2.3[,2]), 
-                            apap.sig.df.2.4[,2]/max(apap.sig.df.2.4[,2]),
-                            apap.sig.df.2.5[,2]/max(apap.sig.df.2.5[,2]), 
-                            apap.sig.df.2.6[,2]/max(apap.sig.df.2.6[,2]), 
-                            apap.sig.df.2.7[,2]/max(apap.sig.df.2.7[,2]), 
-                            apap.sig.df.2.8[,2]/max(apap.sig.df.2.8[,2]),
-                            apap.sig.df.3.1[,2]/max(apap.sig.df.3.1[,2]), 
-                            apap.sig.df.3.2[,2]/max(apap.sig.df.3.2[,2]), 
-                            apap.sig.df.3.3[,2]/max(apap.sig.df.3.3[,2]), 
-                            apap.sig.df.3.4[,2]/max(apap.sig.df.3.4[,2]),
-                            apap.sig.df.3.5[,2]/max(apap.sig.df.3.5[,2]), 
-                            apap.sig.df.3.6[,2]/max(apap.sig.df.3.6[,2]), 
-                            apap.sig.df.3.7[,2]/max(apap.sig.df.3.7[,2]), 
-                            apap.sig.df.3.8[,2]/max(apap.sig.df.3.8[,2])))
-
-df3<-data.frame(apply(N.Mmu1, 1, max), apply(main1, 1, max), apply(main2, 1, max), apply(main3, 1, max))
-colnames(df3)<-c("Morris","eFAST","Jansen","Owen")
-df4<-data.frame(apply(N.sig1, 1, max), apply(inte1, 1, max), apply(inte2, 1, max), apply(inte3, 1, max))
-colnames(df4)<-c("Morris","eFAST","Jansen","Owen")
-
-
 
 
 ##### SUPPLEMENT------------
