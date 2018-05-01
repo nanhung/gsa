@@ -30,7 +30,7 @@ x %>% converge
 
 ##### the Verhulst model of population dynamics
 
-fun <- function(parameters, t)
+Verhulst <- function(parameters, t)
 {
   output <- parameters[1]/(1 + (parameters[1]/parameters[2] - 1) * exp(-parameters[3] * t))
   return(output)
@@ -47,15 +47,9 @@ x<-rfast99(factors=c("K","Y0","a"),
            n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 times <- seq(from = 5, to = 100, by = 5)
-n <- length(x$s)
-factors <- ifelse (class(x$factors) == "character", length(x$factors), factors) 
-replicate <- x$replicate
-out <- length(times)
-y <- array(dim = c(n * factors, replicate, out), NA)
 
+y<-solve_DE(x, times, fun = Verhulst)
 
-dimnames(y)[[3]]<-times
-return(y)
 
 
 tell2(x,y)
@@ -85,7 +79,7 @@ parameters<-initparms1comp()
 initState <- initState1comp(parms=parameters)
 initState[1] <- 1
 
-y<-solve_ODE(x, times, parameters = parameters, initState,
+y<-solve_DE(x, times, parameters = parameters, initState,
              func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp", outnames = "Ccompartment")
 
 ## Check each time point; time = 0.5
