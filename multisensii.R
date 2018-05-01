@@ -1,4 +1,6 @@
+library(sensitivity)
 library(multisensi)
+library(deSolve)
 
 source("pbtk1comp_inits.R")
 
