@@ -63,6 +63,11 @@ plot(pbtk.seq.fast, normalized = TRUE, color = terrain.colors, gsi.plot = FALSE)
 title(xlab = "Time (hr)")
 dev.off()
 
+pdf(file="pbtk.seq.fast.N.pdf", width = 8, height = 6)
+plot(pbtk.seq.fast, normalized = FALSE, color = terrain.colors, gsi.plot = FALSE)
+title(xlab = "Time (hr)")
+dev.off()
+
 #####
 m <- 10000
 Xb <- data.frame(vdist = runif(m, min = 0.7, max = 1.3), 
