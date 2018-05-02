@@ -3,7 +3,6 @@ library(dplyr)
 library(deSolve)
 library(sensitivity)
 
-
 ####
 
 
@@ -57,11 +56,11 @@ q.arg = list(list(min=100, max=1000),
 
 set.seed(1234)
 x<-rfast99(factors=c("K","Y0","a"),
-           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 times <- seq(from = 5, to = 100, by = 5)
 
-y<-solve_DE(x, times, fun = Verhulst)
+y<-solve_DE(x, times, model = Verhulst)
 
 tell2(x,y)
 
@@ -83,7 +82,7 @@ q.arg = list(list(min = 0.7, max = 1.3),
              list(min = 0.9, max = 1.2))
 
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
-           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters<-initparms1comp()
@@ -93,14 +92,13 @@ initState[1] <- 1
 y<-solve_DE(x, times, parameters = parameters, initState,
              func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp", outnames = "Ccompartment")
 
+tell2(x,y)
+
 ## Check each time point; time = 0.5
 # tell(x, y[,,"0.5"]) %>% converge
 # x
 
 #####
-
-
-tell2(x,y)
 
 plot(rownames(x$mSI), x$mSI[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
 lines(rownames(x$mSI), x$mSI[,2])
