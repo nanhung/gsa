@@ -60,7 +60,7 @@ set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
            n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
-times <- seq(from = 0.5, to = 48, by = 0.5)
+times <- seq(from = 0.5, to = 24, by = 0.5)
 
 y<-solve_fun(x, model = FFPK, times = times)
 
@@ -70,39 +70,8 @@ check.rfast99(x)
 check.rfast99(x, SI = 0.05, CI = 0.05)
 
 
-##
+plot(x)
 
-plot.rfast99 <- function(x, ...){
-  
-  nv <- length(colnames(x$tSI))+1
-  nc <- ceiling(sqrt(nv))
-  nr <- nv/nc
-  
-  par(mfrow = c(nr, nc), mar = c(4,2,4,1))
-  for(i in 1:ncol(x$tSI)){
-    plot(times, x$tSI[,i], ylim = c(0, 1), bty = 'n',
-         type = 'l', lwd = 2, xlab = 'time', ylab = '', 
-         main = colnames(x$tSI)[i])
-    col.transp = adjustcolor('black', alpha = 0.4)
-    polygon(x = c(times, rev(times)),
-            y =c(x$tSI[,i]-x$tCI[,i], rev(x$tSI[,i]+x$tCI[,i])),
-            col = col.transp, border = col.transp)
-    
-    col.transp = adjustcolor('red', alpha = 0.4)
-    lines(times, x$mSI[,i], ylim = c(0, 1), bty = 'n',
-          lwd = 2, col = 'red')
-    polygon(x = c(times, rev(times)),
-            y =c(x$mSI[,i]-x$mCI[,i], rev(x$mSI[,i]+x$mCI[,i])),
-            col = col.transp, border = col.transp)
-  }
-  plot.new()
-  legend('top', legend = c('total order', 'first order'), col = c('black','red'),
-         lty = 'solid', lwd = 1, pch = NA, bty = 'n',
-         text.col = 'black', 
-         fill = adjustcolor(c('black', 'red'), alpha = 0.4), border = NA, cex = 1.2)
-}
-
-plot.rfast99(x)
   
 
 ##### MCSim under R (use deSolve package)
@@ -184,54 +153,12 @@ abline(0.05, 0, lty = 2); abline(0.01, 0, lty = 3)
 library(ggplot2)
 
 
-tidy_index <- function (x, index = "CI") {
-  if(!("dplyr" %in% (.packages()))){
-    if(!require(dplyr)) install.packages("dplyr") else require(dplyr)
-  }
-  
-  if(index == "CI") {
-    m <- reshape::melt(x$mCI) %>% cbind(order = "first order")
-    i <- reshape::melt(x$iCI) %>% cbind(order = "interaction")
-    t <- reshape::melt(x$tCI) %>% cbind(order = "total order")
-    X <- do.call(rbind, list(m, i, t))   
-  } else if (index == "SI") {
-    m <- reshape::melt(x$mSI) %>% cbind(order = "first order")
-    i <- reshape::melt(x$iSI) %>% cbind(order = "interaction")
-    t <- reshape::melt(x$tSI) %>% cbind(order = "total order")
-    X <- do.call(rbind, list(m, i, t)) 
-  }
-  names(X) <- c("time", "parameter", "value", "order")
-  return(X)
-}
-
 ##
-X <- tidy_index(x, index = "SI") %>% mutate(category = cut(value, breaks=c(-Inf, 0.01, 0.05, Inf), labels=c("0-0.01","0.01-0.05",">0.05")))
-cols <- c("0-0.01" = "grey", "4" = "pink", "0.01-0.05" = "pink", ">0.05" = "red")
+# X <- tidy_index(x, index = "SI") 
+ggfast(x, index = "SI")
+ggfast(x, index = "CI")
 
-ggplot(X, aes(time, parameter)) + 
-  geom_tile(aes(fill = category), colour = "white") +
-  scale_fill_manual(values= cols)+
-  scale_x_continuous(expand=c(0,0)) +
-  scale_y_discrete(expand=c(0,0)) + 
-  facet_grid(~order) +
-  labs(title="Sensitivity index", x="Time", y="Parameters") + 
-  theme(axis.text.x = element_text(size=10, hjust = 1), 
-        axis.text.y = element_text(size=10), legend.title=element_blank(),
-        legend.position="top")
 
 
 ###
-X <- tidy_index(x, index = "CI") %>% mutate(category = cut(value, breaks=c(-Inf, 0.05, 0.1, Inf), labels=c("0-0.05","0.05-0.1",">0.05")))
-cols2 <- c("0-0.05" = "grey", "4" = "pink", "0.05-0.1" = "pink", ">0.1" = "red")
-
-ggplot(X, aes( time, parameter)) + 
-  geom_tile(aes(fill = category), colour = "white") +
-  scale_fill_manual(values= c("grey", "pink", "red"))+
-  scale_x_continuous(expand=c(0,0)) +
-  scale_y_discrete(expand=c(0,0)) +
-  facet_grid(~order) +
-  labs(title="Convergence index", x="Time", y="Parameters") + 
-  theme(axis.text.x = element_text(size=10, hjust = 1), 
-        axis.text.y = element_text(size=10), legend.title=element_blank(),
-        legend.position="top")
 
