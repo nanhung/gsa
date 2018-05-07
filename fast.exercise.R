@@ -49,8 +49,8 @@ y<-solve_fun(x, model = sobol.fun)
 tell2(x, y)
 
 
-check.rfast99(x)
-check.rfast99(x, SI = 0.05, CI = 0.05)
+check(x)
+check(x, SI = 0.05, CI = 0.05)
 
 ##### the Verhulst model of population dynamics
 
@@ -126,8 +126,8 @@ y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartm
 tell2(x,y)
 
 
-check.rfast99(x)
-check.rfast99(x, SI = 0.05, CI = 0.05)
+check(x)
+check(x, SI = 0.05, CI = 0.05)
 
 ## Check each time point; time = 0.5
 # tell(x, y[,,"0.5"]) %>% converge
