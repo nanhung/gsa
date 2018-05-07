@@ -11,9 +11,9 @@ y = c("Q_fat" = 0, # Quantity of butadiene in fat (mg)
 # Flows: liter / minute
 parameters = c(
   "BDM" = 73, # Body mass (kg)
-  "Height" = 1.6, # Body height (m)
-  "Age" = 40, # in years
-  "Sex" = 1, # code 1 is male, 2 is female
+#  "Height" = 1.6, # Body height (m)
+#  "Age" = 40, # in years
+#  "Sex" = 1, # code 1 is male, 2 is female
   "Flow_pul" = 5, # Pulmonary ventilation rate (L/min)
   "Pct_Deadspace" = 0.7, # Fraction of pulmonary deadspace
   "Vent_Perf" = 1.14, # Ventilation over perfusion ratio
@@ -37,6 +37,12 @@ plot(C_inh(1:300), xlab = "Time (min)",
 bd.model = function(t, y, parameters) {
   with (as.list(y), {
     with (as.list(parameters), {
+      
+      # Define the fixed parameters
+      Height = 1.6
+      Age = 40
+      Sex = 1
+      
       # Define some useful constants
       MW_bu = 54.0914 # butadiene molecular weight (in grams)
       ppm_per_mM = 24450 # ppm to mM under normal conditions
