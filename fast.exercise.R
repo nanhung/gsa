@@ -1,10 +1,10 @@
-# devtools::install_github("nanhung/rfast99")
+# devtools::install_github("nanhung/pksensi")
 
 library(rfast99)
 library(dplyr)
 library(deSolve)
 library(httk)
-#library(ggplot2)
+library(ggplot2)
 # sensitivty
 
 #### Sobol model
@@ -41,6 +41,7 @@ y<-solve_fun(x, model = sobol.fun)
 
 tell2(x, y)
 
+x
 
 check(x)
 check(x, SI = 0.05, CI = 0.05)
@@ -67,12 +68,14 @@ y<-solve_fun(x, model = FFPK, times = times)
 
 tell2(x,y)
 
-check.rfast99(x)
-check.rfast99(x, SI = 0.05, CI = 0.05)
+x
+
+check(x)
+check(x, SI = 0.05, CI = 0.05)
 
 
 plot(x)
-
+plot(x, cut.off = 0.05)
   
 
 ##### MCSim under R (use deSolve package)
@@ -103,8 +106,7 @@ compile <- function (mName, model = F) {
 
 mName = "pbtk1comp"
 compile(mName)
-
-
+source(paste0(mName, "_inits.R"))
 
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
@@ -124,30 +126,34 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
 
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
-           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
              dllname = mName, func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp")
 
 tell2(x,y)
 
+x
 
 check(x)
 check(x, SI = 0.05, CI = 0.05)
 
 plot(x)
+plot(x, cut.off = 0.05)
 
 ####
 
 
 mName = "3compPBPKmodel"
 compile(mName)
+source(paste0(mName, "_inits.R"))
 
 parameters <- initparms3comp()
 initState <- initState3comp(parms=parameters)
 initState[1] <- 1
 
-params <- httk::parameterize_3comp(chem.name = "theophylline")
+#params <- httk::parameterize_3comp(chem.name = "theophylline")
+params <- httk::parameterize_3comp(chem.name = "acetaminophen")
 
 # 10% uncertainty
 LL <- 0.9
@@ -178,83 +184,35 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
 
 factors <- names(parameters)
 
-x<-rfast99(factors = factors, n = 1000, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
-y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
-             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
+#y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
+#             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
+#tell2(x,y)
 
-save(x, file = "3comp_1000.rda")
+#save(x, file = "3comp_1000.rda")
+load(file = "3comp_1000.rda")
 
-tell2(x,y)
-
+x
 
 check(x)
 check(x, SI = 0.05, CI = 0.05)
 
-plot(x)
+plot(x, cut.off = 0.05)
 
-plot.rfast99 <- function(x, ...){
-  
-  nv <- length(colnames(x$tSI))+1
-  nc <- ceiling(sqrt(nv))
-  nr <- nv/nc
-  
-  par(mfrow = c(nr, nc), mar = c(4,2,4,1))
-  for(i in 1:ncol(x$tSI)){
-    plot(times, x$tSI[,i], ylim = c(0, 1), bty = 'n',
-         type = 'l', lwd = 2, xlab = 'time', ylab = '', 
-         main = colnames(x$tSI)[i])
-    col.transp = adjustcolor('black', alpha = 0.4)
-    polygon(x = c(times, rev(times)),
-            y =c(x$tSI[,i]-x$tCI[,i], rev(x$tSI[,i]+x$tCI[,i])),
-            col = col.transp, border = col.transp)
-    
-    col.transp = adjustcolor('red', alpha = 0.4)
-    lines(times, x$mSI[,i], ylim = c(0, 1), bty = 'n',
-          lwd = 2, col = 'red')
-    polygon(x = c(times, rev(times)),
-            y =c(x$mSI[,i]-x$mCI[,i], rev(x$mSI[,i]+x$mCI[,i])),
-            col = col.transp, border = col.transp)
-  }
-  plot.new()
-  legend('top', legend = c('total order', 'first order'), col = c('black','red'),
-         lty = 'solid', lwd = 1, pch = NA, bty = 'n',
-         text.col = 'black', 
-         fill = adjustcolor(c('black', 'red'), alpha = 0.4), border = NA, cex = 1.2)
-}
+pdf(file="rfast99.pdf", width = 10, height = 8.5)
+plot.rfast99(x)
+dev.off()
 
-
-## Check each time point; time = 0.5
-# tell(x, y[,,"0.5"]) %>% converge
-# x
-
-#####
-
-plot(rownames(x$mSI), x$mSI[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
-lines(rownames(x$mSI), x$mSI[,2])
-lines(rownames(x$mSI), x$mSI[,3])
-abline(0.05, 0, lty = 2); abline(0.01, 0, lty = 3)
-
-plot(rownames(x$tSI), x$tSI[,1], ylim=c(0,1), type="l", xlab="Time", ylab = "Sensitivity index")
-lines(rownames(x$tSI), x$tSI[,2])
-lines(rownames(x$tSI), x$tSI[,3])
-abline(0.05, 0, lty = 2); abline(0.01, 0, lty = 3)
-
-
-####
-library(ggplot2)
-
-
-##
 # X <- tidy_index(x, index = "SI") 
-ggfast(x, index = "SI")
-ggfast(x, index = "SI", order = T)
+ggfast(x, index = "SI") 
+ggfast(x, index = "SI", order = T) 
+ggfast(x, index = "SI", order = T) + scale_fill_grey(start = .9, end = .0)
 
 ggfast(x, index = "CI")
 ggfast(x, index = "CI", order = T)
 
-
-
 ###
+
 
