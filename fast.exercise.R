@@ -1,6 +1,6 @@
 # devtools::install_github("nanhung/pksensi")
 
-library(rfast99)
+library(pksensi)
 library(dplyr)
 library(deSolve)
 library(httk)
@@ -47,7 +47,7 @@ check(x)
 check(x, SI = 0.05, CI = 0.05)
 
 ## Flip-Flop Kinetics ####
-FFPK <- function(parameters, times, dose = 500){
+FFPK <- function(parameters, times, dose = 1){
   A <- (dose * parameters[1])/( parameters[3]*( parameters[1]- parameters[2]))
   CONC <- A*exp(- parameters[2] * times) - A*exp(- parameters[1] * times)
   return(CONC)
@@ -73,10 +73,17 @@ x
 check(x)
 check(x, SI = 0.05, CI = 0.05)
 
-
 plot(x)
 plot(x, cut.off = 0.05)
   
+heat_check(x, index = "SI") 
+heat_check(x, index = "SI", order = T) 
+heat_check(x, index = "SI", order = T) + 
+  scale_fill_grey(start = .9, end = .0)
+
+heat_check(x, index = "CI")
+heat_check(x, index = "CI", order = T)
+
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
@@ -101,13 +108,9 @@ compile <- function (mName, model = F) {
   }
 }
 
-
-  
-
 mName = "pbtk1comp"
 compile(mName)
 source(paste0(mName, "_inits.R"))
-
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
@@ -128,11 +131,13 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
+# Use deSolve to solve ode (take some time)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
              dllname = mName, func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp")
 
 tell2(x,y)
 
+#
 x
 
 check(x)
@@ -142,7 +147,6 @@ plot(x)
 plot(x, cut.off = 0.05)
 
 ####
-
 
 mName = "3compPBPKmodel"
 compile(mName)
@@ -202,7 +206,7 @@ check(x, SI = 0.05, CI = 0.05)
 plot(x, cut.off = 0.05)
 
 pdf(file="rfast99.pdf", width = 10, height = 8.5)
-plot.rfast99(x)
+plot(x, cut.off = 0.05)
 dev.off()
 
 # X <- tidy_index(x, index = "SI") 
