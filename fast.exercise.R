@@ -47,32 +47,27 @@ check(x)
 check(x, SI = 0.05, CI = 0.05)
 
 ## Flip-Flop Kinetics ####
-FFPK <- function(parameters, times, dose = 1){
+FFPK <- function(parameters, times, dose = 320){
   A <- (dose * parameters[1])/( parameters[3]*( parameters[1]- parameters[2]))
   CONC <- A*exp(- parameters[2] * times) - A*exp(- parameters[1] * times)
   return(CONC)
 }
 
 q = "qunif"
-q.arg = list(list(min = 0.2, max = 1), 
-             list(min = 0.2, max = 1),
-             list(min = 1, max = 5))
+q.arg = list(list(min = 0.5, max = 1.5), 
+             list(min = 0.02, max = 0.3),
+             list(min = 10, max = 60))
 
 set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
            n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
-times <- seq(from = 0.5, to = 24, by = 0.5)
+times <- seq(from = 0.25, to = 24.25, by = 0.5)
 
 y<-solve_fun(x, model = FFPK, times = times)
 
-
 pksim(y)
-data <- data.frame(x=c(1, 2, 6, 12, 24), y=c(0.15, 0.2, 0.1, 0.05, 0.01))
-points(data, col=2, pch=19)
-
-
-###
+points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 tell2(x,y)
 
@@ -91,7 +86,6 @@ heat_check(x, index = "SI", order = T) +
 
 heat_check(x, index = "CI")
 heat_check(x, index = "CI", order = T)
-
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
