@@ -193,7 +193,7 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
 
 factors <- names(parameters)
 
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+x<-rfast99(factors = factors, n = 8000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 #y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
@@ -210,7 +210,8 @@ points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 simulate(y)
 simulate(y, log = T)
 
-#save(x, file = "3comp_1000.rda")
+#save(x, file = "3comp_2000.rda")
+#save(y, file = "3comp_2000y.rda")
 load(file = "3comp_4000.rda")
 load(file = "3comp_4000y.rda")
 
