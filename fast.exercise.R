@@ -202,18 +202,14 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
-#tell2(x,y)
-
-#user  system elapsed 
-#5815.77    0.72 5825.51 
-
-simulate(y)
-simulate(y, log = T)
+tell2(x,y)
 
 #save(x, file = "3comp_2000.rda")
 #save(y, file = "3comp_2000y.rda")
-load(file = "3comp_4000.rda")
-load(file = "3comp_4000y.rda")
+#save(x, file = "3comp_2000.rda")
+#save(y, file = "3comp_2000y.rda")
+#load(file = "3comp_4000.rda")
+#load(file = "3comp_4000y.rda")
 
 x
 
