@@ -79,25 +79,31 @@ plot(x)
 # pros: Don't need to create in file
 # cons: ?
 
-compile <- function (mName)
-  if (.Platform$OS.type == "windows") {
-    message("The current function haven't supprot Windows system")
-  } else {  # Unix; good luck
-    if (is.loaded("derivs", PACKAGE=mName))
-      dyn.unload(paste0(mName,.Platform$dynlib.ext))
-    if(file.exists(paste0(mName, ".model"))){
+compile <- function (mName, model = F) {
+  if (model == T){
+    if(file.exists(paste0(mName, ".model")) && .Platform$OS.type == "unix"){
       system (paste0("mod -R ", mName, ".model ", mName,".c")) # model to c file
-    }
-    system (paste0("R CMD SHLIB ", mName, ".c")) # create .o and .so files
-    dyn.load(paste(mName, .Platform$dynlib.ext, sep=""))
-    
-    if(file.exists(paste0(mName, "_inits.R"))){
-      source(paste0(mName, "_inits.R"))
+    } else if (.Platform$OS.type == "windows") {
+      stop("The model compiled function haven't supprot Windows system")
     }
   }
+  if (is.loaded("derivs", PACKAGE=mName))
+    dyn.unload(paste0(mName,.Platform$dynlib.ext))
+  
+  system (paste0("R CMD SHLIB ", mName, ".c")) # create .o and .so (or .dll) files
+  dyn.load(paste(mName, .Platform$dynlib.ext, sep=""))
+  
+  if(file.exists(paste0(mName, "_inits.R"))){
+    source(paste0(mName, "_inits.R"))
+  }
+}
+
+
+  
 
 mName = "pbtk1comp"
 compile(mName)
+
 
 
 
@@ -248,27 +254,6 @@ ggfast(x, index = "SI", order = T)
 ggfast(x, index = "CI")
 ggfast(x, index = "CI", order = T)
 
-
-
-tidy_index <- function (x, index = "CI") {
-  if(!("dplyr" %in% (.packages()))){
-    if(!require(dplyr)) install.packages("dplyr") else require(dplyr)
-  }
-  
-  if(index == "CI") {
-    m <- reshape::melt(x$mCI) %>% cbind(order = "first order")
-    i <- reshape::melt(x$iCI) %>% cbind(order = "interaction")
-    t <- reshape::melt(x$tCI) %>% cbind(order = "total order")
-    X <- do.call(rbind, list(m, i, t))   
-  } else if (index == "SI") {
-    m <- reshape::melt(x$mSI) %>% cbind(order = "first order")
-    i <- reshape::melt(x$iSI) %>% cbind(order = "interaction")
-    t <- reshape::melt(x$tSI) %>% cbind(order = "total order")
-    X <- do.call(rbind, list(t, m, i)) 
-  }
-  names(X) <- c("time", "parameter", "value", "order")
-  return(X)
-}
 
 
 ###
