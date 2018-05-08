@@ -178,6 +178,8 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
              dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
 
+save(x, file = "3comp_1000.rda")
+
 tell2(x,y)
 
 
@@ -241,8 +243,32 @@ library(ggplot2)
 ##
 # X <- tidy_index(x, index = "SI") 
 ggfast(x, index = "SI")
-ggfast(x, index = "CI")
+ggfast(x, index = "SI", order = T)
 
+ggfast(x, index = "CI")
+ggfast(x, index = "CI", order = T)
+
+
+
+tidy_index <- function (x, index = "CI") {
+  if(!("dplyr" %in% (.packages()))){
+    if(!require(dplyr)) install.packages("dplyr") else require(dplyr)
+  }
+  
+  if(index == "CI") {
+    m <- reshape::melt(x$mCI) %>% cbind(order = "first order")
+    i <- reshape::melt(x$iCI) %>% cbind(order = "interaction")
+    t <- reshape::melt(x$tCI) %>% cbind(order = "total order")
+    X <- do.call(rbind, list(m, i, t))   
+  } else if (index == "SI") {
+    m <- reshape::melt(x$mSI) %>% cbind(order = "first order")
+    i <- reshape::melt(x$iSI) %>% cbind(order = "interaction")
+    t <- reshape::melt(x$tSI) %>% cbind(order = "total order")
+    X <- do.call(rbind, list(t, m, i)) 
+  }
+  names(X) <- c("time", "parameter", "value", "order")
+  return(X)
+}
 
 
 ###
