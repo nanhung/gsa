@@ -66,6 +66,14 @@ times <- seq(from = 0.5, to = 24, by = 0.5)
 
 y<-solve_fun(x, model = FFPK, times = times)
 
+
+pksim(y)
+data <- data.frame(x=c(1, 2, 6, 12, 24), y=c(0.15, 0.2, 0.1, 0.05, 0.01))
+points(data, col=2, pch=19)
+
+
+###
+
 tell2(x,y)
 
 x
@@ -115,13 +123,13 @@ source(paste0(mName, "_inits.R"))
 times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
-initState[1] <- 1
+initState[1] <- 10
 
 params <- httk::parameterize_1comp(chem.name = "theophylline")
 
-# 10% uncertainty
-LL <- 0.9
-UL <- 1.1
+# 50% uncertainty
+LL <- 0.5
+UL <- 1.5
 
 q = "qunif"
 q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
@@ -134,6 +142,9 @@ x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
 # Use deSolve to solve ode (take some time)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
              dllname = mName, func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp")
+
+pksim(y)
+points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 tell2(x,y)
 
@@ -154,14 +165,14 @@ source(paste0(mName, "_inits.R"))
 
 parameters <- initparms3comp()
 initState <- initState3comp(parms=parameters)
-initState[1] <- 1
+initState[1] <- 10
 
-#params <- httk::parameterize_3comp(chem.name = "theophylline")
-params <- httk::parameterize_3comp(chem.name = "acetaminophen")
+params <- httk::parameterize_3comp(chem.name = "theophylline")
+#params <- httk::parameterize_3comp(chem.name = "acetaminophen")
 
-# 10% uncertainty
-LL <- 0.9
-UL <- 1.1
+# 30% uncertainty
+LL <- 0.3
+UL <- 1.3
 
 # 20 parameters
 q = "qunif"
@@ -188,15 +199,26 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
 
 factors <- names(parameters)
 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 #y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
 #             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
+
+pksim(y)
+points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
+
 #tell2(x,y)
 
+#user  system elapsed 
+#5815.77    0.72 5825.51 
+
+simulate(y)
+simulate(y, log = T)
+
 #save(x, file = "3comp_1000.rda")
-load(file = "3comp_1000.rda")
+load(file = "3comp_4000.rda")
+load(file = "3comp_4000y.rda")
 
 x
 
@@ -210,12 +232,12 @@ plot(x, cut.off = 0.05)
 dev.off()
 
 # X <- tidy_index(x, index = "SI") 
-ggfast(x, index = "SI") 
-ggfast(x, index = "SI", order = T) 
-ggfast(x, index = "SI", order = T) + scale_fill_grey(start = .9, end = .0)
+heat_check(x, index = "SI") 
+heat_check(x, index = "SI", order = T) 
+heat_check(x, index = "SI", order = T) + scale_fill_grey(start = .9, end = .0)
 
-ggfast(x, index = "CI")
-ggfast(x, index = "CI", order = T)
+heat_check(x, index = "CI")
+heat_check(x, index = "CI", order = T)
 
 ###
 
