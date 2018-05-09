@@ -14,7 +14,21 @@ fit <- euler(c(A = 31, B = 0, C = 0, D = 0,
                "A&B&C&D" = 1))
 
 jpeg(file="ven.jpg",width=4000,height=3200,res=300)
-plot(fit, legend = TRUE, edges = F,
+plot(fit, quantities = F,
      labels =c (" ", " ", " ", " ", ""),
-     fills = c("white", "grey", "deepskyblue", "lightgreen", "red"))
+     fill = c("transparent","grey120","grey80","grey60","grey40"),
+     lty = 1,
+     legend = T)
+dev.off()
+
+
+
+set.seed(30)
+fit <- euler(c(FMP = 31, OMP = 0, FIP = 0, OIP = 0,
+               "FMP&OMP" = 7, "FMP&FIP" = 6, "FMP&OIP" = 0, "OMP&FIP" = 0, "OMP&OIP" = 0, "FIP&OIP" = 0, 
+               "FMP&OMP&FIP" = 3, "FMP&OMP&FIP&OIP" = 11))
+jpeg(file="ven.jpg",width=4000,height=3200,res=300)
+plot(fit, quantities = F,
+     fill = c("transparent","grey100","grey90","grey80"),
+     lty = c(5,4,3,2))
 dev.off()
