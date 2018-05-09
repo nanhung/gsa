@@ -164,9 +164,9 @@ initState[1] <- 10
 params <- httk::parameterize_3comp(chem.name = "theophylline")
 #params <- httk::parameterize_3comp(chem.name = "acetaminophen")
 
-# 30% uncertainty
-LL <- 0.3
-UL <- 1.3
+# 40% uncertainty
+LL <- 0.6
+UL <- 1.4
 
 # 20 parameters
 q = "qunif"
@@ -193,23 +193,23 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
 
 factors <- names(parameters)
 
-x<-rfast99(factors = factors, n = 8000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 #y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
 #             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
 
+tell2(x,y)
+
 pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
-tell2(x,y)
 
-#save(x, file = "3comp_2000.rda")
-#save(y, file = "3comp_2000y.rda")
-#save(x, file = "3comp_2000.rda")
-#save(y, file = "3comp_2000y.rda")
-#load(file = "3comp_4000.rda")
-#load(file = "3comp_4000y.rda")
+
+#save(x, file = "3comp_4000x30.rda")
+#save(y, file = "3comp_4000x30y.rda")
+#load(file = "3comp_4000.rda") 20%
+#load(file = "3comp_4000y.rda") 20%
 
 x
 
