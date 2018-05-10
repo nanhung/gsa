@@ -56,54 +56,60 @@ FFPK <- function(parameters, times, dose = 320){
 q = "qunif"
 q.arg = list(list(min = 0.5, max = 1.5), 
              list(min = 0.02, max = 0.3),
-             list(min = 10, max = 60))
+             list(min = 20, max = 60))
 
 set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
-           n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
 
 y<-solve_fun(x, model = FFPK, times = times)
 
-pksim(y)
+pksim(y) # uncertainty analysis
+title(ylab="concentration", xlab="time", main = "Ccompartment")
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 tell2(x,y)
-
 x
 
 check(x)
-check(x, SI = 0.05, CI = 0.05)
+check(x, SI = 0.05, CI = 0.05) # redefine cut-off and convergence threshold
 
 plot(x)
 plot(x, cut.off = 0.05)
   
 heat_check(x, index = "SI") 
-heat_check(x, index = "SI", order = T) 
 heat_check(x, index = "SI", order = T) + 
-  scale_fill_grey(start = .9, end = .0)
+  scale_fill_grey(start = .9, end = .0) # color blind friendly
 
 heat_check(x, index = "CI")
-heat_check(x, index = "CI", order = T)
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
-# cons: ?
+# cons: Slower than in pure MCSim
 
 compile <- function (mName, model = F) {
-  if (model == T){
+  if (model == T){ # Generate the ".c" file and "_inits.R" from model file 
     if(file.exists(paste0(mName, ".model")) && .Platform$OS.type == "unix"){
       system (paste0("mod -R ", mName, ".model ", mName,".c")) # model to c file
     } else if (.Platform$OS.type == "windows") {
-      stop("The model compiled function haven't supprot Windows system")
+      warning("The model compiled function haven't supprot Windows system")
     }
   }
   if (is.loaded("derivs", PACKAGE=mName))
     dyn.unload(paste0(mName,.Platform$dynlib.ext))
   
+  if (.Platform$OS.type == "windows") {
+    if (!(devtools::find_rtools() == TRUE)) {
+      # The windows user neet to install Rtools to complile the c file
+      # The MacOS user neet to install Xcode
+      warning("The Rtools should be installed first") 
+    }
+  } 
   system (paste0("R CMD SHLIB ", mName, ".c")) # create .o and .so (or .dll) files
-  dyn.load(paste(mName, .Platform$dynlib.ext, sep=""))
+  
+  dyn.load(paste0(mName, .Platform$dynlib.ext))
   
   if(file.exists(paste0(mName, "_inits.R"))){
     source(paste0(mName, "_inits.R"))
@@ -114,6 +120,7 @@ mName = "pbtk1comp"
 compile(mName)
 source(paste0(mName, "_inits.R"))
 
+# Define time and parameters and initial state
 times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
@@ -133,18 +140,19 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
+
+
 # Use deSolve to solve ode (take some time)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
-             dllname = mName, func = "derivs1comp", jacfunc = "jac1comp", initfunc = "initmod1comp")
+             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp")
+tell2(x,y)
 
 pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
-
-tell2(x,y)
+pksim(y, log = T)
+points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
 #
-x
-
 check(x)
 check(x, SI = 0.05, CI = 0.05)
 
@@ -164,9 +172,9 @@ initState[1] <- 10
 params <- httk::parameterize_3comp(chem.name = "theophylline")
 #params <- httk::parameterize_3comp(chem.name = "acetaminophen")
 
-# 40% uncertainty
-LL <- 0.6
-UL <- 1.4
+# 20% uncertainty
+LL <- 0.8
+UL <- 1.2
 
 # 20 parameters
 q = "qunif"
@@ -198,18 +206,15 @@ x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0
 times <- seq(from = 0.5, to = 24.5, by = 1)
 #y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
 #             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
+#tell2(x,y)
 
-tell2(x,y)
-
-pksim(y)
-points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
-
-
-
-#save(x, file = "3comp_4000x30.rda")
-#save(y, file = "3comp_4000x30y.rda")
 #load(file = "3comp_4000.rda") 20%
 #load(file = "3comp_4000y.rda") 20%
+
+pksim(y)
+pksim(y, log = T)
+points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+
 
 x
 
@@ -218,17 +223,13 @@ check(x, SI = 0.05, CI = 0.05)
 
 plot(x, cut.off = 0.05)
 
-pdf(file="rfast99.pdf", width = 10, height = 8.5)
-plot(x, cut.off = 0.05)
-dev.off()
 
 # X <- tidy_index(x, index = "SI") 
 heat_check(x, index = "SI") 
-heat_check(x, index = "SI", order = T) 
+heat_check(x, index = "SI", order = T)
 heat_check(x, index = "SI", order = T) + scale_fill_grey(start = .9, end = .0)
 
 heat_check(x, index = "CI")
-heat_check(x, index = "CI", order = T)
 
 ###
 
