@@ -208,8 +208,14 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 #             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
 #tell2(x,y)
 
-#load(file = "3comp_4000.rda") 20%
-#load(file = "3comp_4000y.rda") 20%
+#load(file = "3comp_2000.rda")
+#load(file = "3comp_2000.rda")
+#load(file = "3comp_4000.rda")
+#load(file = "3comp_4000y.rda")
+
+# File size
+cat(file.size(file = "3comp_4000.rda")/1e6, "MB")
+cat(file.size(file = "3comp_4000y.rda")/1e6, "MB")
 
 pksim(y)
 pksim(y, log = T)
@@ -227,10 +233,22 @@ plot(x, cut.off = 0.05)
 # X <- tidy_index(x, index = "SI") 
 heat_check(x, index = "SI") 
 heat_check(x, index = "SI", order = T)
-heat_check(x, index = "SI", order = T) + scale_fill_grey(start = .9, end = .0)
-
 heat_check(x, index = "CI")
 
-###
+# Continous
+heat_check(x, category = F)
 
+# Add value
+heat_check(x, category = F, text = T)
+heat_check(x, text = T)
 
+# grey scale
+heat_check(x) + scale_fill_grey(start = .9, end = .0)
+heat_check(x, category = F) + scale_fill_gradient(low = "white", high = "black")
+# viridis
+heat_check(x) + viridis::scale_fill_viridis(discrete=TRUE)
+heat_check(x, category = F) + viridis::scale_fill_viridis()
+
+# specific index
+heat_check(x, filter = c("first order","total order"))
+           
