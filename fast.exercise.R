@@ -243,8 +243,8 @@ heat_check(x, category = F, text = T)
 heat_check(x, text = T)
 
 # grey scale
-heat_check(x) + scale_fill_grey(start = .9, end = .0)
-heat_check(x, category = F) + scale_fill_gradient(low = "white", high = "black")
+heat_check(x) + ggplot2::scale_fill_grey(start = .9, end = .0)
+heat_check(x, category = F) + ggplot2::scale_fill_gradient(low = "white", high = "black")
 # viridis
 heat_check(x) + viridis::scale_fill_viridis(discrete=TRUE)
 heat_check(x, category = F) + viridis::scale_fill_viridis()
