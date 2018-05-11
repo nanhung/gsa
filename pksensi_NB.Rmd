@@ -11,14 +11,15 @@ output:
 # Install the pksensi
 # devtools::install_github("nanhung/pksensi")
 library(pksensi) 
+library(sensitivity)
 ```
 
 # Use the add-in function (sobol) and do the testing
 ## The eFAST method in sensitivity package 
 ```{r message = FALSE}
-x<-sensitivity::fast99(factors = 8, n = 400,
+x<-fast99(factors = 8, n = 400,
            q = "qunif", q.arg = list(min = 0, max = 1))
-y<-sensitivity::sobol.fun(x$X)
+y<-sobol.fun(x$X)
 tell(x, y)
 x
 plot(x)
@@ -28,14 +29,14 @@ plot(x)
 ```{r message = FALSE}
 set.seed(1234)
 x<-rfast99(factors = 8, n = 400,
-           q = "qunif", q.arg = list(min = 0, max = 1), replicate = 10, conf = 0.99)
-y<-solve_fun(x, model = rfast99:::sobol.fun)
+           q = "qunif", q.arg = list(min = 0, max = 1), replicate = 20, conf = 0.95)
+y<-solve_fun(x, model = pksensi:::sobol.fun)
 tell2(x, y)
 x
 plot(x)
 ```
 
-# Flip-Flop Kinetics
+# Exercise: Flip-Flop Kinetics (Analytical approach)
 
 ```{r message = FALSE}
 # Define Flip-Flop kinetic function
@@ -53,7 +54,7 @@ q.arg = list(list(min = 0.5, max = 1.5),
 
 set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
-           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 ```
 
 
@@ -66,8 +67,10 @@ x
 plot(x)
 ```
 
-# Model compiled
+# HTTK (Numerical approach)
+# Case 1: 1 Compartment model
 
+# Model compiled
 ```{r message = FALSE}
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
@@ -101,6 +104,7 @@ compile <- function (mName, model = F) {
 }
 ```
 
+# Compile the c file
 ```{r message = FALSE}
 mName = "pbtk1comp"
 compile(mName) 
@@ -115,15 +119,17 @@ parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
 initState[1] <- 10
 
-params <- httk::parameterize_1comp(chem.name = "theophylline")
-
-```
-
-```{r message = FALSE}
 parameters
 initState
+
 ```
 
+
+```{r message = FALSE}
+library(httk)
+params <- parameterize_1comp(chem.name = "theophylline")
+params
+```
 
 ```{r message = FALSE}
 # Use httk generated parameter values with 50% uncertainty
@@ -135,6 +141,7 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kelim * LL, max = params$kelim * UL),
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
 
+set.seed(1234)
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
@@ -155,7 +162,7 @@ check(x)
 plot(x, cut.off = 0.05)
 ```
 
-
+# Case 2: 3 CompartmentPBPK model
 ```{r message = FALSE}
 mName = "3compPBPKmodel"
 compile(mName)
@@ -164,12 +171,14 @@ parameters <- initparms3comp()
 initState <- initState3comp(parms=parameters)
 initState[1] <- 10
 
-params <- httk::parameterize_3comp(chem.name = "theophylline")
+parameters
+initState
+
 ```
 
 ```{r message = FALSE}
-parameters
-initState
+params <- httk::parameterize_3comp(chem.name = "theophylline")
+params
 ```
 
 ```{r message = FALSE}
@@ -201,7 +210,10 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
              list(min = params$Rblood2plasma * LL, max = params$Rblood2plasma * UL))
 
 factors <- names(parameters)
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+
+#x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+
 times <- seq(from = 0.5, to = 24.5, by = 1)
 
 # Takes about 1 - 2 hour for the computation
@@ -210,6 +222,7 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 # tell2(x,y)
 ```
 
+# Sample number n = 2000
 ```{r message = FALSE}
 # sample number = 2000
 load(file = "3comp_2000.rda") # parameter space
@@ -225,6 +238,7 @@ points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
 ```{r message = FALSE}
 plot(x, cut.off = 0.05)
+check(x)
 ```
 
 # Heapmap check
@@ -234,6 +248,7 @@ heat_check(x, index = "SI", order = T)
 heat_check(x, index = "CI")
 ```
 
+# Sample number n = 4000
 ```{r message = FALSE}
 # sample number = 4000
 load(file = "3comp_4000.rda")
@@ -264,6 +279,7 @@ heat_check(x, filter = c("first order","total order"), category = F, text = T)
 heat_check(x, filter = c("first order","total order"), order = T, text = T)
 ```
 
+# Customize color 
 ```{r message = FALSE}
 # grey scale
 heat_check(x) + ggplot2::scale_fill_grey(start = .9, end = .0)
