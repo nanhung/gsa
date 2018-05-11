@@ -1,11 +1,7 @@
 # devtools::install_github("nanhung/pksensi")
 
 library(pksensi)
-library(dplyr)
-library(deSolve)
 library(httk)
-library(ggplot2)
-# sensitivty
 
 #### Sobol model
 
@@ -65,13 +61,12 @@ x<-rfast99(factors=c("KA","KE","V"),
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
 
 y<-solve_fun(x, model = FFPK, times = times)
+tell2(x,y)
+x
 
 pksim(y) # uncertainty analysis
 title(ylab="concentration", xlab="time", main = "Ccompartment")
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
-
-tell2(x,y)
-x
 
 check(x)
 check(x, SI = 0.05, CI = 0.05) # redefine cut-off and convergence threshold
@@ -80,9 +75,6 @@ plot(x)
 plot(x, cut.off = 0.05)
   
 heat_check(x, index = "SI") 
-heat_check(x, index = "SI", order = T) + 
-  scale_fill_grey(start = .9, end = .0) # color blind friendly
-
 heat_check(x, index = "CI")
 
 ##### MCSim under R (use deSolve package)
@@ -138,9 +130,7 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
 
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
-           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
-
-
+           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 # Use deSolve to solve ode (take some time)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
@@ -149,6 +139,8 @@ tell2(x,y)
 
 pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
+
+# log scale
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
@@ -170,7 +162,6 @@ initState <- initState3comp(parms=parameters)
 initState[1] <- 10
 
 params <- httk::parameterize_3comp(chem.name = "theophylline")
-#params <- httk::parameterize_3comp(chem.name = "acetaminophen")
 
 # 20% uncertainty
 LL <- 0.8
@@ -209,11 +200,13 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 #tell2(x,y)
 
 #load(file = "3comp_2000.rda")
-#load(file = "3comp_2000.rda")
+#load(file = "3comp_2000y.rda")
 #load(file = "3comp_4000.rda")
 #load(file = "3comp_4000y.rda")
 
 # File size
+cat(file.size(file = "3comp_2000.rda")/1e6, "MB")
+cat(file.size(file = "3comp_2000y.rda")/1e6, "MB")
 cat(file.size(file = "3comp_4000.rda")/1e6, "MB")
 cat(file.size(file = "3comp_4000y.rda")/1e6, "MB")
 
