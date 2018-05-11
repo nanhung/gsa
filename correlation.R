@@ -178,9 +178,11 @@ colnames(df4)<-c("Morris","eFAST","Jansen","Owen")
 
 ##########
 corplt<-function(df, v1, v2, col){
-  plot(df[,v1], df[,v2], col = "white", xlab = names(df[v1]), ylab = names(df[v2]),
+  plot(df[,v1], df[,v2], # col = "white",
+       col = "black", pch = 19,
+       xlab = names(df[v1]), ylab = names(df[v2]),
        xlim=range(df[,v1]), ylim=range(df[,v2]))
-  text(df[,v1], df[,v2], labels= row.names(df))
+  #text(df[,v1], df[,v2], labels= row.names(df))
   polygon(x = c(min(df[,v1]), min(df[,v1]), max(df[,v1]), max(df[,v1])), 
           y = c(min(df[,v2]), max(df[,v2]), max(df[,v2]), min(df[,v2])), 
           col = col, border = NA)
