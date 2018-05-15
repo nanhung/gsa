@@ -112,6 +112,7 @@ params <- httk::parameterize_1comp(chem.name = "theophylline")
 LL <- 0.5
 UL <- 1.5
 
+#
 q = "qunif"
 q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kelim * LL, max = params$kelim * UL),
@@ -119,6 +120,71 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
 
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+
+#
+q = "qunif"
+parameters["vdist"] = params$Vdist
+q.arg = list(list(min = params$kelim * LL, max = params$kelim * UL),
+             list(min = params$kgutabs * LL, max = params$kgutabs * UL))
+
+x<-rfast99(factors = c("ke", "kgutabs"),
+           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+
+solve_fun <- function(x, times = NULL, parameters, initState, dllname,
+                      func, initfunc, nout = 1, outnames,
+                      method ="lsoda", rtol=1e-8, atol=1e-12,
+                      model = NULL, lnparam = F){
+  n <- length(x$s)
+  factors <- ifelse (class(x$factors) == "character", length(x$factors), x$factors)
+  replicate <- x$rep
+  out <- ifelse (is.null(times), 1, length(times))
+  y <- array(dim = c(n * factors, replicate, out), NA)
+  
+  if (is.null(model) == TRUE){
+    for (k in 1 : dim(y)[3]) { #outputs
+      
+      # Specific time or variable
+      inputs = c(0, times[k])
+      
+      for (i in 1 : dim(y)[2]) { # replicate
+        for (j in 1 : dim(y)[1]) { # Model evaluation
+          
+          #for (p in x$factors) {
+          #  parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
+          #}
+          for (p in 1 : factors) { # input individual factors
+            parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
+          }
+          
+          # Integrate
+          tmp <- deSolve::ode(initState, inputs, func = func, parms = parameters,
+                              dllname = dllname,
+                              method = method, rtol=rtol, atol=atol,
+                              initfunc = initfunc, nout = nout, outnames = outnames)
+          y[j,i,k] <- tmp[2, outnames]
+        }
+      }
+    }
+  } else {
+    for (i in 1 : dim(y)[2]) { # Replicate
+      for (j in 1 : dim(y)[1]) { # Model evaluation
+        if (lnparam == T) { parameters <- exp(x$a[j,i,])}
+        else if (lnparam == F) { parameters <- x$a[j,i,]}
+        
+        if (is.null(times)) tmp <- model(parameters) else tmp <- model(parameters, times)
+        
+        for (k in 1 : dim(y)[3]) { # Output time
+          y[j,i,k] <- tmp[k]
+        }
+      }
+    }
+  }
+  dimnames(y)[[3]]<-times
+  return(y)
+}
+
+
+
 
 # Use deSolve to solve ode (take some time)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
@@ -210,6 +276,81 @@ check(x, SI = 0.05, CI = 0.05)
 
 plot(x, cut.off = 0.05)
 
+###
+
+system("./mcsim.ACAT_like Drug_X.simple.in Drug_X.simple.out")
+sim = read.delim("Drug_X.simple.out", skip = 2)
+names(sim)
+
+par(mfrow = c(3,2), mar = c(4, 5, 2, 1))
+for (i in 2:7) {
+  plot(sim$Time, sim[,i], xlab = "Time (hour)", ylab = "",
+       main = names(sim)[i], las = 1, col = "red", lwd = 2,
+       type = "l", log = "y")
+}
+
+###
+
+library(pksensi)
+library(httk)
+library(dplyr)
+
+library(deSolve)
+mName <- "ACAT_like"
+compile(mName, model = T)
+newState <- c(A_stom_lu = 1780)
+newParms <- c(BDM = 70,
+              MM = 180.17, 
+              f_Abs_jeju  = 1,
+              Peff = 0.175,
+              Ratio_BP = 0.824,
+              PC_adip   = 1,
+              PC_kid    = 1,
+              PC_rpt    = 1,
+              PC_ppt    = 1,
+              PC_liver  = 1,
+              PC_stom   = 1,
+              PC_duod   = 1,
+              PC_jeju   = 1,
+              PC_ileon  = 1,
+              PC_cecum  = 1,
+              PC_colon  = 1,
+              Fu_adip     = 1,
+              Fu_kid      = 1,
+              Fu_ppt      = 1,
+              Fu_rpt      = 1,
+              Fu_blood    = 1,
+              Fu_liver    = 1,
+              Fu_portvein = 1,
+              Fu_stom     = 1,
+              Fu_duod     = 1,
+              Fu_jeju     = 1,
+              Fu_ileon    = 1,
+              Fu_cecum    = 1,
+              Fu_colon    = 1,
+              Fu_plasma   = 0.016,
+              Vmax_vitro = 2.48,
+              Km_vitro = 3.31,
+              Kle_kid = 0.085)
+parameters <- initParms(newParms=newParms)
+initState <- initStates(newStates=newState)
+
+Outputs # C_blood
+out <- Outputs
+
+times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
+y<-ode(initState, times, parms = parameters, outnames = out, nout=length(out),
+       dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+
+## GSA
+
+# 20% uncertainty
+LL <- 0.8
+UL <- 1.2
+
+
+
+
 
 # X <- tidy_index(x, index = "SI") 
 heat_check(x, index = "SI") 
@@ -233,3 +374,4 @@ heat_check(x, category = F) + viridis::scale_fill_viridis()
 # specific index
 heat_check(x, filter = c("first order","total order"))
            
+
