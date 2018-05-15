@@ -108,7 +108,7 @@ The `pksim` function is use to simulate the output result. This method can use b
 
 ```{r message = FALSE}
 pksim(y)
-points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 ```
 
 The `check` function can summarize the sensitivity index and convergence index. The `SI` and `CI` can change to other value.

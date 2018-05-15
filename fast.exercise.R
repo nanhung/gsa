@@ -2,6 +2,7 @@
 
 library(pksensi)
 library(httk)
+library(dplyr)
 
 #### Sobol model
 
@@ -21,7 +22,7 @@ for (i in 1 : x$rep) {
   y[,i,]<-sensitivity::sobol.fun(x$a[,i,]) 
 }
 
-tell.rfast99(x, y[,,1])
+pksensi:::tell.rfast99(x, y[,,1])
 
 x %>% plot; abline(0.01, 0, lty = 2) 
 
@@ -30,14 +31,12 @@ x %>% ViSA::converge # Not used
 ####
 
 set.seed(1234)
-x<-rfast99(factors = 20, n = 1000,
-           q = "qunif", q.arg = list(min = 0, max = 1), replicate = 10, conf = 0.99)
-
-y<-solve_fun(x, model = rfast99::sobol.fun)
-
-tell2(x, y)
-
+x<-rfast99(factors = 8, n = 400,
+           q = "qunif", q.arg = list(min = 0, max = 1), replicate = 20, conf = 0.95)
+y<-solve_fun(x, model = pksensi:::sobol.fun) 
+tell2(x, y) # like sensitivity::tell function, the tell2 function is used to combine the output result and model output.
 x
+plot(x)
 
 ## Flip-Flop Kinetics ####
 FFPK <- function(parameters, times, dose = 320){
@@ -46,33 +45,27 @@ FFPK <- function(parameters, times, dose = 320){
   return(CONC)
 }
 
+# Define parameter distribution
 q = "qunif"
 q.arg = list(list(min = 0.5, max = 1.5), 
              list(min = 0.02, max = 0.3),
              list(min = 20, max = 60))
 
+# The replication and confidence interval are set to 20, 0.95, respectively.
 set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
-           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
-
 y<-solve_fun(x, model = FFPK, times = times)
 tell2(x,y)
-x
-
-pksim(y) # uncertainty analysis
-title(ylab="concentration", xlab="time", main = "Ccompartment")
+x # print the time-dependent output of sensitivity index and convergence index to the console 
+plot(x, cut.off = 0.05) # Visualize the printed result 
+pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 check(x)
-check(x, SI = 0.05, CI = 0.05) # redefine cut-off and convergence threshold
-
-plot(x)
-plot(x, cut.off = 0.05)
-  
-heat_check(x, index = "SI") 
-heat_check(x, index = "CI")
+check(x, SI = 0.05, CI = 0.05)
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
@@ -91,8 +84,6 @@ compile <- function (mName, model = F) {
   
   if (.Platform$OS.type == "windows") {
     if (!(devtools::find_rtools() == TRUE)) {
-      # The windows user neet to install Rtools to complile the c file
-      # The MacOS user neet to install Xcode
       warning("The Rtools should be installed first") 
     }
   } 
