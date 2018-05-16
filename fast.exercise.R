@@ -117,74 +117,8 @@ q = "qunif"
 q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kelim * LL, max = params$kelim * UL),
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
-
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
-
-#
-q = "qunif"
-parameters["vdist"] = params$Vdist
-q.arg = list(list(min = params$kelim * LL, max = params$kelim * UL),
-             list(min = params$kgutabs * LL, max = params$kgutabs * UL))
-
-x<-rfast99(factors = c("ke", "kgutabs"),
-           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
-
-solve_fun <- function(x, times = NULL, parameters, initState, dllname,
-                      func, initfunc, nout = 1, outnames,
-                      method ="lsoda", rtol=1e-8, atol=1e-12,
-                      model = NULL, lnparam = F){
-  n <- length(x$s)
-  factors <- ifelse (class(x$factors) == "character", length(x$factors), x$factors)
-  replicate <- x$rep
-  out <- ifelse (is.null(times), 1, length(times))
-  y <- array(dim = c(n * factors, replicate, out), NA)
-  
-  if (is.null(model) == TRUE){
-    for (k in 1 : dim(y)[3]) { #outputs
-      
-      # Specific time or variable
-      inputs = c(0, times[k])
-      
-      for (i in 1 : dim(y)[2]) { # replicate
-        for (j in 1 : dim(y)[1]) { # Model evaluation
-          
-          #for (p in x$factors) {
-          #  parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
-          #}
-          for (p in 1 : factors) { # input individual factors
-            parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
-          }
-          
-          # Integrate
-          tmp <- deSolve::ode(initState, inputs, func = func, parms = parameters,
-                              dllname = dllname,
-                              method = method, rtol=rtol, atol=atol,
-                              initfunc = initfunc, nout = nout, outnames = outnames)
-          y[j,i,k] <- tmp[2, outnames]
-        }
-      }
-    }
-  } else {
-    for (i in 1 : dim(y)[2]) { # Replicate
-      for (j in 1 : dim(y)[1]) { # Model evaluation
-        if (lnparam == T) { parameters <- exp(x$a[j,i,])}
-        else if (lnparam == F) { parameters <- x$a[j,i,]}
-        
-        if (is.null(times)) tmp <- model(parameters) else tmp <- model(parameters, times)
-        
-        for (k in 1 : dim(y)[3]) { # Output time
-          y[j,i,k] <- tmp[k]
-        }
-      }
-    }
-  }
-  dimnames(y)[[3]]<-times
-  return(y)
-}
-
-
-
 
 # Use deSolve to solve ode (take some time)
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
@@ -204,6 +138,21 @@ check(x, SI = 0.05, CI = 0.05)
 
 plot(x)
 plot(x, cut.off = 0.05)
+
+#### Fix Volume
+q = "qunif"
+q.arg = list(list(min = params$kelim * LL, max = params$kelim * UL),
+             list(min = params$kgutabs * LL, max = params$kgutabs * UL))
+x<-rfast99(factors = c("ke", "kgutabs"),
+           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+parameters["vdist"] = params$Vdist
+y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
+             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp")
+tell2(x,y)
+
+pksim(y)
+points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
+plot(x)
 
 ####
 
@@ -246,11 +195,11 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
 
 factors <- names(parameters)
 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
 
 times <- seq(from = 0.5, to = 24.5, by = 1)
 #y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
-#             dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
+#             dllname = mName, func = "derivs3comp", initfunc = "initmod3comp")
 #tell2(x,y)
 
 #load(file = "3comp_2000.rda")
@@ -335,20 +284,104 @@ newParms <- c(BDM = 70,
 parameters <- initParms(newParms=newParms)
 initState <- initStates(newStates=newState)
 
-Outputs # C_blood
-out <- Outputs
+#Outputs # C_blood
+#out <- Outputs
 
-times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
+#times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
+#y<-ode(initState, times, parms = parameters, outnames = out, nout=length(out),
+#       dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+
 y<-ode(initState, times, parms = parameters, outnames = out, nout=length(out),
-       dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+       dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12)
 
 ## GSA
 
 # 20% uncertainty
-LL <- 0.8
-UL <- 1.2
+
+LL <- 0.9
+UL <- 1.1
+
+newParms
+
+q = "qunif"
+
+q.arg = list(list(min = newParms["BDM"], max = newParms["BDM"]),
+             list(min = newParms["Peff"], max = newParms["Peff"]))
+
+factors <- c("BDM", "Peff")
+
+x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+
+times <- seq(from = 0.5, to = 4.5, by = 1)
+
+solve_fun <- function(x, times = NULL, parameters, initState, dllname,
+                      func, initfunc, nout = 1, outnames,
+                      method ="lsoda", rtol=1e-8, atol=1e-12,
+                      model = NULL, lnparam = F){
+  n <- length(x$s)
+  factors <- ifelse (class(x$factors) == "character", length(x$factors), x$factors)
+  replicate <- x$rep
+  out <- ifelse (is.null(times), 1, length(times))
+  y <- array(dim = c(n * factors, replicate, out), NA)
+  
+  if (is.null(model) == TRUE){
+    for (k in 1 : dim(y)[3]) { #outputs
+      
+      # Specific time or variable
+      inputs = c(0, times[k])
+      
+      for (i in 1 : dim(y)[2]) { # replicate
+        for (j in 1 : dim(y)[1]) { # Model evaluation
+          for (p in x$factors) {
+            parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
+          }
+          
+          # Integrate
+          tmp <- deSolve::ode(initState, inputs, func = "derivs", parms = parameters,
+                              dllname = mName,
+                              method = "lsode", rtol=1e-8, atol=1e-12,
+                              initfunc = "initmod", nout = nout, outnames = "C_blood")
+          y[j,i,k] <- tmp[2, outnames]
+        }
+      }
+    }
+  } else {
+    for (i in 1 : dim(y)[2]) { # Replicate
+      for (j in 1 : dim(y)[1]) { # Model evaluation
+        if (lnparam == T) { parameters <- exp(x$a[j,i,])}
+        else if (lnparam == F) { parameters <- x$a[j,i,]}
+        
+        if (is.null(times)) tmp <- model(parameters) else tmp <- model(parameters, times)
+        
+        for (k in 1 : dim(y)[3]) { # Output time
+          y[j,i,k] <- tmp[k]
+        }
+      }
+    }
+  }
+  dimnames(y)[[3]]<-times
+  return(y)
+}
 
 
+y<-solve_fun(x, times, parameters = parameters, initState, 
+             outnames = "C_blood",
+             dllname = mName, func = "derivs", initfunc = "initmod")
+
+
+
+tell2(x,y)
+pksim(y)
+pksim(y, log = T)
+points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+
+
+x
+
+check(x)
+check(x, SI = 0.05, CI = 0.05)
+
+plot(x, cut.off = 0.05)
 
 
 
