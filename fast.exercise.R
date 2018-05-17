@@ -71,6 +71,7 @@ check(x, SI = 0.05, CI = 0.05)
 # pros: Don't need to create in file
 # cons: Slower than in pure MCSim
 
+# Compile the code
 source("compile.R")
 mName = "pbtk1comp"
 compile(mName)
@@ -80,32 +81,38 @@ source(paste0(mName, "_inits.R"))
 times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
-initState[1] <- 10
+initState["Agutlumen"] <- 10
 
 params <- httk::parameterize_1comp(chem.name = "theophylline")
 
-# 50% uncertainty
-LL <- 0.5
+# Parameter uncertainty 
+LL <- 0.5 # use 50% variation in this case
 UL <- 1.5
-
-#
 q = "qunif"
 q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
-             list(min = params$kelim * LL, max = params$kelim * UL),
+             list(min = params$kelim * LL, max = params$kelim * UL), 
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
-x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
-           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
-# Use deSolve to solve ode (take some time)
 
+x<-rfast99(factors = c("vdist", "ke", "kgutabs"), 
+           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+
+# Use pksensi::solve_fun to solve ode
 outnames <- Outputs1comp
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
-             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", output = "Ccompartment")
-
+             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
+             output = "Ccompartment")
 tell2(x,y)
 
+## Plot the PK simulation result by pksensi::pksim
 pksim(y)
+par(mar=c(4,4,1,1))
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
+title(xlab="time(hr)", ylab = expression(paste("concentration, ",mu, "M")))
+
+## Create time-dependent sensitivity index
+plot(x, cut.off= 0.05)
+heat_check(x)
 
 #### log scale ####
 pksim(y, log = T)
@@ -116,7 +123,6 @@ check(x)
 check(x, SI = 0.05, CI = 0.05)
 
 plot(x)
-plot(x, cut.off = 0.05)
 
 #### Fix Volume ####
 q = "qunif"
@@ -174,15 +180,17 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
              list(min = params$Rblood2plasma * LL, max = params$Rblood2plasma * UL))
 
 factors <- names(parameters)
-
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.9)
-
-times <- seq(from = 0.5, to = 12.5, by = 1)
-
 outnames <- Outputs3comp
-#y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
-#             dllname = mName, func = "derivs3comp", initfunc = "initmod3comp", output = "Crest")
-#tell2(x,y)
+times <- seq(from = 0.5, to = 24.5, by = 1)
+
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, 
+           rep = 10, conf = 0.9)
+y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
+             dllname = mName, func = "derivs3comp", initfunc = "initmod3comp", 
+             output = "Crest")
+tell2(x,y)
+plot(x, cut.off = 0.05); heat_check(x, index = "SI", order = T)
+
 
 #load(file = "3comp_2000.rda")
 #load(file = "3comp_2000y.rda")
@@ -205,7 +213,7 @@ x
 check(x)
 check(x, SI = 0.05, CI = 0.05)
 
-plot(x, cut.off = 0.05)
+
 
 ###
 
@@ -336,17 +344,32 @@ factors <- c("Peff","Ratio_BP",
              "Fu_plasma",
              "Vmax_vitro", "Km_vitro", "Kle_kid")
 
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
 
 times <- seq(from = 0.5, to = 12.5, by = 1)
 outnames <- Outputs
 
-#y<-solve_fun(x, times, parameters = parameters, initState = initState, 
-#             outnames = outnames, dllname = mName,
-#             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
-#system.time(source("solvefun.R"))
-
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 20, conf = 0.95) 
+y<-solve_fun(x, times, parameters = parameters, initState = initState, 
+             outnames = outnames, dllname = mName,
+             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
 tell2(x,y)
+plot(x);
+heat_check(x, index = "SI", order = T) + 
+  ggplot2::scale_fill_grey(start = .9, end = .0)
+
+png(file="figS3.png",width=3200,height=2800,res=300)
+plot(x, cut.off = 0.05)
+dev.off()
+
+png(file="figS4.png",width=2000,height=2400,res=300)
+heat_check(x, index = "SI", order = T) + 
+  ggplot2::scale_fill_grey(start = .9, end = .0)
+dev.off()
+
+#load(file = "acat_2000.rda")
+#load(file = "acat_2000y.rda")
+
+system.time(source("solvefun.R"))
 pksim(y)
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
