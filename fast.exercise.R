@@ -230,11 +230,6 @@ for (i in 2:7) {
 
 ###
 
-library(pksensi)
-library(httk)
-library(dplyr)
-
-library(deSolve)
 mName <- "ACAT_like"
 source("compile.R")
 compile(mName, model = T)
@@ -274,13 +269,10 @@ newParms <- c(BDM = 70,
               Kle_kid = 0.085)
 parameters <- initParms(newParms=newParms)
 initState <- initStates(newStates=newState)
-
-Outputs # C_blood
-out <- Outputs
-#out <- "C_blood"
+outnames <- Outputs
 
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
-y<-ode(initState, times, parms = parameters, outnames = out, nout=length(out),
+y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, nout=length(outnames),
        dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
 
 ## GSA

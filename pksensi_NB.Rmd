@@ -3,7 +3,7 @@ title: "pksensi_NB"
 output:
   html_document:
     df_print: paged
-  html_notebook: default
+  html_notebook: false
 ---
 
 This [R Markdown](http://rmarkdown.rstudio.com) Notebook shows the main functions in [pksensi](https://github.com/nanhung/pksensi) package.
@@ -127,7 +127,7 @@ We test One-compartment and 3-compartment PBPK model in this section. The c file
 
 The c file need to compile to executable file (dynamic-link libraries (.dll) on Windows or shared objects (.so) on unix systems).
 
-The windows user neet to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/) to complile the c file. The MacOS user neet to install Xcode (https://developer.apple.com/). The GNU compilers are included by default in most Linux distributions
+The windows user neet to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/) to complile the c file. The MacOS user neet to install Xcode (https://developer.apple.com/). The GNU compilers are included by default in most Linux distributions.
 
 The follwong function had been test in Windows 7, Ubuntu 18.04, and MacOS 10.13.4.
 
@@ -183,7 +183,7 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
 initState[1] <- 10
-
+outnames <- Outputs1comp
 parameters
 initState
 
@@ -211,18 +211,19 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
 
 set.seed(1234)
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
-           n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
+           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
 
 # Use deSolve to solve ode (take some time)
-y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Ccompartment",
-             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp")
+y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
+             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", output = "Ccompartment")
 tell2(x,y)
 ```
 
-Here use n = 100 to reduce the computational time.
+Here use n = 400 to reach converge.
 
 
 ```{r message = FALSE}
+plot(x)
 pksim(y, log = T) # Use log-transformed scale
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 ```
@@ -238,6 +239,7 @@ compile(mName)
 parameters <- initparms3comp()
 initState <- initState3comp(parms=parameters)
 initState[1] <- 10
+outnames <- Outputs3comp
 
 parameters
 initState
@@ -282,15 +284,12 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
              list(min = params$Rblood2plasma * LL, max = params$Rblood2plasma * UL))
 
 factors <- names(parameters)
-
-#x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
-#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
-
 times <- seq(from = 0.5, to = 24.5, by = 1)
 
-# Takes about 1 - 2 hour for the computation
-# y<-solve_fun(x, times, parameters = parameters, initState, outnames = "Crest",
-#              dllname = mName, func = "derivs3comp", jacfunc = "jac3comp", initfunc = "initmod3comp")
+#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
+#y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
+#             dllname = mName, func = "derivs3comp", initfunc = "initmod3comp", 
+#             output = "Crest")
 # tell2(x,y)
 ```
 
@@ -336,7 +335,167 @@ heat_check(x, index = "SI", order = T)
 heat_check(x, index = "CI")
 ```
 
-#Customize heatmap
+## Case 3: ACAT-PBPK model model
+The ACAT_like.model was sourced from 'mcsim-6.0.0/examples/ACAT-PBPK'
+```{r message = FALSE}
+file.exists("ACAT_like.model")
+```
+
+First, compile the MCSim model file to the executable file
+The model file will generate the C model file 'ACAT_like.c' to linke with R deSolve package
+It can also create the R parameter initialization file 'ACAT_like_inits.R'
+The executable file 'ACAT_like.so' or 'ACAT_like.dll' will generate in the compile process.
+```{r message = FALSE}
+source("compile.R")
+mName <- "ACAT_like"
+compile(mName, model = T)
+```
+
+Seting Initial state and parameter value. Al parameter value can be check by using `initParms()`. Also, the `initStates()` can use to check all state conditions. The `Outputs` included all variables that were defined in the statement of outputs in 'ACAT_like.model'
+```{r message = FALSE}
+newState <- c(A_stom_lu = 1780) # Ingestion dose uM
+newParms <- c(BDM = 70, # Body weight (kg)
+              MM = 180.17, # Molecular weight
+              f_Abs_jeju  = 1, # only cosider the absorption in jejunum 
+              Peff = 0.175, # Effective permeability of g.i. tract epithelia
+              Ratio_BP = 0.824, # Plasma / blood concentration ratio
+              # Tissue / blood partition coefficients
+              PC_adip   = 1, # adipose tissue
+              PC_kid    = 1, # Kidney
+              PC_rpt    = 1, # richly perfused tissues (viscera)
+              PC_ppt    = 1, # poorly perfused tissues (muscle and skin)
+              PC_liver  = 1, # liver
+              PC_stom   = 1, # stomach 
+              PC_duod   = 1, # duodenum
+              PC_jeju   = 1, # jejunum
+              PC_ileon  = 1, # ileon
+              PC_cecum  = 1, # cecum
+              PC_colon  = 1, # colon
+              # Fraction unbound in compartments
+              Fu_adip     = 1,
+              Fu_kid      = 1,
+              Fu_ppt      = 1,
+              Fu_rpt      = 1,
+              Fu_blood    = 1,
+              Fu_liver    = 1,
+              Fu_portvein = 1,
+              Fu_stom     = 1,
+              Fu_duod     = 1,
+              Fu_jeju     = 1,
+              Fu_ileon    = 1,
+              Fu_cecum    = 1,
+              Fu_colon    = 1,
+              Fu_plasma   = 0.016,
+              Vmax_vitro = 2.48, # Michaelis-Menten Vmax (micromol/min/mg microsomal proteins)
+              Km_vitro = 3.31, # Michaelis-Menten Km (microM)
+              Kle_kid = 0.085) # Renal elimination clearance (L/h)
+parameters <- initParms(newParms=newParms)
+initState <- initStates(newStates=newState)
+outnames <- Outputs
+length(parameters); parameters
+length(initState); initState
+length(outnames); outnames
+```
+
+Define the parameter distribution (30 parameters)
+```{r message = FALSE}
+factors <- c("Peff",
+             "Ratio_BP",
+             "PC_adip",
+             "PC_kid",
+             "PC_rpt",
+             "PC_ppt",
+             "PC_liver",
+             "PC_stom",
+             "PC_duod",
+             "PC_jeju",
+             "PC_ileon",
+             "PC_cecum",
+             "PC_colon",
+             "Fu_adip",
+             "Fu_kid",
+             "Fu_ppt",
+             "Fu_rpt",
+             "Fu_blood",
+             "Fu_liver",
+             "Fu_portvein",
+             "Fu_stom",
+             "Fu_duod",
+             "Fu_jeju",
+             "Fu_ileon",
+             "Fu_cecum",
+             "Fu_colon",
+             "Fu_plasma",
+             "Vmax_vitro", 
+             "Km_vitro",
+             "Kle_kid")
+q = "qunif"
+# Use log-transformed parameter value
+q.arg = list(list(min = -2.3, max = 0), # Peff
+             list(min = -2.3, max = 0), # Ratio_BP
+             list(min = -4.6, max = 4.6), #PC_adip
+             list(min = -4.6, max = 4.6), #PC_kid
+             list(min = -4.6, max = 4.6), #PC_rpt
+             list(min = -4.6, max = 4.6), #PC_ppt
+             list(min = -4.6, max = 4.6), #PC_liver
+             list(min = -4.6, max = 4.6), #PC_stom
+             list(min = -4.6, max = 4.6), #PC_duod
+             list(min = -4.6, max = 4.6), #PC_jeju
+             list(min = -4.6, max = 4.6), #PC_ileon
+             list(min = -4.6, max = 4.6), #PC_cecum
+             list(min = -4.6, max = 4.6), #PC_colon
+             list(min = -4.6, max = 0), # Fu_adip
+             list(min = -4.6, max = 0), # Fu_kid
+             list(min = -4.6, max = 0), # Fu_ppt
+             list(min = -4.6, max = 0), # Fu_rpt
+             list(min = -4.6, max = 0), # Fu_blood
+             list(min = -4.6, max = 0), # Fu_liver
+             list(min = -4.6, max = 0), # Fu_portvein
+             list(min = -4.6, max = 0), # Fu_stom
+             list(min = -4.6, max = 0), # Fu_duod
+             list(min = -4.6, max = 0), # Fu_jeju
+             list(min = -4.6, max = 0), # Fu_ileon
+             list(min = -4.6, max = 0), # Fu_cecum
+             list(min = -4.6, max = 0), # Fu_colon
+             list(min = -4.6, max = 0), # Fu_plasma
+             list(min = 0, max = 4.6), # Vmax_vitro
+             list(min = 0, max = 4.6), # Km_vitro
+             list(min = -4.6, max = 0)) # Kle_kid
+```
+
+Set the time step and input the parameters in `rfast99`
+```{r eval=FALSE}
+times <- seq(from = 0.5, to = 12.5, by = 1)
+x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 20, conf = 0.95) 
+#y<-solve_fun(x, times, parameters = parameters, initState = initState, 
+#             outnames = outnames, dllname = mName,
+#             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
+# user   system  elapsed 
+# 3801.957    6.150 3808.827 
+```
+
+```{r message = FALSE}
+# sample number = 2000
+cat(file.size(file = "acat_2000.rda")/1e6, "MB", "\n")
+cat(file.size(file = "acat_2000y.rda")/1e6, "MB")
+load(file = "acat_2000.rda")
+load(file = "acat_2000y.rda")
+```
+
+Create the basic plot
+```{r fig.height=9, fig.width=11, message=FALSE}
+pksim(y)
+plot(x,cut.off = 0.05)
+```
+
+Check sensitivity parameter
+```{r fig.height=6, fig.width=8, message=FALSE}
+heat_check(x, order =T)
+heat_check(x, order =T, category = F, text= T)
+heat_check(x, index = "CI")
+```
+
+## Customize heatmap
 
 ```{r message = FALSE}
 # specific index (the default show all results)
@@ -351,7 +510,7 @@ heat_check(x, filter = c("first order","total order"), category = F, text = T)
 heat_check(x, filter = c("first order","total order"), order = T, text = T)
 ```
 
-# Customize color 
+## Customize color 
 ```{r message = FALSE}
 # grey scale
 heat_check(x) + ggplot2::scale_fill_grey(start = .9, end = .0) + ggplot2::ggtitle("Grey scale (discrete)")

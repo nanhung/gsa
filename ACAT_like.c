@@ -3,13 +3,13 @@
 
    Model File:  ACAT_like.model
 
-   Date:  Thu May 17 08:31:47 2018
+   Date:  Thu May 17 11:18:44 2018
 
-   Created by:  "mod v5.6.6"
+   Created by:  "mod v6.0.0"
     -- a model preprocessor by Don Maszle
    ___________________________________________________
 
-   Copyright (c) 1993-2017 Free Software Foundation, Inc.
+   Copyright (c) 1993-2018 Free Software Foundation, Inc.
 
    Model calculations for compartmental model:
 
