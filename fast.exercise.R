@@ -352,6 +352,13 @@ x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 20, conf = 0
 y<-solve_fun(x, times, parameters = parameters, initState = initState, 
              outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
+#system.time(source("solvefun.R"))
+# user   system  elapsed 
+# 3801.957    6.150 3808.827 
+
+#save(x, file = "acat_2000.rda")
+#save(y, file = "acat_2000y.rda")
+
 tell2(x,y)
 plot(x);
 heat_check(x, index = "SI", order = T) + 
