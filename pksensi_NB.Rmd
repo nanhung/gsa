@@ -336,6 +336,7 @@ heat_check(x, index = "CI")
 ```
 
 ## Case 3: ACAT-PBPK model model
+
 The ACAT_like.model was sourced from 'mcsim-6.0.0/examples/ACAT-PBPK'
 ```{r message = FALSE}
 file.exists("ACAT_like.model")
@@ -392,7 +393,7 @@ newParms <- c(BDM = 70, # Body weight (kg)
 parameters <- initParms(newParms=newParms)
 initState <- initStates(newStates=newState)
 outnames <- Outputs
-length(parameters); parameters
+length(parameters); round(parameters, digits = 4)
 length(initState); initState
 length(outnames); outnames
 ```
@@ -466,16 +467,12 @@ q.arg = list(list(min = -2.3, max = 0), # Peff
 Set the time step and input the parameters in `rfast99`
 ```{r eval=FALSE}
 times <- seq(from = 0.5, to = 12.5, by = 1)
-x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 20, conf = 0.95) 
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 20, conf = 0.95) 
 #y<-solve_fun(x, times, parameters = parameters, initState = initState, 
 #             outnames = outnames, dllname = mName,
 #             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
 # user   system  elapsed 
 # 3801.957    6.150 3808.827 
-```
-
-```{r message = FALSE}
-# sample number = 2000
 cat(file.size(file = "acat_2000.rda")/1e6, "MB", "\n")
 cat(file.size(file = "acat_2000y.rda")/1e6, "MB")
 load(file = "acat_2000.rda")
