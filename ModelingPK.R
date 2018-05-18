@@ -1,36 +1,40 @@
 # Define and initialize the state variables
-y = c("Q_fat" = 0, # Quantity of butadiene in fat (mg)
-      "Q_wp" = 0, # ~ in well-perfused (mg)
-      "Q_pp" = 0, # ~ in poorly-perfused (mg)
-      "Q_met" = 0) # ~ metabolized (mg)
+y <- c("Q_fat" = 0, # Quantity of butadiene in fat (mg)
+       "Q_wp" = 0, # ~ in well-perfused (mg)
+       "Q_pp" = 0, # ~ in poorly-perfused (mg)
+       "Q_met" = 0) # ~ metabolized (mg)
 
 # Define the model parameters
 # Units:
 # Volumes: liter
 # Time: minute
 # Flows: liter / minute
-parameters = c(
-  "BDM" = 73, # Body mass (kg)
-#  "Height" = 1.6, # Body height (m)
-#  "Age" = 40, # in years
-#  "Sex" = 1, # code 1 is male, 2 is female
-  "Flow_pul" = 5, # Pulmonary ventilation rate (L/min)
-  "Pct_Deadspace" = 0.7, # Fraction of pulmonary deadspace
-  "Vent_Perf" = 1.14, # Ventilation over perfusion ratio
-  "Pct_LBDM_wp" = 0.2, # wp tissue as fraction of lean mass
-  "Pct_Flow_fat" = 0.1, # Fraction of cardiac output to fat
-  "Pct_Flow_pp" = 0.35, # ~ to pp
-  "PC_art" = 2, # Blood/air partition coefficient
-  "PC_fat" = 22, # Fat/blood ~
-  "PC_wp" = 0.8, # wp/blood ~
-  "PC_pp" = 0.8, # pp/blood ~
-  "Kmetwp" = 0.25) # Rate constant for metabolism
+parameters <- c("BDM" = 73, # Body mass (kg)
+               "Height" = 1.6, # Body height (m)
+               "Age" = 40, # in years
+               "Sex" = 1, # code 1 is male, 2 is female
+               "Flow_pul" = 5, # Pulmonary ventilation rate (L/min)
+               "Pct_Deadspace" = 0.7, # Fraction of pulmonary deadspace
+               "Vent_Perf" = 1.14, # Ventilation over perfusion ratio
+               "Pct_LBDM_wp" = 0.2, # wp tissue as fraction of lean mass
+               "Pct_Flow_fat" = 0.1, # Fraction of cardiac output to fat
+               "Pct_Flow_pp" = 0.35, # ~ to pp
+               "PC_art" = 2, # Blood/air partition coefficient
+               "PC_fat" = 22, # Fat/blood ~
+               "PC_wp" = 0.8, # wp/blood ~
+               "PC_pp" = 0.8, # pp/blood ~
+               "Kmetwp" = 0.25) # Rate constant for metabolism
 
-C_inh = approxfun(x = c(0,120), y = c(10,0),
-                  method="constant", f=0, rule=2)
+week_per_month <- 60 * 24 * 7 + 480 
+x1 <- seq(0, week_per_month, 1440)
+x2 <- seq(480, week_per_month, 1440)
+duration <- as.vector(matrix(c(x1, x2), nrow = 2, byrow = TRUE))
+exposure <- rep(c(10,1),length(duration)/2)
+
+C_inh <- approxfun(x = duration, y = exposure, method="constant", f=0, rule=2)
 
 # Check the input concentration profile just defined
-plot(C_inh(1:300), xlab = "Time (min)",
+plot(C_inh(1:week_per_month), xlab = "Time (min)",
      ylab = "Butadiene air concentration (ppm)", type = "l")
 
 # Define the model equations
@@ -105,10 +109,10 @@ bd.model = function(t, y, parameters) {
 } # end bd.model
 
 # Define the computation output times
-times = seq(from=0, to=1440, by=10)
+times <- seq(from = 0, to = week_per_month, by = 10)
 # Call the ODE solver
 library(deSolve)
-results = ode(times = times, func = bd.model, y = y, parms = parameters)
+results <- ode(times = times, func = bd.model, y = y, parms = parameters)
 
 # results is basically a table
 results
@@ -121,7 +125,7 @@ plot(results)
 # We assume that a simple simulation has already been run, so that
 # y, parameters, C_inh, and bd.model have all been defined and that
 # deSolve has been loaded.
-for (iteration in 1:1000) { # 1000 Monte Carlo simulations…
+for (iteration in 1:100) { # 1000 Monte Carlo simulations…
   # Sample randomly some parameters
   parameters["BDM"] = rnorm(1, 73, 7.3)
   parameters["Flow_pul"] = rnorm(1, 5, 0.5)
