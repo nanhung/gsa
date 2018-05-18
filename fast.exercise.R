@@ -82,10 +82,10 @@ times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
 initState["Agutlumen"] <- 10
+outnames <- Outputs1comp
 
+# Parameter uncertainty
 params <- httk::parameterize_1comp(chem.name = "theophylline")
-
-# Parameter uncertainty 
 LL <- 0.5 # use 50% variation in this case
 UL <- 1.5
 q = "qunif"
@@ -98,7 +98,7 @@ x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 # Use pksensi::solve_fun to solve ode
-outnames <- Outputs1comp
+
 y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
              dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
              output = "Ccompartment")
