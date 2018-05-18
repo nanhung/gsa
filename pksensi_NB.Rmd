@@ -352,7 +352,7 @@ mName <- "ACAT_like"
 compile(mName, model = T)
 ```
 
-Seting Initial state and parameter value. Al parameter value can be check by using `initParms()`. Also, the `initStates()` can use to check all state conditions. The `Outputs` included all variables that were defined in the statement of outputs in 'ACAT_like.model'
+Seting initial state and parameter value. Al parameter value can be check by using `initParms()`. Also, the `initStates()` can use to check all state conditions. The `Outputs` included all variables that were defined in the statement of outputs in 'ACAT_like.model'
 ```{r message = FALSE}
 newState <- c(A_stom_lu = 1780) # Ingestion dose uM
 newParms <- c(BDM = 70, # Body weight (kg)
