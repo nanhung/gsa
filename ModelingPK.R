@@ -25,16 +25,16 @@ parameters <- c("BDM" = 73, # Body mass (kg)
                "PC_pp" = 0.8, # pp/blood ~
                "Kmetwp" = 0.25) # Rate constant for metabolism
 
-week_per_month <- 60 * 24 * 7 + 480 
-x1 <- seq(0, week_per_month, 1440)
-x2 <- seq(480, week_per_month, 1440)
-duration <- as.vector(matrix(c(x1, x2), nrow = 2, byrow = TRUE))
-exposure <- rep(c(10,1),length(duration)/2)
+min_per_week <- 60 * 24 * 7
 
+x1 <- seq(1, min_per_week, 1440)
+x2 <- seq(480, min_per_week, 1440)
+duration <- as.vector(matrix(c(x1, x2), nrow = 2, byrow = TRUE))
+exposure <- rep(c(10,0.1),length(duration)/2)
 C_inh <- approxfun(x = duration, y = exposure, method="constant", f=0, rule=2)
 
 # Check the input concentration profile just defined
-plot(C_inh(1:week_per_month), xlab = "Time (min)",
+plot(C_inh(1:min_per_week), xlab = "Time (min)",
      ylab = "Butadiene air concentration (ppm)", type = "l")
 
 # Define the model equations
@@ -109,7 +109,7 @@ bd.model = function(t, y, parameters) {
 } # end bd.model
 
 # Define the computation output times
-times <- seq(from = 0, to = week_per_month, by = 10)
+times <- seq(from = 0, to = min_per_week, by = 10)
 # Call the ODE solver
 library(deSolve)
 results <- ode(times = times, func = bd.model, y = y, parms = parameters)
@@ -117,7 +117,7 @@ results <- ode(times = times, func = bd.model, y = y, parms = parameters)
 # results is basically a table
 results
 # Plot the results of the simulation
-plot(results)
+plot(results, col="red")
 # End
 # End Simple Simulation.
 
@@ -125,15 +125,43 @@ plot(results)
 # We assume that a simple simulation has already been run, so that
 # y, parameters, C_inh, and bd.model have all been defined and that
 # deSolve has been loaded.
-for (iteration in 1:100) { # 1000 Monte Carlo simulations…
+
+library(sensitivity)
+
+factors <- c("BDM", "Flow_pul", "Pct_Deadspace", "Vent_Perf", 
+             "Pct_LBDM_wp", "Pct_Flow_fat", "Pct_Flow_pp", 
+             "PC_art", "PC_fat", "PC_wp", "PC_pp",
+             "Kmetwp")
+
+LL <- 0.9
+UL <- 1.1
+
+binf <- c(parameters["BDM"]*LL, 
+          parameters["Flow_pul"]*LL,
+          parameters["PC_art"]*LL,
+          parameters["Kmetwp"]*LL)
+bsup <- c(parameters["BDM"]*UL, 
+          parameters["Flow_pul"]*UL,
+          parameters["PC_art"]*UL,
+          parameters["Kmetwp"]*UL)
+
+set.seed(12345)
+x <- morris(model = NULL, factors = factors, r = 20,
+            design = list(type = "oat", levels = 5, grid.jump = 3), 
+            binf = binf, bsup = bsup, scale = TRUE)
+
+
+for (iteration in 1:nrow(x$X)) { # 1000 Monte Carlo simulations…
   # Sample randomly some parameters
-  parameters["BDM"] = rnorm(1, 73, 7.3)
-  parameters["Flow_pul"] = rnorm(1, 5, 0.5)
-  parameters["PC_art"] = rnorm(1, 2, 0.2)
-  parameters["Kmetwp"] = rnorm(1, 0.25, 0.025)
+
+  parameters["BDM"] = x$X[iteration,"BDM"]
+  parameters["Flow_pul"] = x$X[iteration,"Flow_pul"]
+  parameters["PC_art"] = x$X[iteration,"PC_art"]
+  parameters["Kmetwp"] = x$X[iteration,"Kmetwp"]
+  
   # Reduce output times eventually. We only care about time 1440,
   # but time zero still needs to be specified
-  times = c(0, 1440)
+  times = c(0, 480) # the first 8-hour 
   # Integrate
   tmp = ode(times = times, func = bd.model, y = y, parms = parameters)
   if (iteration == 1) { # initialize
@@ -151,7 +179,25 @@ for (iteration in 1:100) { # 1000 Monte Carlo simulations…
 } # end Monte Carlo loop
 
 # Save the results, specially if they took a long time to compute
-save(sampled.parms, results, file="MTC.dat.xz", compress = "xz")
+tell(x, results[,"C_ven"])
+
+ee.mean <- apply(abs(x$ee), 2, mean)
+ee.sd <- apply(abs(x$ee), 2, sd)
+ee.sd / ee.mean
+
+
+
+xlim <- c(min(abs(x$ee)), max(abs(x$ee)))
+plot(x, xlim=xlim)
+abline(0,1) # non-linear and/or non-monotonic
+abline(0,0.5, lty = 2) # monotonic
+abline(0,0.1, lty = 3) # almost linear
+
+for (i in 1:ncol(x$X)){
+  plot(x$X[,i], x$y)  
+}
+
+
 # use load(file="MTC.dat.xz") to read them back in
 # Plot the results
 hist(sampled.parms[,1])
