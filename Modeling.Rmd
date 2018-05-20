@@ -1,14 +1,34 @@
-# Define and initialize the state variables
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+In my previous post, I used python [SALib](https://nanhung.rbind.io/post/sensitivity-analysis-by-python-salib/) to conduct the sensitivity analysis for the simple example (Sobol model). Now, I want to take the more complicated case to understand how to apply sensitivity analysis in a dynamic model. Let's get started! 
+
+I found an excellent example of the dynamic model, the physiological-based pharmacokinetic (PBPK) model provided from the book *In silico Methods for Predicting Drug Toxicity* (chapter 3). This model was used to simulate the time-course of the concentration of the 1, 3-Butadiene in human body fluids and organs. The authors also provided the R source code to conduct the reproducible PBPK modeling.
+
+I think this is an opportunity to apply the sensitivity analysis for this model. Therefore, I choose the elementary effect-based Morris screening method (Morris 1991), which is also the advance local sensitivity analysis that change one-factor-at-a-time (OAT) to investigate the parameter impact on the model output. 
+
+Compare with variance-based sensitivity analysis, the Morris method has high computing stable (lower computational cost) and only need few sample number (lower computational resource) to reach the convergence. However, there are some disadvantages for the local method, e.g., the percentage of the output variation cannot be quantified. Due to this PBPK case study is running in the pure R with the deSolve package. To have better computational performance, I think the Morris method is the best candidate.
+
+The Morris method is an extension of the traditional OAT process, but over multiple points in the multi-dimensional parameter spaces as to provide global converge. For each parameter, the Morris approach can calculate the mean OAT sensitivities $\mu$ and its standard deviation $\sigma$, which represent the overall influence and the interacts/non-linear effects on the model output, respectively. 
+
+An improved elementary effect method was developed by Campolongo et al. (2007). They improved both the reliability of the sensitivity measures (adding the mean absolute value of the OAT sensitives, denoted $\mu^*$) as well as the efficiency of the sampling strategy (generating a large number of proposed sampling trajectories and selecting a subset with the highest diversion across parameter space).
+
+
+# PBPK modeling
+
+Define and initialize the state variables. The used PBPK model was constructed from three tissue compartment (fat, well-perfused, and poorly-perfused tissues)
+```{r}
 y <- c("Q_fat" = 0, # Quantity of butadiene in fat (mg)
        "Q_wp" = 0, # ~ in well-perfused (mg)
        "Q_pp" = 0, # ~ in poorly-perfused (mg)
        "Q_met" = 0) # ~ metabolized (mg)
+```       
+   
 
-# Define the model parameters
-# Units:
-# Volumes: liter
-# Time: minute
-# Flows: liter / minute
+Define the model parameters (Volumes: liter, Time: minute, Flows: liter / minute)
+```{r}
 parameters <- c("BDM" = 73, # Body mass (kg)
                "Height" = 1.6, # Body height (m)
                "Age" = 40, # in years
@@ -24,11 +44,14 @@ parameters <- c("BDM" = 73, # Body mass (kg)
                "PC_wp" = 0.8, # wp/blood ~
                "PC_pp" = 0.8, # pp/blood ~
                "Kmetwp" = 0.25) # Rate constant for metabolism
+```
+       
+Define the exposure function. I set the periodic exposure (8-hour exposure per day) in a week.
+```{r}
+min_per_week <- 60 * 24 * 7 
 
-min_per_week <- 60 * 24 * 7
-
-x1 <- seq(1, min_per_week, 1440)
-x2 <- seq(480, min_per_week, 1440)
+x1 <- seq(1, min_per_week, 1440) # start exposure
+x2 <- seq(480, min_per_week, 1440) # stop exposure
 duration <- as.vector(matrix(c(x1, x2), nrow = 2, byrow = TRUE))
 exposure <- rep(c(10,0.1),length(duration)/2)
 C_inh <- approxfun(x = duration, y = exposure, method="constant", f=0, rule=2)
@@ -36,7 +59,10 @@ C_inh <- approxfun(x = duration, y = exposure, method="constant", f=0, rule=2)
 # Check the input concentration profile just defined
 plot(C_inh(1:min_per_week), xlab = "Time (min)",
      ylab = "Butadiene air concentration (ppm)", type = "l")
+```
 
+Define the PBPK model
+```{r}
 # Define the model equations
 bd.model = function(t, y, parameters) {
   with (as.list(y), {
@@ -107,35 +133,44 @@ bd.model = function(t, y, parameters) {
     }) # end with parameters
   }) # end with y
 } # end bd.model
+```
 
-# Define the computation output times
-times <- seq(from = 0, to = min_per_week, by = 10)
-# Call the ODE solver
+Define the computation output times and call the ODE solver
+```{r}
 library(deSolve)
+times <- seq(from = 0, to = min_per_week, by = 10) # A week
 results <- ode(times = times, func = bd.model, y = y, parms = parameters)
+```
 
-# results is basically a table
-results
-# Plot the results of the simulation
+Plot the results of the simulation
+```{r}
 plot(results, col="red")
-# End
-# End Simple Simulation.
+```
 
-# Monte Carlo simulations
-# We assume that a simple simulation has already been run, so that
-# y, parameters, C_inh, and bd.model have all been defined and that
-# deSolve has been loaded.
 
+# Sensitivity analysis
+
+Firstly, we use the Morris method which was provided from `sensitivity` package.
+```{r}
 library(sensitivity)
+```
 
+Define the testing parameters. Twelve parameters were used in this test.
+```{r}
 factors <- c("BDM", "Flow_pul", "Pct_Deadspace", "Vent_Perf", 
              "Pct_LBDM_wp", "Pct_Flow_fat", "Pct_Flow_pp", 
              "PC_art", "PC_fat", "PC_wp", "PC_pp",
              "Kmetwp")
+```
 
-LL <- 0.9
-UL <- 1.1
 
+Then, we need to set up the uncertainty for each parameter. Here we set the 10% variation in the testing parameters.
+
+```{r}
+LL <- 0.9 # 10% lower limit
+UL <- 1.1 # 10% upper limit
+
+# Define the lower and upper limits that will be the input to the morris function
 binf <- c(parameters["BDM"]*LL, 
           parameters["Flow_pul"]*LL,
           parameters["Pct_Deadspace"]*LL,
@@ -160,8 +195,12 @@ bsup <- c(parameters["BDM"]*UL,
           parameters["PC_wp"]*UL,
           parameters["PC_pp"]*UL,
           parameters["Kmetwp"]*UL)
+```
+
+To check the convergence of the sensitivity index, we can set up the sequence of the sampling number. After that, we can apply the for-loop to do the morris sensitivity analysis and link with numerical analysis with deSolve::ode function. In this case, I examine the parameter sensitivity under the exposure time at 8-hour (stop point of the first exposure) and investigate the parameter sensitivity. Also, we only focused on the parameter effect on venous blood concentration.
 
 
+```{r}
 sample <- seq(from = 20, to = 140, by = 20)
 
 for (i in 1:length(sample)) {
@@ -170,8 +209,7 @@ for (i in 1:length(sample)) {
               design = list(type = "oat", levels = 6, grid.jump = 3), 
               binf = binf, bsup = bsup, scale = TRUE)
   
-  for (iteration in 1:nrow(x$X)) { # 1000 Monte Carlo simulations…
-    # Sample randomly some parameters
+  for (iteration in 1:nrow(x$X)) { 
     
     parameters["BDM"] = x$X[iteration,"BDM"]
     parameters["Flow_pul"] = x$X[iteration,"Flow_pul"]
@@ -186,9 +224,8 @@ for (i in 1:length(sample)) {
     parameters["PC_pp"] = x$X[iteration,"PC_pp"]
     parameters["Kmetwp"] = x$X[iteration,"Kmetwp"]
     
-    # Reduce output times eventually. We only care about time 1440,
-    # but time zero still needs to be specified
-    times = c(0, 480) # the first 8-hour 
+    # We focus on time at 8 hour (stop exposure),
+    times = c(0, 480)
     # Integrate
     tmp = ode(times = times, func = bd.model, y = y, parms = parameters)
     if (iteration == 1) { # initialize
@@ -221,10 +258,10 @@ for (i in 1:length(sample)) {
                               parameters["PC_pp"],
                               parameters["Kmetwp"]))
     }
-  } # end Monte Carlo loop
+  }
   
-  # Save the results, specially if they took a long time to compute
-  tell(x, results[,"C_ven"])
+  # 
+  tell(x, results[,"C_ven"]) # We focus on parameter effect on venous blood concentration
   
   if (i == 1){
     X <- apply(abs(x$ee), 2, mean)  
@@ -233,13 +270,18 @@ for (i in 1:length(sample)) {
   }
 }
 
+```
+
+
+## Number of repetitions and parameter sensitivity
+Through this plot, we can examine the variation and converge of the parameter. It seems that each sensitivity index of the parameter was stable across all sampling number. Also, we can find the fraction of pulmonary dead space is the most influential parameter.
+
+```{r, fig.height=6, fig.width=9}
+# Manipulate the output result for plotting
 row.names(X) <- sample
-
 meltX <- reshape::melt(X)
-
 ee_lim <- c(min(abs(x$ee)), max(abs(x$ee)))
 
-#
 par(mar=c(4,4,2,1))
 plot(sample, subset(meltX, X2 == factors[1])[,3], type="b", col=viridis_pal()(12)[1],
      frame.plot = FALSE, 
@@ -249,8 +291,13 @@ for( i in 2:12){
   lines(sample, subset(meltX, X2 == factors[i])[,3], type="b", col=viridis_pal()(12)[i])
 }
 text(140, subset(meltX, X1 == 140)[,3], factors, pos = 4)
+```
 
-#
+## Mean OAT sensitivities and standard deviation
+
+This visualization provides the information to examine the parameter sensitivity and the relationships between model parameters and its related output. According to the output result, we can find the relationship between the parameter values and model outputs are between linear and monotonic.
+
+```{r, fig.height=6}
 plot(x, xlim=xlim, main ="number of repetitions = 140")
 abline(0,1) # non-linear and/or non-monotonic
 abline(0,0.5, lty = 2) # monotonic
@@ -258,13 +305,25 @@ abline(0,0.1, lty = 3) # almost linear
 legend("bottomright", legend = c("non-linear and/or non-monotonic",
                                  "monotonic",
                                  "almost linear"), lty = c(1:3))
+```
 
+# Parameter variation and model output
+
+To investigate the parameter effect on the PBPK model outputs, we used the following visualization methods for all parameters and most influential parameter (Pct_Deadspace) and less influential parameter (PC_pp).   
+
+For all parameters
+```{r,fig.height=6}
 par(mfrow=c(3,4))
 for (i in 1:12){
   plot(x$X[,i], x$y, main = x$factors[i], xlab = "", ylab = "predict conc.")
 }
 
+```
 
+
+
+For most influential parameter (Pct_Deadspace)
+```{r}
 library(ggplot2)
 library(plyr)
 
@@ -272,15 +331,15 @@ sensiX <- data.frame(x$X[,"Pct_Deadspace"], x$y)
 names(sensiX) <- c("Pct_Deadspace", "Predict.conc")
 musensi <- ddply(sensiX, "Pct_Deadspace", summarize, mean.conc=mean(Predict.conc))
 
-
-
 ggplot(sensiX, aes(x=Predict.conc, color=as.factor(Pct_Deadspace))) +
   geom_density() + scale_color_discrete(name="Pct_Deadspace") +
   geom_vline(data=musensi, aes(xintercept=mean.conc, color=as.factor(Pct_Deadspace)),
              linetype="dashed") +
   theme_minimal()
+```  
 
-#
+For less influential parameter (PC_pp)
+```{r}
 insensiX <- data.frame(x$X[,"PC_pp"], x$y)
 names(insensiX) <- c("PC_pp", "Predict.conc")
 muinsensi <- ddply(insensiX, "PC_pp", summarize, mean.conc=mean(Predict.conc))
@@ -290,7 +349,6 @@ ggplot(insensiX, aes(x=Predict.conc, color=as.factor(PC_pp))) +
   geom_vline(data=muinsensi, aes(xintercept=mean.conc, color=as.factor(PC_pp)),
              linetype="dashed") +
   theme_minimal()
+```
 
-
-# End Monte Carlo Simulations.
-#============================
+Through this method, we can quickly check the parameter sensitivity in PBPK model and check the parameter effects on model output. However, this is just the simple test case. To do the "complete" sensitivity analysis, we still need to find the reasonable parameter uncertainty and its range. However, this step-by-step method can provide the essential information for beginners to apply the sensitivity in the dynamic model.  
