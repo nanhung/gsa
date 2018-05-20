@@ -138,52 +138,111 @@ UL <- 1.1
 
 binf <- c(parameters["BDM"]*LL, 
           parameters["Flow_pul"]*LL,
+          parameters["Pct_Deadspace"]*LL,
+          parameters["Vent_Perf"]*LL,
+          parameters["Pct_LBDM_wp"]*LL,
+          parameters["Pct_Flow_fat"]*LL,
+          parameters["Pct_Flow_pp"]*LL,
           parameters["PC_art"]*LL,
+          parameters["PC_fat"]*LL,
+          parameters["PC_wp"]*LL,
+          parameters["PC_pp"]*LL,
           parameters["Kmetwp"]*LL)
 bsup <- c(parameters["BDM"]*UL, 
           parameters["Flow_pul"]*UL,
+          parameters["Pct_Deadspace"]*UL,
+          parameters["Vent_Perf"]*UL,
+          parameters["Pct_LBDM_wp"]*UL,
+          parameters["Pct_Flow_fat"]*UL,
+          parameters["Pct_Flow_pp"]*UL,
           parameters["PC_art"]*UL,
+          parameters["PC_fat"]*UL,
+          parameters["PC_wp"]*UL,
+          parameters["PC_pp"]*UL,
           parameters["Kmetwp"]*UL)
 
-set.seed(12345)
-x <- morris(model = NULL, factors = factors, r = 20,
-            design = list(type = "oat", levels = 5, grid.jump = 3), 
-            binf = binf, bsup = bsup, scale = TRUE)
 
+sample <- c(20,40)
 
-for (iteration in 1:nrow(x$X)) { # 1000 Monte Carlo simulations…
-  # Sample randomly some parameters
-
-  parameters["BDM"] = x$X[iteration,"BDM"]
-  parameters["Flow_pul"] = x$X[iteration,"Flow_pul"]
-  parameters["PC_art"] = x$X[iteration,"PC_art"]
-  parameters["Kmetwp"] = x$X[iteration,"Kmetwp"]
+for (i in 1:length(sample)) {
+  set.seed(12345)
+  x <- morris(model = NULL, factors = factors, r = sample[i],
+              design = list(type = "oat", levels = 5, grid.jump = 3), 
+              binf = binf, bsup = bsup, scale = TRUE)
   
-  # Reduce output times eventually. We only care about time 1440,
-  # but time zero still needs to be specified
-  times = c(0, 480) # the first 8-hour 
-  # Integrate
-  tmp = ode(times = times, func = bd.model, y = y, parms = parameters)
-  if (iteration == 1) { # initialize
-    results = tmp[2,-1]
-    sampled.parms = c(parameters["BDM"],
-                      parameters["Flow_pul"],
-                      parameters["PC_art"], parameters["Kmetwp"])
-  } else { # accumulate
-    results = rbind(results, tmp[2,-1])
-    sampled.parms = rbind(sampled.parms,
-                          c(parameters["BDM"],
-                            parameters["Flow_pul"],
-                            parameters["PC_art"], parameters["Kmetwp"]))
+  for (iteration in 1:nrow(x$X)) { # 1000 Monte Carlo simulations…
+    # Sample randomly some parameters
+    
+    parameters["BDM"] = x$X[iteration,"BDM"]
+    parameters["Flow_pul"] = x$X[iteration,"Flow_pul"]
+    parameters["Pct_Deadspace"] = x$X[iteration,"Pct_Deadspace"]
+    parameters["Vent_Perf"] = x$X[iteration,"Vent_Perf"]
+    parameters["Pct_LBDM_wp"] = x$X[iteration,"Pct_LBDM_wp"]
+    parameters["Pct_Flow_fat"] = x$X[iteration,"Pct_Flow_fat"]
+    parameters["Pct_Flow_pp"] = x$X[iteration,"Pct_Flow_pp"]
+    parameters["PC_art"] = x$X[iteration,"PC_art"]
+    parameters["PC_fat"] = x$X[iteration,"PC_fat"]
+    parameters["PC_wp"] = x$X[iteration,"PC_wp"]
+    parameters["PC_pp"] = x$X[iteration,"PC_pp"]
+    parameters["Kmetwp"] = x$X[iteration,"Kmetwp"]
+    
+    # Reduce output times eventually. We only care about time 1440,
+    # but time zero still needs to be specified
+    times = c(0, 480) # the first 8-hour 
+    # Integrate
+    tmp = ode(times = times, func = bd.model, y = y, parms = parameters)
+    if (iteration == 1) { # initialize
+      results = tmp[2,-1]
+      sampled.parms = c(parameters["BDM"], 
+                        parameters["Flow_pul"],
+                        parameters["Pct_Deadspace"],
+                        parameters["Vent_Perf"],
+                        parameters["Pct_LBDM_wp"],
+                        parameters["Pct_Flow_fat"],
+                        parameters["Pct_Flow_pp"],
+                        parameters["PC_art"],
+                        parameters["PC_fat"],
+                        parameters["PC_wp"],
+                        parameters["PC_pp"],
+                        parameters["Kmetwp"])
+    } else { # accumulate
+      results = rbind(results, tmp[2,-1])
+      sampled.parms = rbind(sampled.parms,
+                            c(parameters["BDM"], 
+                              parameters["Flow_pul"],
+                              parameters["Pct_Deadspace"],
+                              parameters["Vent_Perf"],
+                              parameters["Pct_LBDM_wp"],
+                              parameters["Pct_Flow_fat"],
+                              parameters["Pct_Flow_pp"],
+                              parameters["PC_art"],
+                              parameters["PC_fat"],
+                              parameters["PC_wp"],
+                              parameters["PC_pp"],
+                              parameters["Kmetwp"]))
+    }
+  } # end Monte Carlo loop
+  
+  # Save the results, specially if they took a long time to compute
+  tell(x, results[,"C_ven"])
+  
+  if (i == 1){
+    X <- apply(abs(x$ee), 2, mean)  
+  } else {
+    X <- rbind(X, apply(abs(x$ee), 2, mean))
   }
-} # end Monte Carlo loop
+}
 
-# Save the results, specially if they took a long time to compute
-tell(x, results[,"C_ven"])
 
-ee.mean <- apply(abs(x$ee), 2, mean)
-ee.sd <- apply(abs(x$ee), 2, sd)
-ee.sd / ee.mean
+row.names(X) <- sample
+plot(X)
+
+meltX <- melt(X)
+
+colfunc <- colorRampPalette(c("blue", "red"))
+plot(subset(meltX, q_params == labs[2])[,3], type="b", col=colfunc(16)[8], 
+     axes=FALSE, xlab="",ylab="",
+     ylim=c(0,16))
 
 
 
@@ -193,6 +252,7 @@ abline(0,1) # non-linear and/or non-monotonic
 abline(0,0.5, lty = 2) # monotonic
 abline(0,0.1, lty = 3) # almost linear
 
+par(mfrow=c(3,4))
 for (i in 1:ncol(x$X)){
   plot(x$X[,i], x$y)  
 }

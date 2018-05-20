@@ -2,7 +2,7 @@
 set.seed(1234)
 
 library(sensitivity)
-morr <- morris(model = NULL, factors = 16, r = 100, # r = 1024,
+morr <- morris(model = NULL, factors = 16, r = 1024,
                design = list(type = "oat", levels = 5, grid.jump = 3), 
                binf = c(log(LeanBodyWt_min),
                         log(Flow_pul_min),
@@ -174,7 +174,7 @@ for(i in 2:ncol(out)){
 }
 
 ##
-morr.perc.df <- cbind(1, morr$X[1292:1293,]) 
+morr.perc.df <- cbind(1, morr$X) 
 nrow(morr$X) # nrow=17408
 write.table(morr.perc.df, file="perc.setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.perc perc.setpt2.in")
