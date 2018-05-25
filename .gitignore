@@ -16,3 +16,4 @@ mcsim.*
 *.jpeg
 *.o
 *.so
+*.html
