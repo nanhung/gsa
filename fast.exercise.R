@@ -2,7 +2,6 @@
 
 library(pksensi)
 library(httk)
-library(dplyr)
 
 #### Sobol model
 
@@ -78,7 +77,6 @@ compile(mName)
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
-times <- seq(from = 0.5, to = 24.5, by = 1)
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
 initState["Agutlumen"] <- 10
@@ -93,15 +91,22 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kelim * LL, max = params$kelim * UL), 
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
 
-
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"), 
            n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 # Use pksensi::solve_fun to solve ode
+times <- seq(from = 0.01, to = 24.01, by = 1)
 
-y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
+#
+y<-solve_fun(x, times, parameters = parameters, initState = initState, outnames = outnames,
              dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
              output = "Ccompartment")
+
+# Use external function initParms = initparms1comp
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", initState = initState, outnames = outnames,
+             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
+             output = "Ccompartment")
+
 tell2(x,y)
 
 ## Plot the PK simulation result by pksensi::pksim
@@ -124,39 +129,46 @@ check(x, SI = 0.05, CI = 0.05)
 
 plot(x)
 
-#### Fix Volume ####
-q = "qunif"
-q.arg = list(list(min = params$kelim * LL, max = params$kelim * UL),
-             list(min = params$kgutabs * LL, max = params$kgutabs * UL))
-x<-rfast99(factors = c("ke", "kgutabs"),
-           n = 400, q = q, q.arg = q.arg, rep = 10, conf = 0.99)
-parameters["vdist"] = params$Vdist
-
-y<-solve_fun(x, times, parameters = parameters, initState, outnames = Outputs,
-             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", output = "Ccompartment")
-tell2(x,y)
-
-pksim(y)
-points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
-plot(x)
-
 ####
 
 mName = "3compPBPKmodel"
 compile(mName)
 source(paste0(mName, "_inits.R"))
 
-parameters <- initparms3comp()
-initState <- initState3comp(parms=parameters)
-initState[1] <- 10
-
+# Basic check
 params <- httk::parameterize_3comp(chem.name = "theophylline")
+newState <- c(Agutlumen = 10)
+newParms <- c(BW = params$BW,
+              CLmetabolismc = params$Clmetabolismc, # different name in httk parameter
+              kgutabs = params$kgutabs,
+              Qcardiacc = params$Qcardiacc, 
+              Qgfrc = params$Qgfrc, 
+              Qgutf = params$Qgutf, 
+              Qliverf = params$Qliverf, 
+              Vgut = params$Vgut,  
+              Vliver = params$Vliver, 
+              Vrest = params$Vrest, 
+              Fraction_unbound_plasma = params$Funbound.plasma, #
+              Kliver2plasma = params$Kliver2pu, # 
+              Krest2plasma = params$Krest2pu, #
+              Kgut2plasma = params$Kgut2pu,  #
+              Ratioblood2plasma = params$Rblood2plasma) #
 
+parameters <- initparms3comp(newParms=newParms)
+initState <- initState3comp(newState=newState)
+outnames <- Outputs3comp
+
+times <- seq(from = 0.01, to = 6.01, by = 0.2) # NEED ZERO!
+y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, nout=length(outnames),
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+y[,"Crest"]
+
+# Sensitivity analysis
 # 20% uncertainty
 LL <- 0.8
 UL <- 1.2
 
-# 20 parameters
+# 15 parameters
 q = "qunif"
 q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
              list(min = params$Clmetabolismc * LL, max = params$Clmetabolismc * UL),
@@ -169,51 +181,46 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
              list(min = params$Vliver * LL, max = params$Vliver * UL),
              list(min = params$Vrest * LL, max = params$Vrest * UL),
              list(min = params$Funbound.plasma * LL, max = params$Funbound.plasma * UL),
-             list(min = params$Clmetabolism * LL, max = params$Clmetabolism * UL),
-             list(min = params$Qcardiac * LL, max = params$Qcardiac * UL),
-             list(min = params$Qgfr * LL, max = params$Qgfr * UL),
-             list(min = params$Qgut * LL, max = params$Qgut * UL),
-             list(min = params$Qliver * LL, max = params$Qliver * UL),
              list(min = params$Kliver2pu * LL, max = params$Kliver2pu * UL),
              list(min = params$Krest2pu * LL, max = params$Krest2pu * UL),
              list(min = params$Kgut2pu * LL, max = params$Kgut2pu * UL),
              list(min = params$Rblood2plasma * LL, max = params$Rblood2plasma * UL))
 
-factors <- names(parameters)
-outnames <- Outputs3comp
-times <- seq(from = 0.5, to = 24.5, by = 1)
+factors <- c("BW","CLmetabolismc","kgutabs",
+             "Qcardiacc","Qgfrc","Qgutf","Qliverf",
+             "Vgut","Vliver","Vrest",
+             "Fraction_unbound_plasma",
+             "Kliver2plasma","Krest2plasma","Kgut2plasma",
+             "Ratioblood2plasma")
 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, 
+set.seed(1234)
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, 
            rep = 10, conf = 0.9)
-y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
-             dllname = mName, func = "derivs3comp", initfunc = "initmod3comp", 
+
+#times <- c(0.01, seq(from = 0.5, to = 12.5, by = 1))
+times <- seq(from = 0.01, to = 8.01, by = 0.2)
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp", initState = initState, outnames = outnames,
+             dllname = mName, func = "derivs", initfunc = "initmod", 
              output = "Crest")
 tell2(x,y)
-plot(x, cut.off = 0.05); heat_check(x, index = "SI", order = T)
-
+plot(x, cut.off = 0.05);
+heat_check(x, order = T)
 
 #load(file = "3comp_2000.rda")
 #load(file = "3comp_2000y.rda")
-#load(file = "3comp_4000.rda")
-#load(file = "3comp_4000y.rda")
 
 # File size
 cat(file.size(file = "3comp_2000.rda")/1e6, "MB")
 cat(file.size(file = "3comp_2000y.rda")/1e6, "MB")
-cat(file.size(file = "3comp_4000.rda")/1e6, "MB")
-cat(file.size(file = "3comp_4000y.rda")/1e6, "MB")
 
 pksim(y)
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
-
 x
 
 check(x)
 check(x, SI = 0.05, CI = 0.05)
-
-
 
 ###
 
@@ -225,7 +232,7 @@ par(mfrow = c(3,2), mar = c(4, 5, 2, 1))
 for (i in 2:7) {
   plot(sim$Time, sim[,i], xlab = "Time (hour)", ylab = "",
        main = names(sim)[i], las = 1, col = "red", lwd = 2,
-       type = "l", log = "y")
+       type = "l")
 }
 
 ###
@@ -272,40 +279,41 @@ initState <- initStates(newStates=newState)
 outnames <- Outputs
 
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
-y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, nout=length(outnames),
+y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, nout=length(outnames),
        dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+y[,"C_blood"]
 
 ## GSA
 q = "qunif"
 q.arg = list(list(min = -2.3, max = 0), # Peff
              list(min = -2.3, max = 0), # Ratio_BP
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC 
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 4.6), #PC
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = -4.6, max = 0), # Fu_
-             list(min = 0, max = 4.6), # Vmax_vitro
-             list(min = 0, max = 4.6), # Km_vitro
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC 
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 2.3), #PC
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = -2.3, max = 0), # Fu_
+             list(min = 0, max = 2.3), # Vmax_vitro
+             list(min = 0, max = 2.3), # Km_vitro
              list(min = -4.6, max = 0)) # Kle_kid
 
 factors <- c("Peff","Ratio_BP",
@@ -336,17 +344,20 @@ factors <- c("Peff","Ratio_BP",
              "Fu_plasma",
              "Vmax_vitro", "Km_vitro", "Kle_kid")
 
-
-times <- seq(from = 0.5, to = 12.5, by = 1)
+times <- seq(from = 0.01, to = 8.01, by = 0.4)
 outnames <- Outputs
 
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 20, conf = 0.95) 
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
 y<-solve_fun(x, times, parameters = parameters, initState = initState, 
              outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
-#system.time(source("solvefun.R"))
-# user   system  elapsed 
-# 3801.957    6.150 3808.827 
+#user   system  elapsed 
+#3476.603   33.605 3513.944 
+pksim(y)
+tell2(x,y)
+pksim(y, log= T)
+
+
 
 #save(x, file = "acat_2000.rda")
 #save(y, file = "acat_2000y.rda")
@@ -367,8 +378,9 @@ dev.off()
 
 #load(file = "acat_2000.rda")
 #load(file = "acat_2000y.rda")
+save(x, file = "acat_2000.rda")
+save(y, file = "acat_2000y.rda")
 
-system.time(source("solvefun.R"))
 pksim(y)
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)

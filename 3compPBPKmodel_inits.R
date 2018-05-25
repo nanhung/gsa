@@ -27,7 +27,7 @@ initparms3comp <- function(newParms = NULL){
     }
   }
   if (!is.null(newParms)) parms[names(newParms)] <- newParms
-  out <- .C("getParms_3comp",
+  out <- .C("getParms", # change to getParms
             as.double(parms),
             out=double(length(parms)),
             as.integer(length(parms)))$out
@@ -53,9 +53,7 @@ initState3comp <- function(parms, newState = NULL) {
     Atubules = 0.0,
     AUC = 0.0
   )
-  Y <- with(as.list(parms), {  Y
-  })
-  
+
   if (!is.null(newState)) {
     if (!all(names(newState) %in% c(names(Y)))) {
       stop("illegal state variable name in newState")

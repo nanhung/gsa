@@ -97,14 +97,14 @@ static double parms[20];
 
 
 /*----- Initializers */
-void initmod3comp (void (* odeparms)(int *, double *))
+void initmod (void (* odeparms)(int *, double *))
 {
   int N=20;
   odeparms(&N, parms);
 }
 
 
-void getParms_3comp (double *inParms, double *out, int *nout) {
+void getParms (double *inParms, double *out, int *nout) {
   /*----- Model scaling */
   
   int i;
@@ -114,10 +114,10 @@ void getParms_3comp (double *inParms, double *out, int *nout) {
   }
   
   
-  kgutabs = kgutabs * 24 ;
-  CLmetabolism = CLmetabolismc * 24 * BW ;
-  Qcardiac = Qcardiacc * 24 * pow ( BW , 0.75 ) ;
-  Qgfr = Qgfrc * pow ( BW , 0.75 ) * 24 ;
+  kgutabs = kgutabs * 1 ; /*Use unit in per hour*/
+  CLmetabolism = CLmetabolismc * 1 * BW ; 
+  Qcardiac = Qcardiacc * 1 * pow ( BW , 0.75 ) ;
+  Qgfr = Qgfrc * pow ( BW , 0.75 ) * 1 ;
   Qgut = Qcardiac * Qgutf ;
   Qliver = Qcardiac * Qliverf ;
   
@@ -127,7 +127,7 @@ void getParms_3comp (double *inParms, double *out, int *nout) {
 }
 /*----- Dynamics section */
 
-void derivs3comp (int *neq, double *pdTime, double *y, double *ydot, double *yout, int *ip)
+void derivs (int *neq, double *pdTime, double *y, double *ydot, double *yout, int *ip)
 {
   
   yout[ID_Cgut] = y[ID_Agut] / Vgut ;
@@ -156,20 +156,20 @@ void derivs3comp (int *neq, double *pdTime, double *y, double *ydot, double *you
 
 
 /*----- Jacobian calculations: */
-void jac3comp (int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrowpd, double *yout, int *ip)
+void jac (int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrowpd, double *yout, int *ip)
 {
   
 } /* jac */
 
 
 /*----- Events calculations: */
-void event3comp (int *n, double *t, double *y)
+void event (int *n, double *t, double *y)
 {
   
 } /* event */
 
 /*----- Roots calculations: */
-void root3comp (int *neq, double *t, double *y, int *ng, double *gout, double *out, int *ip)
+void root (int *neq, double *t, double *y, int *ng, double *gout, double *out, int *ip)
 {
   
 } /* root */

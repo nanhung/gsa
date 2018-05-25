@@ -65,8 +65,8 @@ void getParms_1comp (double *inParms, double *out, int *nout) {
   }
   
   
-  kgutabs = kgutabs * 24 ;
-  ke = ke * 24 ;
+  kgutabs = kgutabs * 1 ; /*Use unit in per hour*/
+  ke = ke * 1 ; /*Use unit in per hour*/
   
   for (i = 0; i < *nout; i++) {
     out[i] = parms[i];
