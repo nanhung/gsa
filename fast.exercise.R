@@ -240,7 +240,6 @@ for (i in 2:7) {
 mName <- "ACAT_like"
 source("compile.R")
 compile(mName, model = T)
-newState <- c(A_stom_lu = 1780)
 newParms <- c(BDM = 70,
               MM = 180.17, 
               f_Abs_jeju  = 1,
@@ -275,13 +274,54 @@ newParms <- c(BDM = 70,
               Km_vitro = 3.31,
               Kle_kid = 0.085)
 parameters <- initParms(newParms=newParms)
-initState <- initStates(newStates=newState)
 outnames <- Outputs
 
+### Define Exposure
+mag <- 200 # Set input
+period <- 1e10
+inittime <- 0 # Exposure start from 0
+exposuretime <- 0.01 # Exposure end at 4 hr
+
+# The output time points
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
-y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, nout=length(outnames),
-       dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
-y[,"C_blood"]
+
+mintime <- min(times)
+maxtime <- max(times)
+
+# Define exposure scenarios: exposure and non-exposure
+nperiods <- 1 
+
+col1 <- rep(inittime, 2 * nperiods)
+I <- 1:length(col1)
+J <- which(I %% 2 == 1)
+col1[J]  <- col1[J] + (ceiling((J / 2)) - 1) * period
+J <- which(I %% 2 == 0)
+col1[J] <- col1[J-1] + exposuretime
+PerDose <- cbind(col1, rep(c(mag,0), length(col1)/2))
+
+# The matrix of periodic exposure
+PerDose
+Forcings1 <- list(PerDose)
+
+times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
+
+## Two type ####  
+#
+newState <- c(A_stom_lu = 1)
+initState <- initStates(newStates=newState)
+y1<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", 
+                outnames = outnames, nout=length(outnames), 
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12)
+#
+newState <- c(A_stom_lu = 0)
+initState <- initStates(newStates=newState)
+y2<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", 
+                outnames = outnames, nout=length(outnames), 
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12,
+                initforc="initforc",
+                forcings=Forcings1) #
+y1[,"C_blood"]
+y2[,"C_blood"]
 
 ## GSA
 q = "qunif"
@@ -393,6 +433,46 @@ check(x)
 check(x, SI = 0.05, CI = 0.05)
 
 plot(x, cut.off = 0.05)
+
+## APAP_PBPK ####
+mName <- "APAP_PBPK_thera"
+source("compile.R")
+compile(mName, model = T)
+
+newParms <- c(mgkg_flag = 0,
+              ODose_APAP_mg = 1000,
+              lnTg = -1.0,
+              lnTp = -2.85,
+              lnCYP_Km = 4.78,
+              lnCYP_VmaxC = 0,
+              lnSULT_Km_apap = 6.9,
+              lnSULT_Ki = 6.6,
+              lnSULT_Km_paps = -0.4,
+              lnSULT_VmaxC = 6.0,
+              lnUGT_Km = 9.33,
+              lnUGT_Ki = 10.0,
+              lnUGT_Km_GA = -0.03,
+              lnUGT_VmaxC = 9.39,
+              lnKm_AG = 10.3,
+              lnVmax_AG = 10.8,
+              lnKm_AS = 10.0,
+              lnVmax_AS = 13.7,
+              lnkGA_syn = 11.3,
+              lnkPAPS_syn = 11.0,
+              lnCLC_APAP = -5.5,
+              lnCLC_AG = -2.00,
+              lnCLC_AS = -2.00)
+
+parameters <- initParms(newParms = newParms)
+initState <- initStates(parms=NULL)
+outnames <- Outputs
+
+parameters["lnCLC_AG"]
+
+times <- seq(from = 0, to = 12, by = 0.2) # NEED ZERO!
+y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, nout=length(outnames),
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+y[,"lnCPL_APAP_mcgL"]
 
 
 
