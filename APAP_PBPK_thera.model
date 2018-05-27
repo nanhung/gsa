@@ -141,8 +141,8 @@ Km_AS; lnKm_AS = 10; # Km for AS transport out of hepatocyte
 mgkg_flag=1.; # If the flag is 1, we have a mg/kg dose
 
 # Oral Regimen
-OralDose_APAP_mgkg = 0.; lnOralDose_APAP_mgkg = log(2E-9);     # Oral Dose given (mg/kg)
-OralDose_APAP_mg = 0.;  lnOralDose_APAP_mg = log(2E-9);         # Oral Dose given (mg)
+OralDose_APAP_mgkg = 1;     # Oral Dose given (mg/kg)
+OralDose_APAP_mg = 1;       # Oral Dose given (mg)
 
 OralDur_APAP = 0.001;   # Oral Duration of chemical (hr)
 ODose_APAP_mg;  # Calculated Dose of APAP (mg)
@@ -510,13 +510,6 @@ Initialize {
 
 #fa = exp(lnfa);
 BW = exp(lnBW);
-
-# Inital Dosing
-#--------------
-OralDose_APAP_mgkg = exp(lnOralDose_APAP_mgkg);
-OralDose_APAP_mg = exp(lnOralDose_APAP_mg);
-IVDose_APAP_mgkg = exp(lnIVDose_APAP_mgkg);
-IVDose_APAP_mg = exp(lnIVDose_APAP_mg);
 
 # Chemical Specific Transport Params
 #-----------------------------------

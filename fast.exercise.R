@@ -277,10 +277,10 @@ parameters <- initParms(newParms=newParms)
 outnames <- Outputs
 
 ### Define Exposure
-mag <- 200 # Set input
+mag <- 100 # Set input
 period <- 1e10
 inittime <- 0 # Exposure start from 0
-exposuretime <- 0.01 # Exposure end at 4 hr
+exposuretime <- 0.02 # Exposure end at 4 hr
 
 # The output time points
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
@@ -289,7 +289,7 @@ mintime <- min(times)
 maxtime <- max(times)
 
 # Define exposure scenarios: exposure and non-exposure
-nperiods <- 1 
+nperiods <- 1
 
 col1 <- rep(inittime, 2 * nperiods)
 I <- 1:length(col1)
@@ -301,7 +301,9 @@ PerDose <- cbind(col1, rep(c(mag,0), length(col1)/2))
 
 # The matrix of periodic exposure
 PerDose
+
 Forcings1 <- list(PerDose)
+
 
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
 
@@ -467,12 +469,49 @@ parameters <- initParms(newParms = newParms)
 initState <- initStates(parms=NULL)
 outnames <- Outputs
 
-parameters["lnCLC_AG"]
+parameters["OralDose_APAP_mg"]
+parameters["ODose_APAP_mg"]
+parameters["ODose_APAP"]
+parameters["OralDur_APAP"]
+parameters["true_dose"]
 
+### Define Exposure
+mag <- 1000 # Set input
+period <- 1e10
+inittime <- 0 # Exposure start from 0
+exposuretime <- 0.02 # Exposure end at 4 hr
+
+# The output time points
 times <- seq(from = 0, to = 12, by = 0.2) # NEED ZERO!
+
+mintime <- min(times)
+maxtime <- max(times)
+
+# Define exposure scenarios: exposure and non-exposure
+nperiods <- 1
+col1 <- c(inittime, exposuretime)
+OralExp <- cbind(col1, rep(c(mag,0), length(col1)/2))
+
+IV <- 0 
+IVExp <- rbind(c(min(times), IV), c(max(times) + 1, 0))
+IVExp
+
+# The matrix of periodic exposure
+Forcings1 <- list(OralExp, IVExp)
+
+
 y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, nout=length(outnames),
-                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12) #
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12,
+                initforc="initforc",
+                forcings=Forcings1) #
 y[,"lnCPL_APAP_mcgL"]
+
+
+
+
+
+
+
 
 
 
