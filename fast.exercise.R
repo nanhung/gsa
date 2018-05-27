@@ -481,6 +481,7 @@ parameters["ODose_APAP_mg"]
 parameters["ODose_APAP"]
 parameters["OralDur_APAP"]
 parameters["true_dose"]
+parameters["lnCLC_APAP"]
 
 ### Define Exposure
 mag <- 1000 # Set input
@@ -534,10 +535,13 @@ r = 2.0 # exp(2.3)/exp(-2.3) ~ 100
 
 #
 library(EnvStats)
-factors <- c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
-             "SULT_Km_paps","SULT_VmaxC","UGT_Km","UGT_Ki",
-             "UGT_Km_GA","UGT_VmaxC","Km_AG","Vmax_AG","Km_AS",
-             "Vmax_AS","kGA_syn","kPAPS_syn","CLC_APAP","CLC_AG","CLC_AS")
+factors <- c("lnTg", "lnTp",
+             "lnCYP_Km","lnCYP_VmaxC",
+             "lnSULT_Km_apap","lnSULT_Ki","lnSULT_Km_paps","lnSULT_VmaxC",
+             "lnUGT_Km","lnUGT_Ki","lnUGT_Km_GA","lnUGT_VmaxC",
+             "lnKm_AG","lnVmax_AG","lnKm_AS","lnVmax_AS",
+             "lnkGA_syn","lnkPAPS_syn",
+             "lnCLC_APAP","lnCLC_AG","lnCLC_AS")
 q <- c("qtri","qtri","qtri","qunif",
        "qtri","qtri","qtri","qunif",
        "qtri","qtri","qtri","qunif",
@@ -567,73 +571,13 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
 
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
 
-x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
              initforc="initforc", forcings=Forcings1)
-
-solve_fun <- function(x, times = NULL, parameters, initParmsfun = NULL, initState, dllname,
-                      func, initfunc, outnames,
-                      method ="lsode", rtol=1e-8, atol=1e-12,
-                      model = NULL, lnparam = F, output, ...){
-  n <- length(x$s)
-  no.factors <- ifelse (class(x$factors) == "character", length(x$factors), x$factors)
-  replicate <- x$rep
-  out <- ifelse (is.null(times), 1, length(times))
-  y <- array(dim = c(n * no.factors, replicate, out), NA)
-  
-  if (is.null(model) == TRUE){
-    
-    # Specific time or variable
-    inputs = c(0, times) # NEED TIME AT ZERO
-    
-    for (i in 1 : dim(y)[2]) { # replicate
-      for (j in 1 : dim(y)[1]) { # Model evaluation
-        for (p in x$factors) {
-          parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
-        }
-        
-        if (!is.null(initParmsfun) == TRUE){
-          parms <- do.call(initParmsfun, list(parameters)) # Use the initParms function from _inits.R file, if the file had defined
-        } else {
-          stop("The 'initParmsfun' must be defined")
-          #          parms <- .C("getParms", # "getParms" must actually named in c file
-          #                      as.double(parameters),
-          #                      parms=double(length(parameters)),
-          #                      as.integer(length(parameters)))$parms
-          #          names(parms) <- names(parameters)
-        }
-        
-        # Integrate
-        tmp <- deSolve::ode(initState, inputs, parms = parms, outnames = outnames, nout = length(outnames),
-                            dllname = dllname, func = func, initfunc = initfunc, method = method,
-                            rtol=rtol, atol=atol, ...)
-        
-        for (k in 1 : dim(y)[3]) { #outputs
-          y[j,i,k] <- tmp[k+1, output] # skip zero
-        }
-      }
-    }
-  } else {
-    for (i in 1 : dim(y)[2]) { # Replicate
-      for (j in 1 : dim(y)[1]) { # Model evaluation
-        if (lnparam == T) { parameters <- exp(x$a[j,i,])}
-        else if (lnparam == F) { parameters <- x$a[j,i,]}
-        
-        if (is.null(times)) tmp <- model(parameters) else tmp <- model(parameters, times)
-        
-        for (k in 1 : dim(y)[3]) { # Output time
-          y[j,i,k] <- tmp[k]
-        }
-      }
-    }
-  }
-  dimnames(y)[[3]]<-times
-  return(y)
-}
-
-
+# user  system elapsed 
+# 3547.07    0.33 3556.34 
 
 
 
