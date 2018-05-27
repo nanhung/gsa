@@ -240,6 +240,9 @@ for (i in 2:7) {
 mName <- "ACAT_like"
 source("compile.R")
 compile(mName, model = T)
+
+# source(paste0(mName, "_inits.R")) for windows
+# dyn.load(paste0(mName, .Platform$dynlib.ext))
 newParms <- c(BDM = 70,
               MM = 180.17, 
               f_Abs_jeju  = 1,
@@ -390,6 +393,9 @@ times <- seq(from = 0.01, to = 8.01, by = 0.4)
 outnames <- Outputs
 
 x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
+
+newState <- c(A_stom_lu = 1)
+initState <- initStates(newStates=newState)
 y<-solve_fun(x, times, parameters = parameters, initState = initState, 
              outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
@@ -500,14 +506,72 @@ IVExp
 Forcings1 <- list(OralExp, IVExp)
 
 
-y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, nout=length(outnames),
-                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12,
+y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, 
+                nout=length(outnames),
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
+                rtol = 1e-08, atol = 1e-12,
                 initforc="initforc",
                 forcings=Forcings1) #
 y[,"lnCPL_APAP_mcgL"]
 
+##
+#Nominal value
+Tg <- log(0.23)
+Tp <- log(0.033)
+CYP_Km <- log(130)
+SULT_Km_apap <- log(300)
+SULT_Ki <- log(526)
+SULT_Km_paps <- log(0.5)
+UGT_Km <- log(6.0e3)
+UGT_Ki <- log(5.8e4)
+UGT_Km_GA <-log(0.5)
+Km_AG <- log(1.99e4)
+Km_AS <- log(2.29e4)
 
+r = 2.0 # exp(2.3)/exp(-2.3) ~ 100
+#r = 2.0 # exp(2.0)/exp(-2.0) ~ 54.6
+#r = 1.8 # exp(1.8)/exp(-1.8) ~ 36.6
 
+#
+library(EnvStats)
+factors <- c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
+             "SULT_Km_paps","SULT_VmaxC","UGT_Km","UGT_Ki",
+             "UGT_Km_GA","UGT_VmaxC","Km_AG","Vmax_AG","Km_AS",
+             "Vmax_AS","kGA_syn","kPAPS_syn","CLC_APAP","CLC_AG","CLC_AS")
+q <- c("qtri","qtri","qtri","qunif",
+       "qtri","qtri","qtri","qunif",
+       "qtri","qtri","qtri","qunif",
+       "qtri","qunif","qtri","qunif",
+       "qunif","qunif","qunif","qunif","qunif")
+q.arg <-list(list(Tg-r, Tg+r, Tg),
+             list(Tp-r, Tp+r, Tp),
+             list(CYP_Km-r, CYP_Km+r, CYP_Km),
+             list(-2., 5.),
+             list(SULT_Km_apap-r, SULT_Km_apap+r, SULT_Km_apap),
+             list(SULT_Ki-r, SULT_Ki+r, SULT_Ki),
+             list(SULT_Km_paps-r, SULT_Km_paps+r, SULT_Km_paps),
+             list(0, 10), #U(0.15)
+             list(UGT_Km-r, UGT_Km+r, UGT_Km),
+             list(UGT_Ki-r, UGT_Ki+r, UGT_Ki),
+             list(UGT_Km_GA-r, UGT_Km_GA+r, UGT_Km_GA),
+             list(0, 10), #U(0.15)
+             list(Km_AG-r, Km_AG+r, Km_AG),
+             list(7., 15),
+             list(Km_AS-r, Km_AS+r, Km_AS),
+             list(7., 15),
+             list(0., 13),
+             list(0., 13),
+             list(-6., 1),
+             list(-6., 1),
+             list(-6., 1))
+
+times <- seq(from = 0.01, to = 12.01, by = 0.4)
+
+x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms", 
+             initState = initState, outnames = outnames, dllname = mName,
+             func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
+             initforc="initforc", forcings=Forcings1)
 
 
 
