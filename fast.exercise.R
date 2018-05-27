@@ -397,8 +397,9 @@ x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0
 newState <- c(A_stom_lu = 1)
 initState <- initStates(newStates=newState)
 y<-solve_fun(x, times, parameters = parameters, initState = initState, 
-             outnames = outnames, dllname = mName,
+             outnames = outnames, dllname = mName, initParmsfun = "initParms",
              func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
+
 #user   system  elapsed 
 #3476.603   33.605 3513.944 
 pksim(y)
@@ -506,9 +507,8 @@ IVExp
 Forcings1 <- list(OralExp, IVExp)
 
 
-y<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", outnames = outnames, 
-                nout=length(outnames),
-                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
+y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, 
+                nout=length(outnames), dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
                 rtol = 1e-08, atol = 1e-12,
                 initforc="initforc",
                 forcings=Forcings1) #
@@ -568,11 +568,70 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
 
 x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms", 
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
              initforc="initforc", forcings=Forcings1)
 
+solve_fun <- function(x, times = NULL, parameters, initParmsfun = NULL, initState, dllname,
+                      func, initfunc, outnames,
+                      method ="lsode", rtol=1e-8, atol=1e-12,
+                      model = NULL, lnparam = F, output, ...){
+  n <- length(x$s)
+  no.factors <- ifelse (class(x$factors) == "character", length(x$factors), x$factors)
+  replicate <- x$rep
+  out <- ifelse (is.null(times), 1, length(times))
+  y <- array(dim = c(n * no.factors, replicate, out), NA)
+  
+  if (is.null(model) == TRUE){
+    
+    # Specific time or variable
+    inputs = c(0, times) # NEED TIME AT ZERO
+    
+    for (i in 1 : dim(y)[2]) { # replicate
+      for (j in 1 : dim(y)[1]) { # Model evaluation
+        for (p in x$factors) {
+          parameters[p] <- ifelse (lnparam == T,  exp(x$a[j,i,p]), x$a[j,i,p])
+        }
+        
+        if (!is.null(initParmsfun) == TRUE){
+          parms <- do.call(initParmsfun, list(parameters)) # Use the initParms function from _inits.R file, if the file had defined
+        } else {
+          stop("The 'initParmsfun' must be defined")
+          #          parms <- .C("getParms", # "getParms" must actually named in c file
+          #                      as.double(parameters),
+          #                      parms=double(length(parameters)),
+          #                      as.integer(length(parameters)))$parms
+          #          names(parms) <- names(parameters)
+        }
+        
+        # Integrate
+        tmp <- deSolve::ode(initState, inputs, parms = parms, outnames = outnames, nout = length(outnames),
+                            dllname = dllname, func = func, initfunc = initfunc, method = method,
+                            rtol=rtol, atol=atol, ...)
+        
+        for (k in 1 : dim(y)[3]) { #outputs
+          y[j,i,k] <- tmp[k+1, output] # skip zero
+        }
+      }
+    }
+  } else {
+    for (i in 1 : dim(y)[2]) { # Replicate
+      for (j in 1 : dim(y)[1]) { # Model evaluation
+        if (lnparam == T) { parameters <- exp(x$a[j,i,])}
+        else if (lnparam == F) { parameters <- x$a[j,i,]}
+        
+        if (is.null(times)) tmp <- model(parameters) else tmp <- model(parameters, times)
+        
+        for (k in 1 : dim(y)[3]) { # Output time
+          y[j,i,k] <- tmp[k]
+        }
+      }
+    }
+  }
+  dimnames(y)[[3]]<-times
+  return(y)
+}
 
 
 
