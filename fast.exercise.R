@@ -571,7 +571,7 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
 
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
 
-x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
