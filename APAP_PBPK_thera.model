@@ -481,6 +481,7 @@ CU_APAP_mcg, CU_AG_mcg, CU_AS_mcg,
 f_abs,
 lntrue_dose,
 lnODose_APAP,
+lnfa,
 
 lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL,
 lnCU_APAP_mcg, lnCU_AG_mcg, lnCU_AS_mcg,
@@ -862,6 +863,8 @@ CU_AS_mcg = AU_AS*MW_AS;
 f_abs = AST_to_Gut_APAP/true_dose;
 lntrue_dose = log(true_dose); 
 lnODose_APAP = log(ODose_APAP);
+lnfa = log(fa);
+
 
 lnCPL_APAP_mcgL = (CPL_APAP_mcgL > 0 ? log(CPL_APAP_mcgL):-20.); # APAP in Plasma
 lnCPL_AG_mcgL = (CPL_AG_mcgL > 0 ? log(CPL_AG_mcgL):-20.); # AG in Plasma

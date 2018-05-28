@@ -36,10 +36,9 @@ IVExp_APAP = 0.;
 IVDose_APAP_mg = 0.;
 lnIVDose_APAP_mg = 0.;
 
+
 PrintStep(lnODose_APAP, 0.2, 12, 0.2);
-#PrintStep(lntrue_dose, 0.2, 12, 0.2);
-#PrintStep(AST_to_Gut_APAP, 0.2, 12, 0.2);
-#PrintStep(f_abs, 0.2, 12, 0.2);
+#PrintStep(AST_Oral_APAP, 0.2, 12, 0.2);
 #Print(lnCPL_APAP_mcgL, 0.5, 1, 1.5, 2 ,4, 6, 8, 12);  
 #Print(lnCPL_AG_mcgL, 0.5, 1, 1.5, 2 ,4, 6, 8, 12);
 #Print(lnCPL_AS_mcgL, 0.5, 1, 1.5, 2 ,4, 6, 8, 12);

@@ -444,7 +444,7 @@ check(x, SI = 0.05, CI = 0.05)
 plot(x, cut.off = 0.05)
 
 ## APAP_PBPK ####
-
+# Use MCSim check
 MCnewParms <- c(lnTg = -1.0,
                 lnTp = -2.85,
                 lnCYP_Km = 4.78,
@@ -479,7 +479,8 @@ source("compile.R")
 compile(mName, model = T)
 
 newParms <- c(mgkg_flag = 0,
-              ODose_APAP_mg = 1000,
+              OralDose_APAP_mg = 1000,
+              OralDur_APAP = 0.75,
               lnTg = -1.0,
               lnTp = -2.85,
               lnCYP_Km = 4.78,
@@ -497,13 +498,10 @@ newParms <- c(mgkg_flag = 0,
               lnKm_AS = 10.0,
               lnVmax_AS = 13.7,
               lnkGA_syn = 13.0,
-              lnkPAPS_syn = 13.0,
+              lnkPAPS_syn = 1.0,
               lnCLC_APAP = -5.5,
               lnCLC_AG = -2.00,
               lnCLC_AS = -2.00)
-
-
-
 
 newStates <- c(AL_PAPS = 1, AL_GA = 1)
 
@@ -513,17 +511,14 @@ parameters <- initParms(newParms = newParms)
 initState <- initStates(parms=NULL, newStates = newStates)
 outnames <- Outputs
 
-parameters["ODose_APAP_mg"]
 parameters["ODose_APAP"]
-parameters["OralDur_APAP"]
-parameters["true_dose"]
 parameters["kPAPS_syn"]
 
 ### Define Exposure
-mag <- 237.5168 # Set input
+mag <- 75 # Set input
 period <- 1e10
 inittime <- 0 # Exposure start from 0
-exposuretime <- 0.02
+exposuretime <- 0.75
 
 # The output time points
 times <- seq(from = 0, to = 12, by = 0.2) # NEED ZERO!
@@ -549,9 +544,10 @@ y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames,
                 rtol = 1e-08, atol = 1e-12,
                 initforc="initforc",
                 forcings=Forcings1) #
-y[,"AST_to_Gut_APAP"]
+
+#y[,"AST_Oral_APAP"]
 y[,"lnCPL_APAP_mcgL"]
-#y[,"AL_PAPS"]
+
 
 ##
 #Nominal value
