@@ -498,7 +498,7 @@ newParms <- c(mgkg_flag = 0,
               lnKm_AS = 10.0,
               lnVmax_AS = 13.7,
               lnkGA_syn = 13.0,
-              lnkPAPS_syn = 1.0,
+              lnkPAPS_syn = 13.0,
               lnCLC_APAP = -5.5,
               lnCLC_AG = -2.00,
               lnCLC_AS = -2.00)
@@ -515,7 +515,7 @@ parameters["ODose_APAP"]
 parameters["kPAPS_syn"]
 
 ### Define Exposure
-mag <- 75 # Set input
+mag <- 2 # Set input
 period <- 1e10
 inittime <- 0 # Exposure start from 0
 exposuretime <- 0.75
