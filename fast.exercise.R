@@ -427,8 +427,8 @@ dev.off()
 
 #load(file = "acat_2000.rda")
 #load(file = "acat_2000y.rda")
-save(x, file = "acat_2000.rda")
-save(y, file = "acat_2000y.rda")
+#save(x, file = "acat_2000.rda")
+#save(y, file = "acat_2000y.rda")
 
 pksim(y)
 pksim(y, log = T)
@@ -466,12 +466,16 @@ newParms <- c(mgkg_flag = 0,
               lnVmax_AG = 10.8,
               lnKm_AS = 10.0,
               lnVmax_AS = 13.7,
-              lnkGA_syn = 11.3,
-              lnkPAPS_syn = 11.0,
+              lnkGA_syn = 11.0,
+              lnkPAPS_syn = 13.0,
               lnCLC_APAP = -5.5,
               lnCLC_AG = -2.00,
               lnCLC_AS = -2.00)
 
+newState <- c(AL_PAPS = 1, AL_GA = 1)
+
+# Be careful the parms <- within(as.list(parms) may cause the problem 
+# in parameter definition
 parameters <- initParms(newParms = newParms)
 initState <- initStates(parms=NULL)
 outnames <- Outputs
@@ -481,7 +485,7 @@ parameters["ODose_APAP_mg"]
 parameters["ODose_APAP"]
 parameters["OralDur_APAP"]
 parameters["true_dose"]
-parameters["lnCLC_APAP"]
+parameters["kPAPS_syn"]
 
 ### Define Exposure
 mag <- 1000 # Set input
@@ -569,9 +573,17 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(-6., 1),
              list(-6., 1))
 
+
+factors <- c("lnkGA_syn","lnkPAPS_syn")
+q <- "qunif"
+q.arg <-list(list(0., 13),
+             list(0., 13))
+
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 4, conf = 0.8) 
+
+set.seed(1234)
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
@@ -579,8 +591,14 @@ y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms",
 # user  system elapsed 
 # 3547.07    0.33 3556.34 
 
+tell2(x,y0)
+tell2(x,y1)
+tell2(x,y2)
 
-
+#save(x, file = "APAP_4000.rda")
+#save(y0, file = "APAP_4000y0.rda")
+#save(y1, file = "APAP_4000y1.rda")
+#save(y2, file = "APAP_4000y2.rda")
 
 # X <- tidy_index(x, index = "SI") 
 heat_check(x, index = "SI") 

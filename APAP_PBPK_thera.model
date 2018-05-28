@@ -22,7 +22,7 @@ MW_AS = 231.22;     # Molecular Weight of APAP-suphate
 
 # Anatomical Parameters
 #---------------------- 
-BW    = 70.; lnBW = log(70.);       # Body weight (kg).
+BW; lnBW = 4.0;       # Body weight (kg).
 QCC   = 16.2;         # Cardiac output (L/hr/kg^0.75).
 
 # Fractional volumes (fraction of body weight).
@@ -49,8 +49,8 @@ QRC = 0.215;           # Rapidly Perfused (1 -  everything else)
 
 # Chemical Specific Transport Params
 #-----------------------------------
-kSG_Vm = 2332.5; lnkSG_Vm = log(2332.5);     # Kmax for abs to portal
-kSG_Km = 1765.49; lnkSG_Km = log(1765.49);     # Km for abs to portal
+kSG_Vm; lnkSG_Vm = 7.75;     # Kmax for abs to portal
+kSG_Km; lnkSG_Km = 7.47;     # Km for abs to portal
 Tg; lnTg = -1.0;
 Tp; lnTp = -3.0;
 
@@ -141,8 +141,8 @@ Km_AS; lnKm_AS = 10; # Km for AS transport out of hepatocyte
 mgkg_flag=1.; # If the flag is 1, we have a mg/kg dose
 
 # Oral Regimen
-OralDose_APAP_mgkg = 1;     # Oral Dose given (mg/kg)
-OralDose_APAP_mg = 1;       # Oral Dose given (mg)
+OralDose_APAP_mgkg = 1; lnOralDose_APAP_mgkg; # Oral Dose given (mg/kg)
+OralDose_APAP_mg = 1; lnOralDose_APAP_mg; # Oral Dose given (mg)
 
 OralDur_APAP = 0.001;   # Oral Duration of chemical (hr)
 ODose_APAP_mg;  # Calculated Dose of APAP (mg)
@@ -151,8 +151,8 @@ ODose_APAP;     # Dose of chemical (muM/hr)
 true_dose;      # Calculated dose (muM)
 
 # IV Regimen
-IVDose_APAP_mgkg = 0.; lnIVDose_APAP_mgkg = log(2E-9);      # IV Dose given (mg/kg)
-IVDose_APAP_mg = 0.; lnIVDose_APAP_mg = log(2E-9);      # IV Dose given (mg)
+IVDose_APAP_mgkg = 0.; lnIVDose_APAP_mgkg;      # IV Dose given (mg/kg)
+IVDose_APAP_mg = 0.; lnIVDose_APAP_mg;      # IV Dose given (mg)
 
 IVDur_APAP = 0.001;     # IV Duration (hr): Default is 5 min duration
 IVD_APAP_mg; # Calculated Dose of APAP (mg) 
@@ -646,9 +646,8 @@ SULT_Vmax = SULT_VmaxC*pow(BW, 0.75);
 #---------------------------------------
 # Initialize PAPSn and GA at 100% at t=0
 #---------------------------------------
-AL_PAPS = 1.;
-AL_GA = 1.;
-
+# AL_PAPS = 1.; Initial state 
+# AL_GA = 1.;
 
 };
 #endregion

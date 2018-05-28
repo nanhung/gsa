@@ -8,9 +8,14 @@ SetPoints (
 "apap_setpoint.csv", 
 "apap_setpoint.dat", 
 0,
-lnTg, lnTp, lnCYP_Km, lnCYP_VmaxC, lnSULT_Km_apap, lnSULT_Ki, lnSULT_Km_paps, 
-lnSULT_VmaxC, lnUGT_Km, lnUGT_Ki, lnUGT_Km_GA, lnUGT_VmaxC, lnKm_AG,
-lnVmax_AG, lnKm_AS, lnVmax_AS, lnkGA_syn, lnkPAPS_syn, lnCLC_APAP, lnCLC_AG, lnCLC_AS
+lnTg, lnTp, 
+lnCYP_Km, lnCYP_VmaxC, 
+lnSULT_Km_apap, lnSULT_Ki, lnSULT_Km_paps, lnSULT_VmaxC, 
+lnUGT_Km, lnUGT_Ki, lnUGT_Km_GA, lnUGT_VmaxC, 
+lnKm_AG, lnVmax_AG, 
+lnKm_AS, lnVmax_AS, 
+lnkGA_syn, lnkPAPS_syn, 
+lnCLC_APAP, lnCLC_AG, lnCLC_AS
 );
 
 #---------------------------------------------------------

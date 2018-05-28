@@ -56,11 +56,21 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(-6., 1),
              list(-6., 1))
 
-n <- 8192
-eFAST <- fast99(model = NULL, factors = 21, n = n, M = 4, q = q, q.arg = q.arg)
+Parameter <- c("Tg", "Tp",
+               "CYP_Km","CYP_VmaxC",
+               "SULT_Km_apap","SULT_Ki", "SULT_Km_paps","SULT_VmaxC",
+               "UGT_Km","UGT_Ki", "UGT_Km_GA","UGT_VmaxC",
+               "Km_AG","Vmax_AG",
+               "Km_AS","Vmax_AS",
+               "kGA_syn","kPAPS_syn",
+               "CLC_APAP","CLC_AG","CLC_AS")
+
+n <- 4000
+eFAST <- fast99(model = NULL, factors = Parameter, n = n, M = 4, q = q, q.arg = q.arg)
 eFAST.APAP.df <- cbind(1, eFAST$X)
 write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
-system("./mcsim.apap.pbpk_v2 apap.setpoint_v1.in")
+#system("./mcsim.apap.pbpk_v2 apap.setpoint_v1.in")
+system("./mcsim.APAP_PBPK_thera apap.setpoint_v1.in")
 eFA.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
 
 eFA.APAP.1.1 <- tell(eFAST, eFA.APAP.mcsim.df[,23])
@@ -87,11 +97,6 @@ eFA.APAP.3.5 <- tell(eFAST, eFA.APAP.mcsim.df[,43])
 eFA.APAP.3.6 <- tell(eFAST, eFA.APAP.mcsim.df[,44])
 eFA.APAP.3.7 <- tell(eFAST, eFA.APAP.mcsim.df[,45])
 eFA.APAP.3.8 <- tell(eFAST, eFA.APAP.mcsim.df[,46])
-
-Parameter <- c("Tg", "Tp","CYP_Km","CYP_VmaxC","SULT_Km_apap","SULT_Ki",
-               "SULT_Km_paps","SULT_VmaxC","UGT_Km","UGT_Ki",
-               "UGT_Km_GA","UGT_VmaxC","Km_AG","Vmax_AG","Km_AS",
-               "Vmax_AS","kGA_syn","kPAPS_syn","CLC_APAP","CLC_AG","CLC_AS")
 
 # Create the eFAST data frame for use
 eFAST_main <- function(data){
