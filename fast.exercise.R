@@ -444,6 +444,36 @@ check(x, SI = 0.05, CI = 0.05)
 plot(x, cut.off = 0.05)
 
 ## APAP_PBPK ####
+
+MCnewParms <- c(lnTg = -1.0,
+                lnTp = -2.85,
+                lnCYP_Km = 4.78,
+                lnCYP_VmaxC = 0,
+                lnSULT_Km_apap = 6.9,
+                lnSULT_Ki = 6.6,
+                lnSULT_Km_paps = -0.4,
+                lnSULT_VmaxC = 6.0,
+                lnUGT_Km = 9.33,
+                lnUGT_Ki = 10.0,
+                lnUGT_Km_GA = -0.03,
+                lnUGT_VmaxC = 9.39,
+                lnKm_AG = 10.3,
+                lnVmax_AG = 10.8,
+                lnKm_AS = 10.0,
+                lnVmax_AS = 13.7,
+                lnkGA_syn = 13.0,
+                lnkPAPS_syn = 13.0,
+                lnCLC_APAP = -5.5,
+                lnCLC_AG = -2.00,
+                lnCLC_AS = -2.00)
+
+eFAST.APAP.df <- rbind(MCnewParms, MCnewParms)
+write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=T, sep="\t")
+system("./mcsim.APAP_PBPK_thera apap.setpoint_v1.in")
+eFA.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
+eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
+
+#
 mName <- "APAP_PBPK_thera"
 source("compile.R")
 compile(mName, model = T)
@@ -466,21 +496,23 @@ newParms <- c(mgkg_flag = 0,
               lnVmax_AG = 10.8,
               lnKm_AS = 10.0,
               lnVmax_AS = 13.7,
-              lnkGA_syn = 11.0,
+              lnkGA_syn = 13.0,
               lnkPAPS_syn = 13.0,
               lnCLC_APAP = -5.5,
               lnCLC_AG = -2.00,
               lnCLC_AS = -2.00)
 
-newState <- c(AL_PAPS = 1, AL_GA = 1)
+
+
+
+newStates <- c(AL_PAPS = 1, AL_GA = 1)
 
 # Be careful the parms <- within(as.list(parms) may cause the problem 
 # in parameter definition
 parameters <- initParms(newParms = newParms)
-initState <- initStates(parms=NULL)
+initState <- initStates(parms=NULL, newStates = newStates)
 outnames <- Outputs
 
-parameters["OralDose_APAP_mg"]
 parameters["ODose_APAP_mg"]
 parameters["ODose_APAP"]
 parameters["OralDur_APAP"]
@@ -488,10 +520,10 @@ parameters["true_dose"]
 parameters["kPAPS_syn"]
 
 ### Define Exposure
-mag <- 1000 # Set input
+mag <- 237.5168 # Set input
 period <- 1e10
 inittime <- 0 # Exposure start from 0
-exposuretime <- 0.02 # Exposure end at 4 hr
+exposuretime <- 0.02
 
 # The output time points
 times <- seq(from = 0, to = 12, by = 0.2) # NEED ZERO!
@@ -517,7 +549,9 @@ y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames,
                 rtol = 1e-08, atol = 1e-12,
                 initforc="initforc",
                 forcings=Forcings1) #
+y[,"AST_to_Gut_APAP"]
 y[,"lnCPL_APAP_mcgL"]
+#y[,"AL_PAPS"]
 
 ##
 #Nominal value
