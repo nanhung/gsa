@@ -3,8 +3,8 @@ initParms <- function(newParms = NULL) {
     MW_APAP = 151.17,
     MW_AG = 327.28,
     MW_AS = 231.22,
-    BW = 70.,
-    lnBW = 0.0,
+    BW = 0,
+    lnBW = 4.0,
     QCC = 16.2,
     VFC = 0.214,
     VKC = 0.0044,
@@ -22,10 +22,10 @@ initParms <- function(newParms = NULL) {
     QMC = 0.191,
     QSC = 0.14,
     QRC = 0.215,
-    kSG_Vm = 2332.5,
-    lnkSG_Vm = 0.0,
-    kSG_Km = 1765.49,
-    lnkSG_Km = 0.0,
+    kSG_Vm = 0,
+    lnkSG_Vm = 7.75,
+    kSG_Km = 0,
+    lnkSG_Km = 7.47,
     Tg = 0,
     lnTg = -1.0,
     Tp = 0,
@@ -121,16 +121,18 @@ initParms <- function(newParms = NULL) {
     lnKm_AS = 10,
     mgkg_flag = 1.,
     OralDose_APAP_mgkg = 1,
+    lnOralDose_APAP_mgkg = 0,
     OralDose_APAP_mg = 1,
+    lnOralDose_APAP_mg = 0,
     OralDur_APAP = 0.001,
     ODose_APAP_mg = 0,
     fa = 0,
     ODose_APAP = 0,
     true_dose = 0,
     IVDose_APAP_mgkg = 0.,
-    lnIVDose_APAP_mgkg = 0.0,
+    lnIVDose_APAP_mgkg = 0,
     IVDose_APAP_mg = 0.,
-    lnIVDose_APAP_mg = 0.0,
+    lnIVDose_APAP_mg = 0,
     IVDur_APAP = 0.001,
     IVD_APAP_mg = 0,
     IVDR_APAP = 0,
@@ -383,9 +385,6 @@ initParms <- function(newParms = NULL) {
   }
 
   parms <- within(as.list(parms), {
-    lnBW = log(70.);
-    lnkSG_Vm = log(2332.5);
-    lnkSG_Km = log(1765.49);
     lnBP_APAP = log(0.9);
     lnPF_APAP = log(0.447);
     lnPG_APAP = log(0.907);
@@ -410,8 +409,6 @@ initParms <- function(newParms = NULL) {
     lnPS_AG = log(0.351);
     lnkPAPS = log(0.018);
     lnkGA = log(0.008);
-    lnIVDose_APAP_mgkg = log(2E-9);
-    lnIVDose_APAP_mg = log(2E-9);
   })
   out <- .C("getParms",  as.double(parms),
             out=double(length(parms)),
@@ -457,6 +454,9 @@ Outputs <- c(
     "CU_AG_mcg",
     "CU_AS_mcg",
     "f_abs",
+    "lntrue_dose",
+    "lnODose_APAP",
+    "lnfa",
     "lnCPL_APAP_mcgL",
     "lnCPL_AG_mcgL",
     "lnCPL_AS_mcgL",

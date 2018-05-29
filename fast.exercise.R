@@ -470,7 +470,7 @@ MCnewParms <- c(lnTg = -1.0,
 eFAST.APAP.df <- rbind(MCnewParms, MCnewParms)
 write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=T, sep="\t")
 system("./mcsim.APAP_PBPK_thera apap.setpoint_v1.in")
-eFA.APAP.mcsim.df <- as.data.frame(fread("apap_setpoint.csv", head = T))
+eFA.APAP.mcsim.df <- as.data.frame(data.table::fread("apap_setpoint.csv", head = T))
 eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
 #
@@ -537,8 +537,6 @@ IVExp
 
 # The matrix of periodic exposure
 Forcings1 <- list(OralExp, IVExp)
-
-
 y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, 
                 nout=length(outnames), dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
                 rtol = 1e-08, atol = 1e-12,
@@ -606,13 +604,15 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
              initforc="initforc", forcings=Forcings1)
-# user  system elapsed 
-# 3547.07    0.33 3556.34 
+#user   system  elapsed 
+#4803.974    9.245 4827.099 
+#user   system  elapsed 
+#8955.221    1.935 8968.250 
 
 tell2(x,y0)
 tell2(x,y1)
