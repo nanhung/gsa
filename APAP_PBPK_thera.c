@@ -3,13 +3,13 @@
 
    Model File:  APAP_PBPK_thera.model
 
-   Date:  Tue May 29 09:52:44 2018
+   Date:  Tue May 29 15:47:05 2018
 
-   Created by:  "mod v5.6.6"
+   Created by:  "mod v6.0.0"
     -- a model preprocessor by Don Maszle
    ___________________________________________________
 
-   Copyright (c) 1993-2017 Free Software Foundation, Inc.
+   Copyright (c) 1993-2018 Free Software Foundation, Inc.
 
    Model calculations for compartmental model:
 

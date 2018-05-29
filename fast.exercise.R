@@ -605,11 +605,18 @@ times <- seq(from = 0.01, to = 12.01, by = 0.4)
 output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 200, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+#x<-rfast99(factors = factors, n =200, q = q, q.arg = q.arg) 
+x<-rfast99(factors = factors, n =200, q = q, q.arg = q.arg, rep = 3, conf = 0.9) 
+
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
              initforc="initforc", forcings=Forcings1)
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
+             initState = initState, outnames = outnames, dllname = mName,
+             func = "derivs", initfunc = "initmod", output = output, method = "lsode",
+             initforc="initforc", forcings=Forcings1)
+
 #user   system  elapsed 
 #4803.974    9.245 4827.099 
 #user   system  elapsed 

@@ -58,13 +58,18 @@ solve_fun <- function(x, times = NULL, parameters, initParmsfun = NULL, initStat
     }
   }
   dimnames(y)[[3]]<-times
+  dimnames(y)[[4]]<-output
   return(y)
 }
 
-
-pksim <- function(y, variable = 1, log = F, legend = T, ...){
-  times <- as.numeric(colnames(y[,1,,variable]))
-  quantY <- apply(y, 3, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
+###########
+pksim <- function(y, varb = 1, log = F, legend = T, ...){
+  times <- as.numeric(colnames(y[,1,,varb]))
+  
+  if (dim(y)[2] == 1){
+    quantY <- apply(y[,,,varb], 2, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
+  } else quantY <- apply(y[,,,varb], 3, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
+  
   ytck <- pretty(c(min(quantY,na.rm=TRUE),max(quantY,na.rm=TRUE)))
   
   if (log == T){
@@ -99,4 +104,247 @@ pksim <- function(y, variable = 1, log = F, legend = T, ...){
            fill = adjustcolor(c(NA, 'black', 'grey30','grey'),
                               alpha.f = 0.5), border = NA, cex = 0.7)
   }
+}
+
+
+##################
+tell2 <- function(x, y){
+  
+  id <- deparse(substitute(x))
+  x$mSI <- x$iSI <- x$tSI <- x$mCI <- x$iCI <- x$tCI <- array(dim = c(dim(y)[3], length(x$factors), dim(y)[4]), NA) #c(tim-points, factors, variables) 
+  variables <- dimnames(y)[[4]]
+    
+  if (dim(y)[3] == 1){
+    names(x$mSI) <- names(x$iSI) <- names(x$tSI) <- names(x$mCI) <- names(x$iCI) <- names(x$tCI) <- dimnames(x$a)[[3]]
+  } else {
+    dimnames(x$mSI)[[1]] <- dimnames(x$iSI)[[1]] <- dimnames(x$tSI)[[1]] <- dimnames(x$mCI)[[1]] <- dimnames(x$iCI)[[1]] <- dimnames(x$tCI)[[1]] <- dimnames(y)[[3]] # time-points
+    dimnames(x$mSI)[[2]] <- dimnames(x$iSI)[[2]] <- dimnames(x$tSI)[[2]] <- dimnames(x$mCI)[[2]] <- dimnames(x$iCI)[[2]] <- dimnames(x$tCI)[[2]] <- x$factors
+    dimnames(x$mSI)[[3]] <- dimnames(x$iSI)[[3]] <- dimnames(x$tSI)[[3]] <- dimnames(x$mCI)[[3]] <- dimnames(x$iCI)[[3]] <- dimnames(x$tCI)[[3]] <- variables
+  }
+  
+  
+  if (dim(y)[3] == 1){ # one time point
+    X <- tell.rfast99(x, y[,,1,variable])
+    x$mSI <- X$S[,"original"]
+    x$iSI <- X$I[,"original"]
+    x$tSI <- X$T[,"original"]
+    x$mCI <- X$S[,"max. c.i."] - X$S[,"min. c.i."]
+    x$iCI <- X$I[,"max. c.i."] - X$I[,"min. c.i."]
+    x$tCI <- X$T[,"max. c.i."] - X$T[,"min. c.i."]
+  } else {
+    
+      for (k in variables){ # variables
+        for ( i in 1:length(dimnames(y)[[3]])){  # time-points
+          X <- tell.rfast99(x, y[,,i,k])
+          x$mSI[i,,k] <- X$S[,"original"]
+          x$iSI[i,,k] <- X$I[,"original"]
+          x$tSI[i,,k] <- X$T[,"original"]
+          x$mCI[i,,k] <- X$S[,"max. c.i."] - X$S[,"min. c.i."]
+          x$iCI[i,,k] <- X$I[,"max. c.i."] - X$I[,"min. c.i."]
+          x$tCI[i,,k] <- X$T[,"max. c.i."] - X$T[,"min. c.i."]
+        }
+      }
+    }
+  
+  x$y<-y
+  x$S<-NULL
+  x$I<-NULL
+  x$T<-NULL
+  
+  assign(id, x, parent.frame())
+}
+
+tell.rfast99 <- function(x, y = NULL) {
+  
+  
+  id <- deparse(substitute(x))
+  
+  if (! is.null(y)) {
+    x$y <- y
+  } else if (is.null(x$y)) {
+    stop("y not found")
+  }
+  
+  p <- dim(x$a)[3]
+  n <- length(x$s)
+  
+  V <- array(numeric(p), dim = c(p, x$rep))
+  D1 <- array(numeric(p), dim = c(p, x$rep))
+  Dt <- array(numeric(p), dim = c(p, x$rep))
+  
+  for (j in 1 : x$rep){
+    for (i in 1 : p) {
+      l <- seq((i - 1) * n + 1, i * n)
+      f <- fft(x$y[l, j], inverse = FALSE)
+      Sp <- ( Mod(f[2 : (n / 2)]) / n )^2
+      V[i, j] <- 2 * sum(Sp)
+      D1[i, j] <- 2 * sum(Sp[(1 : x$M) * x$omega[1]])
+      Dt[i, j] <- 2 * sum(Sp[1 : (x$omega[1] / 2)])
+    }
+  }
+  
+  S_original <- apply(D1 / V, 1, mean)
+  S_se <- apply(D1 / V, 1, function(x) sqrt(var(x)/length(x)))
+  S_min_ci <- apply(D1 / V, 1, quantile, probs= c((1-x$conf)/2))
+  S_max_ci <- apply(D1 / V, 1, quantile, probs= c(1-(1-x$conf)/2))
+  S <- data.frame(S_original, S_se, S_min_ci, S_max_ci)
+  
+  T_original <- apply(1 - Dt / V, 1, mean)
+  T_se <- apply(1 - Dt / V, 1, function(x) sqrt(var(x)/length(x)))
+  T_min_ci <- apply(1 - Dt / V, 1, quantile, probs= c((1-x$conf)/2))
+  T_max_ci <- apply(1 - Dt / V, 1, quantile, probs= c(1-(1-x$conf)/2))
+  T <- data.frame(T_original, T_se, T_min_ci, T_max_ci)
+  
+  I_original <- apply(1 - Dt / V - D1 / V, 1, mean)
+  I_se <- apply(1 - Dt / V - D1 / V, 1, function(x) sqrt(var(x)/length(x)))
+  I_min_ci <- apply(1 - Dt / V - D1 / V, 1, quantile, probs= c((1-x$conf)/2))
+  I_max_ci <- apply(1 - Dt / V - D1 / V, 1, quantile, probs= c(1-(1-x$conf)/2))
+  I <- data.frame(I_original, I_se, I_min_ci, I_max_ci)
+  
+  names(I) <- names(S) <- names(T) <- c("original", "std. error", "min. c.i.", "max. c.i.")
+  row.names(I) <- row.names(S) <- row.names(T) <- dimnames(x$a)[[3]]
+  
+  x$V <- V
+  x$D1 <- D1
+  x$Dt <- Dt
+  x$S <- S
+  x$T <- T
+  x$I <- I
+  
+  assign(id, x, parent.frame())
+}
+
+
+#############
+
+plot.rfast99 <- function(x, varb = 1, cut.off = F, ...){
+  
+  mSI <- x$mSI[,,varb]
+  iSI <- x$tSI[,,varb]
+  tSI <- x$tSI[,,varb]
+  mCI <- x$mCI[,,varb]
+  iCI <- x$tCI[,,varb]
+  tCI <- x$tCI[,,varb]
+  
+  if(is.matrix(mSI)){
+    
+    nv <- length(colnames(tSI))
+    nc <- ceiling(sqrt(nv))
+    nr <- ceiling(nv/nc)
+    
+    times <- row.names(tSI)
+    
+    old.par <- par(no.readonly = TRUE)
+    par(mfrow = c(nr, nc), mar = c(4,2,4,1))
+    
+    for(i in 1:ncol(tSI)){
+      plot(times, tSI[,i], ylim = c(0, 1), bty = 'n',
+           type = 'l', lwd = 2, xlab = 'time', ylab = '',
+           main = colnames(tSI)[i], ...)
+      col.transp = adjustcolor('black', alpha.f = 0.4)
+      polygon(x = c(times, rev(times)),
+              y =c(tSI[,i]-tCI[,i], rev(tSI[,i]+tCI[,i])),
+              col = col.transp, border = col.transp)
+      
+      col.transp = adjustcolor('red', alpha.f = 0.4)
+      lines(times, mSI[,i], ylim = c(0, 1), bty = 'n',
+            lwd = 2, col = 'red')
+      polygon(x = c(times, rev(times)),
+              y =c(mSI[,i]-mCI[,i], rev(mSI[,i]+mCI[,i])),
+              col = col.transp, border = col.transp)
+      if (is.numeric(cut.off)){
+        abline( cut.off, 0, lty = 2)
+      }
+    }
+    legend('top', legend = c('total order', 'first order'), col = c('black','red'),
+           lty = 'solid', lwd = 1, pch = NA, bty = 'n',
+           text.col = 'black',
+           fill = adjustcolor(c('black', 'red'), alpha.f = 0.4), border = NA, cex = 1.2)
+    par(old.par)
+  } else {
+    D1 <- apply(x$D1, 1, mean)
+    V <- apply(x$V, 1, mean)
+    Dt <- apply(x$Dt, 1, mean)
+    
+    S <- rbind(D1 / V, 1 - Dt / V - D1 / V)
+    colnames(S) <- names(x$mSI)
+    bar.col <- c("white","grey")
+    barplot(S, ylim = c(0,1), col = bar.col)
+    legend("topright", c("main effect", "interactions"), fill = bar.col)
+  }
+}
+
+###
+heat_check <- function(x, fit = c("first order", "interaction", "total order"),
+                       varb = NULL,
+                       index = "SI", order = F, level = T, text = F){
+  
+  if (index ==  "SI"){
+    X <- tidy_index(x, index = index) %>%
+      mutate_(level = ~cut(value, breaks=c(-Inf, 0.01, 0.05, Inf),
+                           labels=c("0 - 0.01","0.01 - 0.05"," > 0.05")))
+    
+    cols <- c("0 - 0.01" = "grey", "4" = "pink", "0.01 - 0.05" = "pink", " > 0.05" = "red")
+  } else if ((index == "CI")) {
+    X <- tidy_index(x, index = index) %>%
+      mutate_(level = ~cut(value, breaks=c(-Inf, 0.05, 0.1, Inf),
+                           labels=c("0 - 0.05","0.05 - 0.1"," > 0.1")))
+    
+    cols <- c("0 - 0.05" = "grey", "4" = "pink", "0.05 - 0.1" = "pink", " > 0.1" = "red")
+  }
+  
+  if (is.null(varb)){
+    varb <- dimnames(x$y)[[4]]
+  } else (varb <- varb)
+  
+  X <- X %>% filter(order %in% fit) %>% filter(variable %in% varb)
+  
+  if (order == F){
+    p <- ggplot(X, aes_string("time", "parameter"))
+  } else if (order == T) {
+    p <- ggplot(X, aes_string("time", "reorder(parameter, value)"))
+  }
+  
+  if (level == T) {
+    p <- p + geom_tile(aes(fill = level), colour = "white") +
+      scale_fill_manual(values= cols)
+  } else if (level == F) {
+    p <- p + geom_tile(aes_string(fill = "value")) +
+      scale_fill_gradient(low = "white", high = "red", limits = c(-0.05,1.05))
+  }
+  
+  p <- p +scale_x_continuous(expand=c(0,0)) +
+    scale_y_discrete(expand=c(0,0)) +
+    facet_grid(variable~order) +
+    theme(axis.text.x = element_text(size=10, hjust = 1),
+          axis.text.y = element_text(size=10), legend.title=element_blank(),
+          legend.position="top")
+  
+  if (index ==  "SI"){
+    p <- p + labs(title="Sensitivity index", x="time", y="parameters")
+  } else if ((index == "CI")) {
+    p <- p + labs(title="Convergence index", x="time", y="parameters")
+  }
+  
+  if (text == T){
+    p + geom_text(aes_string(label = "ifelse(value < 0.01, '', round(value, 2))"), size = 2.5)
+  } else p
+  
+}
+
+tidy_index <- function (x, index = "SI") {
+  
+  if(index == "CI") {
+    m <- reshape::melt(x$mCI) %>% cbind(order = "first order")
+    i <- reshape::melt(x$iCI) %>% cbind(order = "interaction")
+    t <- reshape::melt(x$tCI) %>% cbind(order = "total order")
+    X <- do.call(rbind, list(m, i, t))
+  } else if (index == "SI") {
+    m <- reshape::melt(x$mSI) %>% cbind(order = "first order")
+    i <- reshape::melt(x$iSI) %>% cbind(order = "interaction")
+    t <- reshape::melt(x$tSI) %>% cbind(order = "total order")
+    X <- do.call(rbind, list(m, i, t))
+  }
+  names(X) <- c("time", "parameter", "variable", "value", "order")
+  return(X)
 }
