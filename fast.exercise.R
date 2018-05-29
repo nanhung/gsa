@@ -602,9 +602,10 @@ q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(-6., 1))
 
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
+output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+x<-rfast99(factors = factors, n = 200, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
