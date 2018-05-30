@@ -29,16 +29,18 @@ mgkg_flag = 0;
 
 OralExp_APAP = NDoses(2, 1 0, 0 0.75);
 OralDur_APAP = 0.75;
-OralDose_APAP_mg = 325.0;
+OralDose_APAP_mg = 1000.0;
 
 IVExp_APAP = 0.;
 IVDose_APAP_mg = 0.;
 
 #PrintStep(lnODose_APAP, 0.2, 12, 0.2);
 #PrintStep(AST_Oral_APAP, 0.2, 12, 0.2);
-PrintStep(lnCPL_APAP_mcgL, 0.2, 12, 0.2);
+#PrintStep(lnCPL_APAP_mcgL, 0.2, 12, 0.2);
+PrintStep(lnCPL_APAP_mcgL, lnCPL_AG_mcgL, lnCPL_AS_mcgL, 0.2, 12, 0.2);
 
 #Print(lnCPL_APAP_mcgL,lnCPL_AG_mcgL,lnCPL_AS_mcgL, 0.5, 1, 1.5, 2 ,4, 6, 8, 12);  
+
 }
 
 END.

@@ -626,6 +626,11 @@ tell2(x,y)
 
 #save(x, file = "APAP_4000_1000mg.rda")
 #save(x, file = "APAP_4000_325mg.rda")
+load(file = "APAP_4000_1000mg.rda")
+
+pdf(file="HEAT.pdf", width = 14, height = 12)
+heat_check(x, index = "SI") 
+dev.off()
 
 # X <- tidy_index(x, index = "SI") 
 heat_check(x, index = "SI") 
