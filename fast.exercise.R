@@ -479,7 +479,7 @@ source("compile.R")
 compile(mName, model = T)
 
 newParms <- c(mgkg_flag = 0,
-              OralDose_APAP_mg = 1000,
+              OralDose_APAP_mg = 325, # Dose
               OralDur_APAP = 0.75,
               lnTg = -1.0,
               lnTp = -2.85,
@@ -606,7 +606,7 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n =200, q = q, q.arg = q.arg) 
-x<-rfast99(factors = factors, n =200, q = q, q.arg = q.arg, rep = 3, conf = 0.9) 
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
 
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
@@ -618,18 +618,14 @@ y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms",
              initforc="initforc", forcings=Forcings1)
 
 #user   system  elapsed 
-#4803.974    9.245 4827.099 
+#4517.225    0.823 4518.596 
 #user   system  elapsed 
-#8955.221    1.935 8968.250 
+#4215.709    0.976 4217.539 
 
-tell2(x,y0)
-tell2(x,y1)
-tell2(x,y2)
+tell2(x,y)
 
-#save(x, file = "APAP_4000.rda")
-#save(y0, file = "APAP_4000y0.rda")
-#save(y1, file = "APAP_4000y1.rda")
-#save(y2, file = "APAP_4000y2.rda")
+#save(x, file = "APAP_4000_1000mg.rda")
+#save(x, file = "APAP_4000_325mg.rda")
 
 # X <- tidy_index(x, index = "SI") 
 heat_check(x, index = "SI") 

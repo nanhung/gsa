@@ -63,12 +63,12 @@ solve_fun <- function(x, times = NULL, parameters, initParmsfun = NULL, initStat
 }
 
 ###########
-pksim <- function(y, varb = 1, log = F, legend = T, ...){
-  times <- as.numeric(colnames(y[,1,,varb]))
+pksim <- function(y, vars = 1, log = F, legend = T, ...){
+  times <- as.numeric(colnames(y[,1,,vars]))
   
   if (dim(y)[2] == 1){
-    quantY <- apply(y[,,,varb], 2, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
-  } else quantY <- apply(y[,,,varb], 3, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
+    quantY <- apply(y[,,,vars], 2, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
+  } else quantY <- apply(y[,,,vars], 3, quantile, c(0.50, 0, 1, 0.1, 0.9, 0.25,0.75), na.rm=TRUE)
   
   ytck <- pretty(c(min(quantY,na.rm=TRUE),max(quantY,na.rm=TRUE)))
   
@@ -217,25 +217,25 @@ tell.rfast99 <- function(x, y = NULL) {
 
 #############
 
-plot.rfast99 <- function(x, varb = 1, cut.off = F, ...){
+plot.rfast99 <- function(x, vars = 1, cut.off = F, ...){
   
-  mSI <- x$mSI[,,varb]
-  iSI <- x$tSI[,,varb]
-  tSI <- x$tSI[,,varb]
-  mCI <- x$mCI[,,varb]
-  iCI <- x$tCI[,,varb]
-  tCI <- x$tCI[,,varb]
+  mSI <- x$mSI[,,vars]
+  iSI <- x$tSI[,,vars]
+  tSI <- x$tSI[,,vars]
+  mCI <- x$mCI[,,vars]
+  iCI <- x$tCI[,,vars]
+  tCI <- x$tCI[,,vars]
   
   if(is.matrix(mSI)){
     
-    nv <- length(colnames(tSI))
+    nv <- length(colnames(tSI))+1
     nc <- ceiling(sqrt(nv))
     nr <- ceiling(nv/nc)
     
     times <- row.names(tSI)
     
     old.par <- par(no.readonly = TRUE)
-    par(mfrow = c(nr, nc), mar = c(4,2,4,1))
+    par(mfrow = c(nr, nc), mar = c(4,2,3,1))
     
     for(i in 1:ncol(tSI)){
       plot(times, tSI[,i], ylim = c(0, 1), bty = 'n',
@@ -256,10 +256,10 @@ plot.rfast99 <- function(x, varb = 1, cut.off = F, ...){
         abline( cut.off, 0, lty = 2)
       }
     }
+    plot.new()
     legend('top', legend = c('total order', 'first order'), col = c('black','red'),
-           lty = 'solid', lwd = 1, pch = NA, bty = 'n',
-           text.col = 'black',
-           fill = adjustcolor(c('black', 'red'), alpha.f = 0.4), border = NA, cex = 1.2)
+           lty = 1, lwd = 1, pch = NA, bty = 'n',
+           text.col = 'black')
     par(old.par)
   } else {
     D1 <- apply(x$D1, 1, mean)
@@ -276,7 +276,7 @@ plot.rfast99 <- function(x, varb = 1, cut.off = F, ...){
 
 ###
 heat_check <- function(x, fit = c("first order", "interaction", "total order"),
-                       varb = NULL,
+                       vars = NULL,
                        index = "SI", order = F, level = T, text = F){
   
   if (index ==  "SI"){
@@ -293,11 +293,13 @@ heat_check <- function(x, fit = c("first order", "interaction", "total order"),
     cols <- c("0 - 0.05" = "grey", "4" = "pink", "0.05 - 0.1" = "pink", " > 0.1" = "red")
   }
   
-  if (is.null(varb)){
-    varb <- dimnames(x$y)[[4]]
-  } else (varb <- varb)
+  X$variable = factor(X$variable, levels=dimnames(x$y)[[4]])
   
-  X <- X %>% filter(order %in% fit) %>% filter(variable %in% varb)
+  if (is.null(vars)){
+    vars <- dimnames(x$y)[[4]]
+  } else (vars <- vars)
+  
+  X <- X %>% filter(order %in% fit) %>% filter(variable %in% vars)
   
   if (order == F){
     p <- ggplot(X, aes_string("time", "parameter"))
