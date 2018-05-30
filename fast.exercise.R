@@ -468,9 +468,12 @@ MCnewParms <- c(lnTg = -1.0,
                 lnCLC_AS = -2.00)
 
 eFAST.APAP.df <- rbind(MCnewParms, MCnewParms)
-write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=T, sep="\t")
-system("./mcsim.APAP_PBPK_thera apap.setpoint_v1.in")
-eFA.APAP.mcsim.df <- as.data.frame(data.table::fread("apap_setpoint.csv", head = T))
+#write.table(eFAST.APAP.df, file="apap_setpoint.dat", row.names=T, sep="\t")
+#system("./mcsim.APAP_PBPK_thera apap.setpoint_v1.in")
+#eFA.APAP.mcsim.df <- as.data.frame(data.table::fread("apap_setpoint.csv", head = T))
+write.table(eFAST.APAP.df, file="setpoint.dat", row.names=T, sep="\t")
+system("./mcsim.APAP_PBPK_thera setpoint.in")
+eFA.APAP.mcsim.df <- as.data.frame(data.table::fread("setpoint.csv", head = T))
 eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
 #
@@ -479,7 +482,7 @@ source("compile.R")
 compile(mName, model = T)
 
 newParms <- c(mgkg_flag = 0,
-              OralDose_APAP_mg = 325, # Dose
+              OralDose_APAP_mg = 1000, # Dose
               OralDur_APAP = 0.75,
               lnTg = -1.0,
               lnTp = -2.85,
@@ -544,7 +547,7 @@ y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames,
                 forcings=Forcings1) #
 
 #y[,"AST_Oral_APAP"]
-y[,"lnCPL_APAP_mcgL"]
+y[,"lnCPL_AS_mcgL"]
 
 
 ##
@@ -605,9 +608,22 @@ times <- seq(from = 0.01, to = 12.01, by = 0.4)
 output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
-#x<-rfast99(factors = factors, n =200, q = q, q.arg = q.arg) 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
+#x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
 
+
+
+
+
+
+
+
+
+
+
+
+
+#####
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
