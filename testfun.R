@@ -27,21 +27,21 @@ install_mcsim = function(version = "6.0.1", directory = NULL) {
     tf <- tempfile()
     download.file(URL, tf, mode = "wb")
     
+    name <- Sys.info()[['user']]
+    
     if (is.null(directory)){
       if (Sys.info()[['sysname']] == "Darwin"){
         exdir <- paste0("/Users/", name, sprintf('/mcsim-%s', version))
       } else if (Sys.info()[['sysname']] == "Linux") {
-        exdir <- paste0("/Users/", name, sprintf('/mcsim-%s', version))   
+        exdir <- paste0("/home/", name, sprintf('/mcsim-%s', version))   
       } else if (Sys.info()[['sysname']] == "Windows") {
         exdir <- paste0("C:", sprintf('/mcsim-%s', version))
       }
     } else {exdir <- directory}
     
-    utils::untar(tf, list = T, exdir = exdir)
+    utils::untar(tf, exdir = exdir)
     
     current.wd <- getwd()
-    
-    name <- Sys.info()[['user']]
     
     if (is.null(directory)){
       if (Sys.info()[['sysname']] == "Darwin"){
@@ -52,6 +52,8 @@ install_mcsim = function(version = "6.0.1", directory = NULL) {
         setwd(paste0("C:/", name, sprintf('/mcsim-%s', version)))
       }
     } else {setwd(paste0(directory, sprintf('/mcsim-%s', version)))}
+    
+    mcsim.directory <-getwd()
     
     system("./configure")
     system("make")
@@ -66,7 +68,7 @@ install_mcsim = function(version = "6.0.1", directory = NULL) {
     }
     
     cat("\n")
-    message(paste0("The MCSim is installed under ", mcsim.wd))
+    message(paste0("The MCSim is installed under ", mcsim.directory))
     setwd(current.wd)
   }
 }
