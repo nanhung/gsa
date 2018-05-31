@@ -630,6 +630,8 @@ y<-solve_MCSim(x, mName = mName,
                condition = conditions)
 
 #user   system  elapsed 
+#1267.084  652.133 1917.641 
+#user   system  elapsed 
 #4517.225    0.823 4518.596 
 
 
