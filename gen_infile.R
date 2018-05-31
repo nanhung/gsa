@@ -1,6 +1,7 @@
 infile.name <- "APAP.setpoint.in"
 outfile.name <- "setpoint.csv"
-setpoint.data<-"setpoint.dat"
+conditions <- "mgkg_flag = 0; OralExp_APAP = NDoses(2, 1 0, 0 0.75); OralDur_APAP = 0.75; OralDose_APAP_mg = 1000.0; IVExp_APAP = 0.; IVDose_APAP_mg = 0.;"
+
 parameters<-c("lnTg", "lnTp",
               "lnCYP_Km","lnCYP_VmaxC",
               "lnSULT_Km_apap","lnSULT_Ki","lnSULT_Km_paps","lnSULT_VmaxC",
@@ -13,7 +14,6 @@ times <- seq(from = 0.01, to = 12.01, by = 0.4)
 rtol <- 1e-6
 atol <- 1e-9
 
-conditions <- "mgkg_flag = 0; OralExp_APAP = NDoses(2, 1 0, 0 0.75); OralDur_APAP = 0.75; OralDose_APAP_mg = 1000.0; IVExp_APAP = 0.; IVDose_APAP_mg = 0.;"
 
 mName<-"APAP_PBPK_thera"
 
@@ -43,6 +43,12 @@ solve_MCSim <- function(x, mName, infile.name, outfile.name, setpoint.data,
                output = output,
                time = times, 
                condition = conditions)
+  }
+  
+  mcsim. <- paste0("mcsim.", mName)
+  
+  if(file.exists(mcsim.) == F){
+    system(paste0("makemcsim", " ", mName, ".model"))
   }
   
   #

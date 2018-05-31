@@ -3,7 +3,7 @@ compile <- function (mName, model = F) {
     if(file.exists(paste0(mName, ".model")) && .Platform$OS.type == "unix"){
       system (paste0("mod -R ", mName, ".model ", mName,".c")) # model to c file
     } else if (.Platform$OS.type == "windows") {
-      warning("The model compiled function haven't supprot Windows system")
+      warning("The current function can't generate c file in Windows system")
     }
   }
   if (is.loaded("derivs", PACKAGE=mName))

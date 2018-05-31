@@ -478,7 +478,7 @@ eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
 #
 mName <- "APAP_PBPK_thera"
-source("compile.R")
+compile(mName)
 compile(mName, model = T)
 
 newParms <- c(mgkg_flag = 0,
@@ -609,34 +609,29 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-#x<-rfast99(factors = factors, n = 100, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
-
-
-
-
-
-
-
-
-
-
-
-
+#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
 
 #####
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
-             initState = initState, outnames = outnames, dllname = mName,
-             func = "derivs", initfunc = "initmod", output = "lnCPL_APAP_mcgL", method = "lsode",
-             initforc="initforc", forcings=Forcings1)
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
              initState = initState, outnames = outnames, dllname = mName,
              func = "derivs", initfunc = "initmod", output = output, method = "lsode",
              initforc="initforc", forcings=Forcings1)
 
+infile.name <- "setpoint.in"
+outfile.name <- "setpoint.csv"
+conditions <- "mgkg_flag = 0; OralExp_APAP = NDoses(2, 1 0, 0 0.75); OralDur_APAP = 0.75; OralDose_APAP_mg = 1000.0; IVExp_APAP = 0.; IVDose_APAP_mg = 0.;"
+
+y<-solve_MCSim(x, mName = mName,
+               infile.name = infile.name, 
+               outfile.name = outfile.name, 
+               parameters = factors,
+               output = output,
+               time = times, 
+               condition = conditions)
+
 #user   system  elapsed 
 #4517.225    0.823 4518.596 
-#user   system  elapsed 
-#4215.709    0.976 4217.539 
+
 
 tell2(x,y)
 
