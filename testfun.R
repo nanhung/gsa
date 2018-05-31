@@ -17,13 +17,11 @@ atol <- 1e-9
 
 mName<-"APAP_PBPK_thera"
 
-install_mcsim = function(
-  version = "6.0.1", force = FALSE
-) {
+install_mcsim = function(version = "6.0.1") {
   if (.Platform$OS.type == "windows") {
     stop("The current function haven't supprot Windows system")
   } else {
-    message("Start install") # _might_ be Linux; good luck
+    message("Start install")
     version<-version
     URL <- sprintf('http://ftp.gnu.org/gnu/mcsim/mcsim-%s.tar.gz', version)
     tf <- tempfile()
@@ -35,12 +33,15 @@ install_mcsim = function(
     
     system("./configure")
     system("make")
-    # system("make check")
-    system('sudo make install', input=getPass::getPass("Enter the password: "))
-    
+    system("make check")
+    system("sudo -kS sh -c 'make install; ldconfig'", input=getPass::getPass("Authentication is required to install MCSim (Password): "))
+    #system('sudo -kS ldconfig', input=getPass::getPass("Enter the password: "))
+    cat("\n")
     setwd(main.wd)
+    message(paste0("The MCSim is installed under ", getwd()))
   }
 }
+
 
 
 y<-solve_MCSim(x, mName = mName,
