@@ -17,7 +17,7 @@ atol <- 1e-9
 
 mName<-"APAP_PBPK_thera"
 
-install_mcsim = function(version = "6.0.1") {
+install_mcsim = function(version = "6.0.1", directory = NULL) {
   if (.Platform$OS.type == "windows") {
     stop("The current function haven't supprot Windows system")
   } else {
@@ -25,20 +25,49 @@ install_mcsim = function(version = "6.0.1") {
     version<-version
     URL <- sprintf('http://ftp.gnu.org/gnu/mcsim/mcsim-%s.tar.gz', version)
     tf <- tempfile()
-    download.file(URL, tf, mode = 'wb')
-    files = utils::untar(tf, list = TRUE, exdir = getwd())
-    utils::untar(tf)
-    main.wd <- getwd()
-    mcsim.wd <- setwd(paste(getwd(), sprintf('/mcsim-%s', version), sep = ""))
+    download.file(URL, tf, mode = "wb")
+    
+    if (is.null(directory)){
+      if (Sys.info()[['sysname']] == "Darwin"){
+        exdir <- paste0("/Users/", name, sprintf('/mcsim-%s', version))
+      } else if (Sys.info()[['sysname']] == "Linux") {
+        exdir <- paste0("/Users/", name, sprintf('/mcsim-%s', version))   
+      } else if (Sys.info()[['sysname']] == "Windows") {
+        exdir <- paste0("C:", sprintf('/mcsim-%s', version))
+      }
+    } else {exdir <- directory}
+    
+    utils::untar(tf, list = T, exdir = exdir)
+    
+    current.wd <- getwd()
+    
+    name <- Sys.info()[['user']]
+    
+    if (is.null(directory)){
+      if (Sys.info()[['sysname']] == "Darwin"){
+        setwd(paste0("/Users/", name, sprintf('/mcsim-%s', version)))
+      } else if (Sys.info()[['sysname']] == "Linux") {
+        setwd(paste0("/home/", name, sprintf('/mcsim-%s', version)))    
+      } else if (Sys.info()[['sysname']] == "Windows") {
+        setwd(paste0("C:/", name, sprintf('/mcsim-%s', version)))
+      }
+    } else {setwd(paste0(directory, sprintf('/mcsim-%s', version)))}
     
     system("./configure")
     system("make")
     system("make check")
-    system("sudo -kS sh -c 'make install; ldconfig'", input=getPass::getPass("Authentication is required to install MCSim (Password): "))
-    #system('sudo -kS ldconfig', input=getPass::getPass("Enter the password: "))
+    
+    input <- getPass::getPass("Authentication is required to install MCSim (Password): ")
+    
+    if (Sys.info()[['sysname']] == "Darwin"){
+      system("sudo -kS make install", input=input)
+    } else if (Sys.info()[['sysname']] == "Linux"){
+      system("sudo -kS sh -c 'make install; ldconfig'", input=input)
+    }
+    
     cat("\n")
-    setwd(main.wd)
-    message(paste0("The MCSim is installed under ", getwd()))
+    message(paste0("The MCSim is installed under ", mcsim.wd))
+    setwd(current.wd)
   }
 }
 
