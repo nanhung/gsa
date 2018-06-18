@@ -92,15 +92,11 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
 
 x<-rfast99(factors = c("vdist", "ke", "kgutabs"), 
-           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+           n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 # Use pksensi::solve_fun to solve ode
 times <- seq(from = 0.01, to = 24.01, by = 1)
 
-#
-y<-solve_fun(x, times, parameters = parameters, initState = initState, outnames = outnames,
-             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
-             output = "Ccompartment")
 
 # Use external function initParms = initparms1comp
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", initState = initState, outnames = outnames,
@@ -108,6 +104,21 @@ y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp",
              output = "Ccompartment")
 
 tell2(x,y)
+
+dim(x$a);dim(y)
+
+# Vdist
+plot(x$a[,3,1], y[,3,1,])
+
+
+par(mfrow = c(5,5))
+for(i in 1:25){
+  plot(x$a[,1,1], y[,1,i,]) # parmeter time-point  
+}
+
+
+
+
 
 ## Plot the PK simulation result by pksensi::pksim
 pksim(y)
