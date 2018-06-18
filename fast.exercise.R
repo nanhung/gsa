@@ -111,9 +111,9 @@ dim(x$a);dim(y)
 plot(x$a[,3,1], y[,3,1,])
 
 
-par(mfrow = c(5,5))
-for(i in 1:25){
-  plot(x$a[,1,1], y[,1,i,]) # parmeter time-point  
+par(mfrow = c(1,3))
+for(i in 1:3){
+  plot(x$a[,1,i], y[,1,25,], xlab = x$factors[i], ylab = dimnames(y)[[4]]) # parameter time-point  
 }
 
 
