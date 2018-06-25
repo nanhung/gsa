@@ -71,9 +71,8 @@ check(x, SI = 0.05, CI = 0.05)
 # cons: Slower than in pure MCSim
 
 # Compile the code
-source("compile.R")
 mName = "pbtk1comp"
-compile(mName)
+compile(mName, app = "R")
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
@@ -115,10 +114,6 @@ par(mfrow = c(1,3))
 for(i in 1:3){
   plot(x$a[,1,i], y[,1,25,], xlab = x$factors[i], ylab = dimnames(y)[[4]]) # parameter time-point  
 }
-
-
-
-
 
 ## Plot the PK simulation result by pksensi::pksim
 pksim(y)
