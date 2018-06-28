@@ -1,41 +1,8 @@
 # devtools::install_github("nanhung/pksensi")
-
+# rm(list=ls())
 library(pksensi)
 library(httk)
 
-#### Sobol model
-
-set.seed(1234)
-x<-rfast99(factors = 20, n = 100,
-           q = "qunif", q.arg = list(min = 0, max = 1), replicate = 10, conf = 0.99)
-
-n <- length(x$s)
-factors <- x$factors
-replicate <- x$replicate
-
-out <- 1 # Not time dependent
-
-y <- array(dim = c(n * factors, replicate, out), NA)
-
-for (i in 1 : x$rep) {
-  y[,i,]<-sensitivity::sobol.fun(x$a[,i,]) 
-}
-
-pksensi:::tell.rfast99(x, y[,,1])
-
-x %>% plot; abline(0.01, 0, lty = 2) 
-
-x %>% ViSA::converge # Not used
-
-####
-
-set.seed(1234)
-x<-rfast99(factors = 8, n = 400,
-           q = "qunif", q.arg = list(min = 0, max = 1), replicate = 20, conf = 0.95)
-y<-solve_fun(x, model = pksensi:::sobol.fun) 
-tell2(x, y) # like sensitivity::tell function, the tell2 function is used to combine the output result and model output.
-x
-plot(x)
 
 ## Flip-Flop Kinetics ####
 FFPK <- function(parameters, times, dose = 320){
@@ -43,6 +10,7 @@ FFPK <- function(parameters, times, dose = 320){
   CONC <- A*exp(- parameters[2] * times) - A*exp(- parameters[1] * times)
   return(CONC)
 }
+
 
 # Define parameter distribution
 q = "qunif"
@@ -56,7 +24,7 @@ x<-rfast99(factors=c("KA","KE","V"),
            n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
-y<-solve_fun(x, model = FFPK, times = times)
+y<-solve_fun(x, model = FFPK, times = times, output = "output")
 tell2(x,y)
 x # print the time-dependent output of sensitivity index and convergence index to the console 
 plot(x, cut.off = 0.05) # Visualize the printed result 
@@ -210,6 +178,7 @@ y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp",
              output = "Crest")
 tell2(x,y)
 plot(x, cut.off = 0.05);
+check(x, CI = 0.05)
 heat_check(x, order = T)
 
 #load(file = "3comp_2000.rda")
@@ -219,14 +188,9 @@ heat_check(x, order = T)
 cat(file.size(file = "3comp_2000.rda")/1e6, "MB")
 cat(file.size(file = "3comp_2000y.rda")/1e6, "MB")
 
-pksim(y)
-pksim(y, log = T)
+pksim(x$y)
+pksim(x$y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
-
-x
-
-check(x)
-check(x, SI = 0.05, CI = 0.05)
 
 ###
 
@@ -484,7 +448,6 @@ eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
 #
 mName <- "APAP_PBPK_thera"
-compile(mName)
 compile(mName, model = T, app = "R")
 
 newParms <- c(mgkg_flag = 0,
@@ -556,7 +519,7 @@ y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames,
 y[,"lnCPL_AS_mcgL"]
 
 
-##
+################
 #Nominal value
 Tg <- log(0.23)
 Tp <- log(0.033)
@@ -615,13 +578,13 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
 
 #####
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
-             initState = initState, outnames = outnames, dllname = mName,
-             func = "derivs", initfunc = "initmod", output = output, method = "lsode",
-             initforc="initforc", forcings=Forcings1)
+#y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
+#             initState = initState, outnames = outnames, dllname = mName,
+#             func = "derivs", initfunc = "initmod", output = output, method = "lsode",
+#             initforc="initforc", forcings=Forcings1)
 
 infile.name <- "setpoint.in"
 outfile.name <- "setpoint.csv"
@@ -642,7 +605,8 @@ y<-solve_mcsim(x, mName = mName,
 
 
 tell2(x,y)
-
+plot(x, vars = "lnCPL_AG_mcgL")
+plot(x, vars = "lnCPL_AS_mcgL")
 #save(x, file = "APAP_4000_1000mg.rda")
 #save(x, file = "APAP_4000_325mg.rda")
 load(file = "APAP_4000_1000mg.rda")
@@ -657,20 +621,20 @@ heat_check(x, index = "SI", order = T)
 heat_check(x, index = "CI")
 
 # Continous
-heat_check(x, category = F)
+heat_check(x, level = F)
 
 # Add value
-heat_check(x, category = F, text = T)
+heat_check(x, level = F, text = T)
 heat_check(x, text = T)
 
 # grey scale
 heat_check(x) + ggplot2::scale_fill_grey(start = .9, end = .0)
-heat_check(x, category = F) + ggplot2::scale_fill_gradient(low = "white", high = "black")
+heat_check(x, level = F) + ggplot2::scale_fill_gradient(low = "white", high = "black")
 # viridis
 heat_check(x) + viridis::scale_fill_viridis(discrete=TRUE)
-heat_check(x, category = F) + viridis::scale_fill_viridis()
+heat_check(x, level = F) + viridis::scale_fill_viridis()
 
 # specific index
-heat_check(x, filter = c("first order","total order"))
+heat_check(x, fit = c("first order","total order"))
            
 
