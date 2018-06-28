@@ -138,7 +138,7 @@ plot(x)
 ####
 
 mName = "3compPBPKmodel"
-compile(mName)
+compile(mName, app = "R")
 source(paste0(mName, "_inits.R"))
 
 # Basic check
@@ -245,7 +245,7 @@ for (i in 2:7) {
 
 mName <- "ACAT_like"
 source("compile.R")
-compile(mName, model = T)
+compile(mName, model = T, app = "R")
 
 # source(paste0(mName, "_inits.R")) for windows
 # dyn.load(paste0(mName, .Platform$dynlib.ext))
@@ -485,7 +485,7 @@ eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 #
 mName <- "APAP_PBPK_thera"
 compile(mName)
-compile(mName, model = T)
+compile(mName, model = T, app = "R")
 
 newParms <- c(mgkg_flag = 0,
               OralDose_APAP_mg = 1000, # Dose
@@ -627,7 +627,7 @@ infile.name <- "setpoint.in"
 outfile.name <- "setpoint.csv"
 conditions <- "mgkg_flag = 0; OralExp_APAP = NDoses(2, 1 0, 0 0.75); OralDur_APAP = 0.75; OralDose_APAP_mg = 1000.0; IVExp_APAP = 0.; IVDose_APAP_mg = 0.;"
 
-y<-solve_MCSim(x, mName = mName,
+y<-solve_mcsim(x, mName = mName,
                infile.name = infile.name, 
                outfile.name = outfile.name, 
                parameters = factors,
