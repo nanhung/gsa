@@ -3,7 +3,6 @@
 library(pksensi)
 library(httk)
 
-
 ## Flip-Flop Kinetics ####
 FFPK <- function(parameters, times, dose = 320){
   A <- (dose * parameters[1])/( parameters[3]*( parameters[1]- parameters[2]))
@@ -47,7 +46,6 @@ source(paste0(mName, "_inits.R"))
 parameters <- initparms1comp()
 initState <- initState1comp(parms=parameters)
 initState["Agutlumen"] <- 10
-outnames <- Outputs1comp
 
 # Parameter uncertainty
 params <- httk::parameterize_1comp(chem.name = "theophylline")
@@ -64,9 +62,9 @@ x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
 # Use pksensi::solve_fun to solve ode
 times <- seq(from = 0.01, to = 24.01, by = 1)
 
-
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", initState = initState, outnames = outnames,
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", 
+             initState = initState, outnames = Outputs1comp,
              dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
              output = "Ccompartment")
 
