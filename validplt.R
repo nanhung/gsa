@@ -252,3 +252,124 @@ jpeg(file="fig5.jpg",width=5400,height=3600,res=300)
 #grid.arrange(p1,p11, ncol=1, heights=c(3,1))
 plot_grid(p1,p11, ncol=1, rel_heights=c(5,2), label_size = 20, labels="AUTO")
 dev.off()
+
+
+################### IC2018 #########
+
+
+
+p2<-ggplot(df.b, aes(Obs, prd.val)) + 
+  xlab("") + ylab(expression("in-silico prediction of plasma concentration, "~mu*g/L)) +
+  theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
+  theme(legend.position="top") + annotation_logticks(sides = "lb") +
+  scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x))) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x)))+
+  geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.1) +
+  scale_fill_manual(values=c("black", "blue", "green", "red", "grey")) + 
+  guides(fill=FALSE) + # remove "fill" legend 
+  geom_point(aes(colour = prd.typ), alpha = 0.6) +
+  annotation_custom(grob=g, xmin = log(2), xmax = log(8),
+                    ymin=log(0.4), ymax=log(1.5)) +
+  #annotation_custom(grob=g2, xmin = log(0.6), xmax = log(1.8),
+  #                  ymin=log(2), ymax=log(15)) +
+  scale_color_manual(values=c("black", "blue", "green", "red", "grey"),
+                     name="",
+                     breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
+                     labels=c("OMP", 
+                              "OIP",
+                              expression(FIP["05"]), 
+                              expression(FIP["01"]),
+                              "FMP")) + 
+  theme(legend.justification=c(0,1), 
+        legend.position=c(0.8,0.7), 
+        text = element_text(size=20),
+        legend.background = element_rect(fill=alpha('white', 0.1)),
+        panel.grid.minor = element_blank()) # Hide the minor grid lines because they don't align with the ticks
+
+library(dplyr)
+factor <- c(rep("Expert", 238),rep("EFAST", 238),rep("All", 238))
+value <- c(res.Oall, res.Asen, res.Aall)
+X <- data.frame(factor,value)
+mu <- plyr::ddply(X, "factor", summarize, mean.conc=mean(value))
+p3<-ggplot(X, aes(x=value, color=factor)) +
+  xlab("Residual") + ylab("Density") +
+  geom_density() + scale_color_discrete(name=" ") +
+  geom_vline(data=mu, aes(xintercept=mean.conc, color=factor),
+             linetype="dashed") +
+  theme_minimal()
+g<-ggplotGrob(p3)
+
+
+df.ic2018a <- df.b %>% filter(prd.typ2 %in% c("prd.o", "prd.d", "prd.a"))
+p2<-ggplot(df.ic2018a, aes(Obs, prd.val)) + 
+  xlab("in-vivo observation of plasma concentration, "~mu*g/L) + ylab(expression("in-silico prediction of plasma concentration, "~mu*g/L)) +
+  theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
+  theme(legend.position="top") + annotation_logticks(sides = "lb") +
+  scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x))) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x))) +
+  geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.2) +
+  annotation_custom(grob=g, xmin = log(1.8), xmax = log(9),
+                    ymin=log(0.5), ymax=log(1.7)) +
+  geom_point(aes(colour = prd.typ), alpha = 0.6, size=0.8)+
+  scale_fill_discrete(name="Group",
+                      breaks=c("prd.a", "prd.d", "prd.o"),
+                      labels=c("All parameters", "EFAST-judged parameters", "Expert-judged parameters")) + 
+  scale_color_discrete(name="Group",
+                       breaks=c("prd.a", "prd.d", "prd.o"),
+                       labels=c("All parameters", "EFAST-judged parameters", "Expert-judged parameters"))
+
+png(file="fig3.png",width=2800,height=2400,res=300)
+p2
+dev.off()
+
+# Change facet label
+mdata$line2<-c(rep(NA,246),
+               rep("A",246),# OMP
+               rep("B",246), # OIP
+               rep("D",246), #FIP01
+               rep("E",246), #FMP
+               rep("C",246)) #FIP05
+
+df.mdata <- mdata[c(1:492, 739:1230),]
+nrow(df.mdata)
+
+p1<-ggplot(df.mdata) + geom_point(aes(x = Time, y = exp(point)/1000, shape=point2)) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x))) +
+  geom_line(aes(x = Time, y = exp(line)/1000, color=line2)) +
+  scale_colour_manual(values = c("blue", "green", "red", "white"),
+                      labels=c("Expert", 
+                               "EFAST",
+                               "All", 
+                               " ")) +
+  facet_grid(chem~exp) + theme_bw() + xlim(0, 13) +
+  theme(legend.position="top", legend.title = element_blank(),text = element_text(size=12)) +
+  labs(x="Time, hr",
+       y=expression("Plasma concentration, "~mu*g/L))
+
+
+r2df2 <- r2df %>% filter(set %in% c("Original all parameters",
+                                    "All sensitive parameters (0.01)",
+                                    "All model parameters"))
+
+p11<-ggplot(r2df2, aes(x=set, y= r2, fill = set))+
+  labs(x="",
+       y=bquote(~italic(R)^2)) +
+  geom_col(color = "white")+
+  coord_cartesian(ylim=c(0.7,1.0)) +
+  scale_fill_manual(values = c("blue", "green", "red")) +
+  scale_x_discrete(labels=c("Expert", 
+                            "EFAST",
+                            "All"))+
+  guides(fill=FALSE) +
+  facet_grid(~gp) + theme_bw()+
+  theme(text = element_text(size=12),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+png(file="fig4.png",width=3200,height=2400,res=300)
+plot_grid(p1,p11, ncol=1, rel_heights=c(5,2), label_size = 20, labels="AUTO")
+dev.off()
