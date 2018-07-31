@@ -97,14 +97,12 @@ points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
 #
 check(x)
-check(x, SI = 0.05, CI = 0.05)
-
 plot(x)
 
 ####
 
 mName = "3compPBPKmodel"
-compile(mName, app = "R")
+compile(mName, app = "R", version = "6.0.1", use_model_file = F) # For windows
 source(paste0(mName, "_inits.R"))
 
 # Basic check
@@ -166,8 +164,7 @@ factors <- c("BW","CLmetabolismc","kgutabs",
              "Ratioblood2plasma")
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, 
-           rep = 10, conf = 0.9)
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg)
 
 #times <- c(0.01, seq(from = 0.5, to = 12.5, by = 1))
 times <- seq(from = 0.01, to = 8.01, by = 0.2)
@@ -206,8 +203,7 @@ for (i in 2:7) {
 ###
 
 mName <- "ACAT_like"
-source("compile.R")
-compile(mName, model = T, app = "R")
+compile(mName, use_model_file = T, app = "R", version="6.0.1") # For windows
 
 # source(paste0(mName, "_inits.R")) for windows
 # dyn.load(paste0(mName, .Platform$dynlib.ext))
@@ -360,7 +356,7 @@ factors <- c("Peff","Ratio_BP",
 times <- seq(from = 0.01, to = 8.01, by = 0.4)
 outnames <- Outputs
 
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 10, conf = 0.9) 
+x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg) 
 
 newState <- c(A_stom_lu = 1)
 initState <- initStates(newStates=newState)
@@ -446,7 +442,7 @@ eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
 #
 mName <- "APAP_PBPK_thera"
-compile(mName, model = T, app = "R")
+compile(mName, use_model_file = T, version = "6.0.1", app = "R")
 
 newParms <- c(mgkg_flag = 0,
               OralDose_APAP_mg = 1000, # Dose
