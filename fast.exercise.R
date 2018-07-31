@@ -39,7 +39,7 @@ check(x, SI = 0.05, CI = 0.05)
 
 # Compile the code
 mName = "pbtk1comp"
-compile(mName, app = "R")
+compile(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
@@ -187,7 +187,7 @@ pksim(x$y)
 pksim(x$y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
-###
+### For unix
 
 system("./mcsim.ACAT_like Drug_X.simple.in Drug_X.simple.out")
 sim = read.delim("Drug_X.simple.out", skip = 2)
@@ -200,7 +200,7 @@ for (i in 2:7) {
        type = "l")
 }
 
-###
+### End
 
 mName <- "ACAT_like"
 compile(mName, use_model_file = T, app = "R", version="6.0.1") # For windows
@@ -272,13 +272,16 @@ Forcings1 <- list(PerDose)
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
 
 ## Two type ####  
-#
+# ode not work in Windows
 newState <- c(A_stom_lu = 1)
 initState <- initStates(newStates=newState)
 y1<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", 
                 outnames = outnames, nout=length(outnames), 
-                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12)
-#
+                dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
+                rtol = 1e-08, atol = 1e-12)
+
+
+
 newState <- c(A_stom_lu = 0)
 initState <- initStates(newStates=newState)
 y2<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms", 
@@ -286,10 +289,11 @@ y2<-deSolve::ode(initState, times, parms = parameters, initParmsfun = "initparms
                 dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", rtol = 1e-08, atol = 1e-12,
                 initforc="initforc",
                 forcings=Forcings1) #
+
 y1[,"C_blood"]
 y2[,"C_blood"]
 
-## GSA
+### GSA ################################
 q = "qunif"
 q.arg = list(list(min = -2.3, max = 0), # Peff
              list(min = -2.3, max = 0), # Ratio_BP
@@ -529,6 +533,8 @@ r = 2.0 # exp(2.3)/exp(-2.3) ~ 100
 #r = 1.8 # exp(1.8)/exp(-1.8) ~ 36.6
 
 #
+mName <- "APAP_PBPK_thera"
+compile(mName, use_model_file = T, version = "6.0.1", app = "mcsim")
 library(EnvStats)
 factors <- c("lnTg", "lnTp",
              "lnCYP_Km","lnCYP_VmaxC",
@@ -579,7 +585,12 @@ x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg)
 
 infile.name <- "setpoint.in"
 outfile.name <- "setpoint.csv"
-conditions <- "mgkg_flag = 0; OralExp_APAP = NDoses(2, 1 0, 0 0.75); OralDur_APAP = 0.75; OralDose_APAP_mg = 1000.0; IVExp_APAP = 0.; IVDose_APAP_mg = 0.;"
+conditions <- c("mgkg_flag = 0",
+                "OralExp_APAP = NDoses(2, 1, 0, 0, 0.75)",
+                "OralDur_APAP = 0.75",
+                "OralDose_APAP_mg = 1000.0",
+                "IVExp_APAP = 0.",
+                "IVDose_APAP_mg = 0.")
 
 y<-solve_mcsim(x, mName = mName,
                infile.name = infile.name, 
