@@ -3,13 +3,13 @@
 
    Model File:  ACAT_like.model
 
-   Date:  Tue Jul 31 12:29:58 2018
+   Date:  Tue Jul 31 13:34:37 2018
 
-   Created by:  "c:/Users/lenovo/MCSIM-~1.1/mod/mod.exe v6.0.1"
+   Created by:  "mod v5.6.6"
     -- a model preprocessor by Don Maszle
    ___________________________________________________
 
-   Copyright (c) 1993-2018 Free Software Foundation, Inc.
+   Copyright (c) 1993-2017 Free Software Foundation, Inc.
 
    Model calculations for compartmental model:
 

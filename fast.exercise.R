@@ -268,10 +268,7 @@ PerDose <- cbind(col1, rep(c(mag,0), length(col1)/2))
 
 # The matrix of periodic exposure
 PerDose
-
 Forcings1 <- list(PerDose)
-
-
 times <- seq(from = 0, to = 24, by = 1) # NEED ZERO!
 
 ## Two type ####  
@@ -376,7 +373,7 @@ pksim(y, log= T)
 #save(y, file = "acat_2000y.rda")
 
 tell2(x,y)
-plot(x);
+plot(x)
 heat_check(x, index = "SI", order = T) + 
   ggplot2::scale_fill_grey(start = .9, end = .0)
 
@@ -436,7 +433,7 @@ eFAST.APAP.df <- rbind(MCnewParms, MCnewParms)
 #system("./mcsim.APAP_PBPK_thera apap.setpoint_v1.in")
 #eFA.APAP.mcsim.df <- as.data.frame(data.table::fread("apap_setpoint.csv", head = T))
 write.table(eFAST.APAP.df, file="setpoint.dat", row.names=T, sep="\t")
-system("./mcsim.APAP_PBPK_thera setpoint.in")
+#system("./mcsim.APAP_PBPK_thera setpoint.in")
 eFA.APAP.mcsim.df <- as.data.frame(data.table::fread("setpoint.csv", head = T))
 eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
@@ -572,7 +569,7 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 5, conf = 0.8) 
+x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
 
 #####
 #y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
