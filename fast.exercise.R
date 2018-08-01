@@ -31,7 +31,6 @@ pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 check(x)
-check(x, SI = 0.05, CI = 0.05)
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
@@ -164,7 +163,7 @@ factors <- c("BW","CLmetabolismc","kgutabs",
              "Ratioblood2plasma")
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg)
+x<-rfast99(factors = factors, n = 2048, q = q, q.arg = q.arg)
 
 #times <- c(0.01, seq(from = 0.5, to = 12.5, by = 1))
 times <- seq(from = 0.01, to = 8.01, by = 0.2)
@@ -173,15 +172,11 @@ y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp",
              output = "Crest")
 tell2(x,y)
 plot(x, cut.off = 0.05);
-check(x, CI = 0.05)
+check(x)
 heat_check(x, order = T)
 
 #load(file = "3comp_2000.rda")
 #load(file = "3comp_2000y.rda")
-
-# File size
-cat(file.size(file = "3comp_2000.rda")/1e6, "MB")
-cat(file.size(file = "3comp_2000y.rda")/1e6, "MB")
 
 pksim(x$y)
 pksim(x$y, log = T)
@@ -365,19 +360,14 @@ y<-solve_fun(x, times, parameters = parameters, initState = initState,
              outnames = outnames, dllname = mName, initParmsfun = "initParms",
              func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
 
-#user   system  elapsed 
-#3476.603   33.605 3513.944 
 pksim(y)
 tell2(x,y)
 pksim(y, log= T)
 
-
-
-#save(x, file = "acat_2000.rda")
-#save(y, file = "acat_2000y.rda")
-
 tell2(x,y)
 plot(x)
+
+dev.off()
 heat_check(x, index = "SI", order = T) + 
   ggplot2::scale_fill_grey(start = .9, end = .0)
 
@@ -575,7 +565,7 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
+x<-rfast99(factors = factors, n = 4096, q = q, q.arg = q.arg) 
 
 #####
 #y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
@@ -609,9 +599,6 @@ y<-solve_mcsim(x, mName = mName,
 tell2(x,y)
 plot(x, vars = "lnCPL_AG_mcgL")
 plot(x, vars = "lnCPL_AS_mcgL")
-#save(x, file = "APAP_4000_1000mg.rda")
-#save(x, file = "APAP_4000_325mg.rda")
-load(file = "APAP_4000_1000mg.rda")
 
 pdf(file="HEAT.pdf", width = 14, height = 12)
 heat_check(x, index = "SI") 
