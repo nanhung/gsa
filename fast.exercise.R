@@ -22,15 +22,16 @@ set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
            n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
-times <- seq(from = 0.25, to = 24.25, by = 0.5)
+#times <- seq(from = 0.25, to = 24.25, by = 0.5)
+times <- 1
 y<-solve_fun(x, model = FFPK, times = times, output = "output")
 tell2(x,y)
 x # print the time-dependent output of sensitivity index and convergence index to the console 
-plot(x, cut.off = 0.05) # Visualize the printed result 
 pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 check(x)
+plot(x) # Visualize the printed result 
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
@@ -59,7 +60,8 @@ x<-rfast99(factors = c("vdist", "ke", "kgutabs"),
            n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 # Use pksensi::solve_fun to solve ode
-times <- seq(from = 0.01, to = 24.01, by = 1)
+#times <- seq(from = 0.01, to = 24.01, by = 1)
+times <- 1
 
 # Use external function initParms = initparms1comp
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", 
@@ -68,6 +70,9 @@ y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp",
              output = "Ccompartment")
 
 tell2(x,y)
+check(x)
+plot(x)
+
 
 dim(x$a);dim(y)
 
@@ -93,10 +98,6 @@ heat_check(x)
 #### log scale ####
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
-
-#
-check(x)
-plot(x)
 
 ####
 
