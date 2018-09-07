@@ -178,18 +178,18 @@ colnames(df4)<-c("Morris","eFAST","Jansen","Owen")
 
 ##########
 corplt<-function(df, v1, v2, col){
-  plot(df[,v1], df[,v2], # col = "white",
-       col = "black", pch = 19,
+  plot(df[,v1], df[,v2], col = "white",
+       #col = "black", pch = 19,
        xlab = names(df[v1]), ylab = names(df[v2]),
        xlim=range(df[,v1]), ylim=range(df[,v2]))
-  #text(df[,v1], df[,v2], labels= row.names(df))
+  text(df[,v1], df[,v2], labels= row.names(df))
   polygon(x = c(min(df[,v1]), min(df[,v1]), max(df[,v1]), max(df[,v1])), 
           y = c(min(df[,v2]), max(df[,v2]), max(df[,v2]), min(df[,v2])), 
           col = col, border = NA)
-  text(min(df[,v1]), 0.95*max(df[,v2]), font=3,
-       bquote(r == .(format(cor(df[,v1],df[,v2]), digits=3))), pos = 4, cex=1.5)
-  text(min(df[,v1]), 0.8*max(df[,v2]), font=3,
-       bquote(rho == .(format(cor(df[,v1],df[,v2], method = c("spearman")), digits=3))), pos = 4, cex=1.5)
+  #text(min(df[,v1]), 0.95*max(df[,v2]), font=3,
+  #     bquote(r == .(format(cor(df[,v1],df[,v2]), digits=3))), pos = 4, cex=1.5)
+  #text(min(df[,v1]), 0.8*max(df[,v2]), font=3,
+  #     bquote(rho == .(format(cor(df[,v1],df[,v2], method = c("spearman")), digits=3))), pos = 4, cex=1.5)
        #paste(bquote(rho, format(cor(df[,v1],df[,v2], method = c("spearman")), digits=3) ,sep=""), pos = 4, cex=1.5)
        #paste("r = ", format(cor(df[,v1],df[,v2]), digits=3) ,sep=""), pos = 4, cex=1.5)
 
@@ -257,4 +257,62 @@ corplt(df4, 1, 4, rgb(1,0,0, alpha=0.1))
 mtext("Sensitivity index", SOUTH<-1, line=2, adj=0.5, cex=1.5, outer=TRUE)
 mtext("Sensitivity index", WEST<-2, line=2, adj=0.2, cex=1.5, outer=TRUE) 
 mtext("Sensitivity index", WEST<-2, line=2, adj=0.75, cex=1.5, outer=TRUE) 
+dev.off()
+
+#################
+
+jpeg(file="fig2-1.jpg",width=2800,height=2800,res=300)
+par(mar=c(2,2,2,1), oma=c(0,0,0,0))
+layout(matrix(c(1,1,1,1,
+                2,3,4,5,
+                6,7,8,9,
+                10,11,12,13,
+                14,15,16,17), nrow = 5, ncol = 4, byrow = TRUE), 
+       heights=c(1,3,3,3,3))
+plot.new()
+mtext(text="Original 21 parameters", line = -3, adj=0, cex=1.5)
+corplt(df, 4, 1, rgb(0,0,0, alpha=0.1))
+corplt(df, 3, 1, rgb(0,0,0, alpha=0.1))
+corplt(df, 2, 1, rgb(0,0,0, alpha=0.1))
+textplt("Morris")
+corplt(df, 4, 2, rgb(0,0,0, alpha=0.1))
+corplt(df, 3, 2, rgb(0,0,0, alpha=0.1))
+textplt("eFAST")
+corplt(df2, 1, 2, rgb(1,0,0, alpha=0.1))
+corplt(df, 4, 3, rgb(0,0,0, alpha=0.1))
+textplt("Jansen")
+corplt(df2, 2, 3, rgb(1,0,0, alpha=0.1))
+corplt(df2, 1, 3, rgb(1,0,0, alpha=0.1))
+textplt("Owen")
+corplt(df2, 3, 4, rgb(1,0,0, alpha=0.1))
+corplt(df2, 2, 4, rgb(1,0,0, alpha=0.1))
+corplt(df2, 1, 4, rgb(1,0,0, alpha=0.1))
+dev.off()
+
+jpeg(file="fig2-2.jpg",width=2800,height=2800,res=300)
+par(mar=c(2,2,2,1), oma=c(0,0,0,0))
+layout(matrix(c(1,1,1,1,
+                2,3,4,5,
+                6,7,8,9,
+                10,11,12,13,
+                14,15,16,17), nrow = 5, ncol = 4, byrow = TRUE), 
+       heights=c(1,3,3,3,3))
+plot.new()
+mtext(text="All 58 parameters", line = -3, adj=0, cex=1.5)
+corplt(df3, 4, 1, rgb(0,0,0, alpha=0.1))
+corplt(df3, 3, 1, rgb(0,0,0, alpha=0.1))
+corplt(df3, 2, 1, rgb(0,0,0, alpha=0.1))
+textplt("Morris")
+corplt(df3, 4, 2, rgb(0,0,0, alpha=0.1))
+corplt(df3, 3, 2, rgb(0,0,0, alpha=0.1))
+textplt("eFAST")
+corplt(df4, 1, 2, rgb(1,0,0, alpha=0.1))
+corplt(df3, 4, 3, rgb(0,0,0, alpha=0.1))
+textplt("Jansen")
+corplt(df4, 2, 3, rgb(1,0,0, alpha=0.1))
+corplt(df4, 1, 3, rgb(1,0,0, alpha=0.1))
+textplt("Owen")
+corplt(df4, 3, 4, rgb(1,0,0, alpha=0.1))
+corplt(df4, 2, 4, rgb(1,0,0, alpha=0.1))
+corplt(df4, 1, 4, rgb(1,0,0, alpha=0.1))
 dev.off()
