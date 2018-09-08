@@ -254,6 +254,41 @@ plot_grid(p1,p11, ncol=1, rel_heights=c(5,2), label_size = 20, labels="AUTO")
 dev.off()
 
 
+############## seminar ############
+
+jpeg(file="fig4-1.jpg",width=3600,height=3200,res=300)
+ggplot(df.b, aes(Obs, prd.val)) + 
+  xlab(expression("in-vivo prediction of plasma concentration, "~mu*g/L)) +
+  ylab(expression("in-silico prediction of plasma concentration, "~mu*g/L)) +
+  theme_bw() + geom_abline(slope = 1, intercept = 0)+ 
+  theme(legend.position="top") + annotation_logticks(sides = "lb") +
+  scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x))) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x, n=3),
+                labels = trans_format("log10", math_format(10^.x)))+
+  geom_ribbon(aes(y = exp(fit), ymin = exp(lwr), ymax = exp(upr), fill = prd.typ), alpha = 0.1) +
+  scale_fill_manual(values=c("black", "blue", "green", "red", "grey")) + 
+  guides(fill=FALSE) + # remove "fill" legend 
+  geom_point(aes(colour = prd.typ), alpha = 0.6) +
+  annotation_custom(grob=g, xmin = log(2), xmax = log(8),
+                    ymin=log(0.4), ymax=log(1.5)) +
+  #annotation_custom(grob=g2, xmin = log(0.6), xmax = log(1.8),
+  #                  ymin=log(2), ymax=log(15)) +
+  scale_color_manual(values=c("black", "blue", "green", "red", "grey"),
+                     name="",
+                     breaks=c("prd.o", "prd.s", "prd.d2", "prd.d", "prd.a"),
+                     labels=c("OMP", 
+                              "OIP",
+                              expression(FIP["05"]), 
+                              expression(FIP["01"]),
+                              "FMP")) + 
+  theme(legend.justification=c(0,1), 
+        legend.position=c(0.8,0.7), 
+        text = element_text(size=20),
+        legend.background = element_rect(fill=alpha('white', 0.1)),
+        panel.grid.minor = element_blank()) # Hide the minor grid lines because they don't align with the ticks
+dev.off()
+
 ################### IC2018 #########
 
 
