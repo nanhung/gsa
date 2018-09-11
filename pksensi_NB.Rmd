@@ -43,7 +43,7 @@ x<-rfast99(factors=c("KA","KE","V"),
 Unlike the sobol function, we need to define the time step here.
 
 ```{r message = FALSE}
-times <- seq(from = 0.25, to = 24.25, by = 0.5)
+times <- seq(from = 0.25, to = 24.25, by = 1)
 y<-solve_fun(x, model = FFPK, times = times, output = "output")
 tell2(x,y)
 x # print the time-dependent output of sensitivity index and convergence index to the console 
@@ -108,7 +108,7 @@ Compile the c file
 
 ```{r message = FALSE}
 mName = "pbtk1comp"
-compile(mName, application = "R") 
+compile(mName, application = "R", use_model_file = F) 
 # The compile function can generate the R file for input parameter and initial state 
 ```
 
@@ -177,7 +177,7 @@ points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
 ```{r message = FALSE}
 mName = "3compPBPKmodel"
-compile(mName)
+compile(mName, application = "R", use_model_file = F) 
 
 parameters <- initparms3comp()
 initState <- initState3comp(parms=parameters)
@@ -227,22 +227,14 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
              list(min = params$Rblood2plasma * LL, max = params$Rblood2plasma * UL))
 
 factors <- names(parameters)
-times <- seq(from = 0.5, to = 24.5, by = 1)
 
-#x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg, rep = 10, conf = 0.95)
-#y<-solve_fun(x, times, parameters = parameters, initState, outnames = outnames,
-#             dllname = mName, func = "derivs3comp", initfunc = "initmod3comp", 
-#             output = "Crest")
-# tell2(x,y)
-```
+x<-rfast99(factors = factors, n = 1000, q = q, q.arg = q.arg, rep=5)
+times <- seq(from = 0.01, to = 6.01, by = 0.2)
+y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp", initState = initState,
+             outnames = outnames, dllname = mName, func = "derivs", initfunc = "initmod", 
+             output = "Crest")
 
-# Sample number n = 2000
-```{r message = FALSE}
-# sample number = 2000
-load(file = "3comp_2000.rda") # parameter space
-load(file = "3comp_2000y.rda") # model output
-cat(file.size(file = "3comp_2000.rda")/1e6, "MB", "\n") 
-cat(file.size(file = "3comp_2000y.rda")/1e6, "MB") 
+tell2(x,y)
 ```
 
 ```{r message = FALSE}
@@ -255,6 +247,8 @@ plot(x, cut.off = 0.05)
 check(x)
 ```
 
+#
+
 # Heapmap check
 ```{r message = FALSE}
 heat_check(x, index = "SI") 
@@ -262,17 +256,8 @@ heat_check(x, index = "SI", order = T)
 heat_check(x, index = "CI")
 ```
 
-# Sample number n = 4000
-```{r message = FALSE}
-# sample number = 4000
-load(file = "3comp_4000.rda")
-load(file = "3comp_4000y.rda")
-cat(file.size(file = "3comp_4000.rda")/1e6, "MB", "\n")
-cat(file.size(file = "3comp_4000y.rda")/1e6, "MB")
-```
 
 ```{r message = FALSE}
-plot(x, cut.off = 0.05)
 heat_check(x, index = "SI") 
 heat_check(x, index = "SI", order = T)
 heat_check(x, index = "CI")
@@ -290,9 +275,8 @@ The model file will generate the C model file 'ACAT_like.c' to linke with R deSo
 It can also create the R parameter initialization file 'ACAT_like_inits.R'
 The executable file 'ACAT_like.so' or 'ACAT_like.dll' will generate in the compile process.
 ```{r message = FALSE}
-source("compile.R")
 mName <- "ACAT_like"
-compile(mName, model = T)
+compile(mName, app= "R")
 ```
 
 Seting initial state and parameter value. Al parameter value can be check by using `initParms()`. Also, the `initStates()` can use to check all state conditions. The `Outputs` included all variables that were defined in the statement of outputs in 'ACAT_like.model'
@@ -410,16 +394,13 @@ q.arg = list(list(min = -2.3, max = 0), # Peff
 Set the time step and input the parameters in `rfast99`
 ```{r eval=FALSE}
 times <- seq(from = 0.5, to = 12.5, by = 1)
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg, rep = 20, conf = 0.95) 
-#y<-solve_fun(x, times, parameters = parameters, initState = initState, 
-#             outnames = outnames, dllname = mName,
-#             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
-# user   system  elapsed 
-# 3801.957    6.150 3808.827 
-cat(file.size(file = "acat_2000.rda")/1e6, "MB", "\n")
-cat(file.size(file = "acat_2000y.rda")/1e6, "MB")
-load(file = "acat_2000.rda")
-load(file = "acat_2000y.rda")
+x<-rfast99(factors = factors, n = 1000, q = q, q.arg = q.arg, rep = 5) 
+y<-solve_fun(x, times, parameters = parameters, 
+             initState = initState, 
+             initParmsfun = "initParms", #
+             outnames = outnames, dllname = mName,
+             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
+tell2(x,y)
 ```
 
 Create the basic plot
@@ -431,7 +412,7 @@ plot(x,cut.off = 0.05)
 Check sensitivity parameter
 ```{r fig.height=6, fig.width=8, message=FALSE}
 heat_check(x, order =T)
-heat_check(x, order =T, category = F, text= T)
+heat_check(x, order =T, text= T)
 heat_check(x, index = "CI")
 ```
 
@@ -439,27 +420,27 @@ heat_check(x, index = "CI")
 
 ```{r message = FALSE}
 # specific index (the default show all results)
-heat_check(x, filter = c("first order","interaction"))
+heat_check(x, fit = c("first order","interaction"))
 ```
 
 ```{r message = FALSE}
 # Continous
-heat_check(x, filter = c("first order","total order"), category = F)
+heat_check(x, fit = c("first order","total order"), level = F)
 # Add value
-heat_check(x, filter = c("first order","total order"), category = F, text = T)
-heat_check(x, filter = c("first order","total order"), order = T, text = T)
+heat_check(x, fit = c("first order","total order"), level = F, text = T)
+heat_check(x, fit = c("first order","total order"), order = T, text = T)
 ```
 
 ## Customize color 
 ```{r message = FALSE}
 # grey scale
 heat_check(x) + ggplot2::scale_fill_grey(start = .9, end = .0) + ggplot2::ggtitle("Grey scale (discrete)")
-heat_check(x, category = F) + ggplot2::scale_fill_gradient(low = "white", high = "black") + ggplot2::ggtitle("Grey scale (continue)")
+heat_check(x, level = F) + ggplot2::scale_fill_gradient(low = "white", high = "black") + ggplot2::ggtitle("Grey scale (continue)")
 
 # viridis for color blindness
 heat_check(x) + viridis::scale_fill_viridis(discrete=TRUE) + ggplot2::ggtitle("viridis for color blindness")
-heat_check(x, category = F) + viridis::scale_fill_viridis() + ggplot2::ggtitle("viridis for color blindness")
+heat_check(x, level = F) + viridis::scale_fill_viridis() + ggplot2::ggtitle("viridis for color blindness")
 
 #
-heat_check(x, filter = c("first order","interaction"), text = T, category = F) + ggplot2::scale_fill_gradient(low = "white", high = "blue") + ggplot2::ggtitle("The eFAST with random phase shift")
+heat_check(x, fit = c("first order","interaction"), text = T, level = F) + ggplot2::scale_fill_gradient(low = "white", high = "blue") + ggplot2::ggtitle("The eFAST with random phase shift")
 ```

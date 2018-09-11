@@ -14,7 +14,7 @@ FFPK <- pksensi:::FFPK
 
 # Define parameter distribution
 q = "qunif"
-q.arg = list(list(min = 0.5, max = 1.5), 
+q.arg = list(list(min = 0.5,  max = 1.5), 
              list(min = 0.02, max = 0.3),
              list(min = 20, max = 60))
 
@@ -508,23 +508,6 @@ y[,"lnCPL_AS_mcgL"]
 
 
 ################
-#Nominal value
-Tg <- log(0.23)
-Tp <- log(0.033)
-CYP_Km <- log(130)
-SULT_Km_apap <- log(300)
-SULT_Ki <- log(526)
-SULT_Km_paps <- log(0.5)
-UGT_Km <- log(6.0e3)
-UGT_Ki <- log(5.8e4)
-UGT_Km_GA <-log(0.5)
-Km_AG <- log(1.99e4)
-Km_AS <- log(2.29e4)
-
-r = 2.0 # exp(2.3)/exp(-2.3) ~ 100
-#r = 2.0 # exp(2.0)/exp(-2.0) ~ 54.6
-#r = 1.8 # exp(1.8)/exp(-1.8) ~ 36.6
-
 #
 mName <- "APAP_PBPK_thera"
 compile(mName, use_model_file = T, version = "6.0.1", app = "mcsim")
@@ -541,6 +524,22 @@ q <- c("qtri","qtri","qtri","qunif",
        "qtri","qtri","qtri","qunif",
        "qtri","qunif","qtri","qunif",
        "qunif","qunif","qunif","qunif","qunif")
+
+#Nominal value
+Tg <- log(0.23)
+Tp <- log(0.033)
+CYP_Km <- log(130)
+SULT_Km_apap <- log(300)
+SULT_Ki <- log(526)
+SULT_Km_paps <- log(0.5)
+UGT_Km <- log(6.0e3)
+UGT_Ki <- log(5.8e4)
+UGT_Km_GA <-log(0.5)
+Km_AG <- log(1.99e4)
+Km_AS <- log(2.29e4)
+
+r = 2.0
+
 q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(Tp-r, Tp+r, Tp),
              list(CYP_Km-r, CYP_Km+r, CYP_Km),
@@ -568,7 +567,7 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-x<-rfast99(factors = factors, n = 4096, q = q, q.arg = q.arg) 
+x<-rfast99(factors = factors, n = 1024, q = q, q.arg = q.arg) 
 
 #####
 #y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
@@ -584,13 +583,19 @@ conditions <- c("mgkg_flag = 0",
                 "OralDose_APAP_mg = 1000.0",
                 "IVExp_APAP = 0.",
                 "IVDose_APAP_mg = 0.")
-
-y<-solve_mcsim(x, mName = mName,
-               infile.name = infile.name, 
-               outfile.name = outfile.name, 
+generate_infile(infile.name = infile.name, 
+                outfile.name = outfile.name, 
+                parameters = factors,
+                output = output,
+                time = times, 
+                condition = conditions) 
+y<-solve_mcsim(x, mName = mName, 
+               infile.name = "setpoint.in", 
+               setpoint.name = "setpoint.dat",
                parameters = factors,
                output = output,
-               time = times, 
+               time = times,
+               outfile.name = "setpoint.csv",
                condition = conditions)
 
 #user   system  elapsed 
