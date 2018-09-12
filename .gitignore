@@ -18,3 +18,4 @@ mcsim.*
 *.so
 *.html
 *.rda
+setpoint.in
