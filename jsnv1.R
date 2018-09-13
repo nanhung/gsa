@@ -50,9 +50,36 @@ J.X.df <- function(n){
              X21 = runif(n, -6., 1))
 }
 
+#
+#J.X.df <- function(n){
+#  data.frame(X1 = runif(n, Tg-r, Tg+r),
+#             X2 = runif(n, Tp-r, Tp+r),
+#             X3 = runif(n, CYP_Km-r, CYP_Km+r),
+#             X4 = runif(n, -2., 5.),
+#             X5 = runif(n, SULT_Km_apap-r, SULT_Km_apap+r),
+#             X6 = runif(n, SULT_Ki-r, SULT_Ki+r),
+#             X7 = runif(n, SULT_Km_paps-r, SULT_Km_paps+r),
+#             X8 = runif(n, 0, 10),
+#             X9 = runif(n, UGT_Km-r, UGT_Km+r),
+#             X10 = runif(n, UGT_Ki-r, UGT_Ki+r),
+#             X11 = runif(n, UGT_Km_GA-r, UGT_Km_GA+r),
+#             X12 = runif(n, 0, 10),
+#             X13 = runif(n, Km_AG-r, Km_AG+r),
+#             X14 = runif(n, 7., 15),
+#             X15 = runif(n, Km_AS-r, Km_AS+r),
+#             X16 = runif(n, 7., 15),
+#             X17 = runif(n, 0., 13),
+#             X18 = runif(n, 0., 13),
+#             X19 = runif(n, -6., 1),
+#             X20 = runif(n, -6., 1),
+#             X21 = runif(n, -6., 1))
+#}
+
+
 n <- 8192
 X1 <- J.X.df(n); X2 <- J.X.df(n);
-J.S <- soboljansen(NULL, X1, X2)#, conf = 0.95, nboot = 1000)
+J.S <- soboljansen(NULL, X1, X2)
+#J.S <- soboljansen(NULL, X1, X2, conf = 0.95, nboot = 1000)
 J.S.APAP.df <- cbind(1, J.S$X)
 write.table(J.S.APAP.df, file="apap_setpoint.dat", row.names=FALSE, sep="\t")
 system("./mcsim.apap.pbpk_v2 apap.setpoint_v1.in")
