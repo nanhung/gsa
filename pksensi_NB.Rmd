@@ -8,7 +8,7 @@ output:
 
 This [R Markdown](http://rmarkdown.rstudio.com) Notebook shows the main functions in [pksensi](https://github.com/nanhung/pksensi) package.
 
-**pksensi** implements the global sensitivity analysis workflow to investigate the parameter uncertainty and sensitivity in pharmacokinetic (PK) models, especially the physiologically based pharmacokinetic (PBPK) model and advanced compartment absorption and transit (ACAT) model with multivariate output. The package also provide some functions to check the convergence and sensitivity of model parameters.
+**pksensi** implements the global sensitivity analysis workflow to investigate the parameter uncertainty and sensitivity in pharmacokinetic (PK) models, especially the physiologically based pharmacokinetic (PBPK) model and advanced compartment absorption and transit (ACAT) model with multivariate outputs. The package also provide some functions to check the convergence and sensitivity of model parameters.
 
 ```{r message = FALSE, warning=FALSE}
 # Install the pksensi, if the package haven't already:
@@ -79,7 +79,7 @@ The `pksim` function is use to simulate the output result. This method can use b
 
 ```{r message = FALSE}
 pksim(y)
-points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
+#points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 ```
 
 The `check` function can summarize the sensitivity index and convergence index. The `SI` and `CI` can change to other value.
@@ -168,7 +168,7 @@ Here use n = 400 to reach converge.
 ```{r message = FALSE}
 plot(x)
 pksim(y, log = T) # Use log-transformed scale
-points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+#points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 ```
 
 
@@ -229,7 +229,7 @@ q.arg = list(list(min = params$BW * LL, max = params$BW * UL),
 
 factors <- names(parameters)
 
-x<-rfast99(factors = factors, n = 1000, q = q, q.arg = q.arg)
+x<-rfast99(factors = factors, n = 1000, q = q, q.arg = q.arg, rep = 5)
 times <- seq(from = 0.01, to = 6.01, by = 0.2)
 y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp", initState = initState,
              outnames = outnames, dllname = mName, func = "derivs", initfunc = "initmod", 
@@ -240,7 +240,7 @@ tell2(x,y)
 
 ```{r message = FALSE}
 pksim(y, log = T)
-points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+#points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 ```
 
 ```{r message = FALSE}
@@ -417,7 +417,9 @@ heat_check(x, order =T, text= T)
 heat_check(x, index = "CI")
 ```
 
-## APAP-PBPK
+# Acetaminophen (APAP)-PBPK
+
+Here shows how to perfom eFAST for APAP-PBPK model with MCSim 
 
 ```{r message = FALSE}
 mName <- "APAP_PBPK_thera"
@@ -480,6 +482,9 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
 x<-rfast99(factors = factors, n = 2048, q = q, q.arg = q.arg, rep = 10) 
+```
+
+```{r message = FALSE}
 load("APAP2048x5.rda")
 ```
 
@@ -513,15 +518,16 @@ generate_infile(infile.name = infile.name,
 #               time = times,
 #               outfile.name = "setpoint.csv",
 #               condition = conditions))
+##   user  system elapsed 
+##  22.18    1.79  560.55
 #tell2(x,y)
-#load("APAP2048x5.rda")
+#save(x, file = "APAP2048x5.rda")
 ```
 
-
-
-```{r message = FALSE}
-#plot(x, vars = "lnCPL_AG_mcgL")
-#plot(x, vars = "lnCPL_AS_mcgL")
+```{r message = FALSE, fig.height=9}
+plot(x, vars = "lnCPL_APAP_mcgL")
+plot(x, vars = "lnCPL_AG_mcgL")
+plot(x, vars = "lnCPL_AS_mcgL")
 ```
 
 ```{r message = FALSE}
