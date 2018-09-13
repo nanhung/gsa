@@ -484,15 +484,13 @@ set.seed(1234)
 x<-rfast99(factors = factors, n = 2048, q = q, q.arg = q.arg, rep = 10) 
 ```
 
-```{r message = FALSE}
-load("APAP2048x5.rda")
-```
-
 Plot the sampling parameter space 
 ```{r message = FALSE}
 plot(x$a[,1,"lnTg"],x$a[,1,"lnTp"])
 plot(x$a[,2,"lnTg"],x$a[,2,"lnTp"])
 plot(x$a[,3,"lnTg"],x$a[,3,"lnTp"])
+plot(x$a[,4,"lnTg"],x$a[,4,"lnTp"])
+plot(x$a[,5,"lnTg"],x$a[,5,"lnTp"])
 ```
 
 ```{r message = FALSE}
@@ -522,12 +520,13 @@ generate_infile(infile.name = infile.name,
 ##  22.18    1.79  560.55
 #tell2(x,y)
 #save(x, file = "APAP2048x5.rda")
+load("APAP2048x5.rda")
 ```
 
 ```{r message = FALSE, fig.height=9}
-plot(x, vars = "lnCPL_APAP_mcgL")
-plot(x, vars = "lnCPL_AG_mcgL")
-plot(x, vars = "lnCPL_AS_mcgL")
+plot(x, vars = "lnCPL_APAP_mcgL", cut.off = 0.05)
+plot(x, vars = "lnCPL_AG_mcgL", cut.off = 0.05)
+plot(x, vars = "lnCPL_AS_mcgL", cut.off = 0.05)
 ```
 
 ```{r message = FALSE}
@@ -537,12 +536,22 @@ heat_check(x, index = "SI")
 heat_check(x, index = "CI")
 ```
 
+Change facet
+
 ```{r message = FALSE}
+heat_check(x, fit = "first order")
 heat_check(x, fit = "total order")
 ```
 
+Multi cut-off
+
 ```{r message = FALSE}
-check(x, SI = "0.5")
+heat_check(x, fit = "total order", SI.cutoff = c(0.05,0.1,0.15,0.2))
+```
+
+```{r message = FALSE}
+#check(x, SI = "0.5", vars = "lnCPL_APAP_mcgL") # For APAP
+check(x, SI = "0.5") # For all variables
 ```
 
 ## Customize heatmap
