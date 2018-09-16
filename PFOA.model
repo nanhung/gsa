@@ -1,0 +1,115 @@
+#---------------------------------------------------------
+# PFOA.model
+#
+# A two-compartment model for PFOA toxicokinetics.
+#---------------------------------------------------------
+States = {	A_central, 	# Amount of PFOA in the central compartment (mg)
+			A_gut,			# AUC of PFOA in central compartment (mg-hr/L)
+		  	AUC,
+			A_deep,		# Amount of PFOA in the deep tissue compartment (mg)
+			A_fil,		# Amount of PFOA in the filtrate compartment (mg)
+			A_urine};	# Amount of PFOA in the filtrate compartment (mg)
+		   		
+		  
+Inputs = { Dose };	# Oral dose (mg/kg) # Amount of PFOA in the gut (mg)
+
+Outputs = { Ccentral,	# Concentration of PFOA in the central compartment (mg/L) 
+			A_total,
+			C_deep,		# Concentration of PFOA in the deep tissue compartment (mg/L) 
+			C_fil};		# Concentration of PFOA in the filtrate compartment (mg/L)
+						
+#Compartments = {central, second, filtrate};
+
+# Input parameters
+# -----------------
+##-- PFOA dosing
+	Dose = 0.0;
+	TChng = 0.05;	# IV infusion duration (hr)
+	
+# Model parameters
+# -----------------
+BW	= 0.02;  # Species-specific defaults during initialization
+#Male = 0.5;	# 1 = male, 0=female;  0.5 = mixed;
+#Species	= 1.0;	# 1 = monkey, 2 = rat, 3 = mouse
+BW74 = pow(BW, 0.74);
+Qcc = 8.68;	# Cardiac output (L/h/kg)
+ka = 290; 	# (0.6–73 000) for CD1 Mouse (F); 340 (0.53–69 000) for C57Bl/6 Mouse (F); 1.7 (1.1–3.1) (F) & 1.1 (0.83–1.3) (M) for SD Rat; 230 (0.27–73 000) for Cynomolgus Monkey (M/F)
+Qfilc = 0.077;	# (0.015–0.58) for CD1 Mouse (F); 0.017 (0.010–0.081) for C57Bl/6 Mouse (F); 0.039 (0.014–0.13) (F) & 0.22 (0.011–58) (M) for SD Rat; 0.15 (0.02–24) for Cynomolgus Monkey (M/F)
+Vcc = 0.18; 	# (0.16–2.0) for CD1 Mouse (F); 0.17 (0.13–2.3) for C57Bl/6 Mouse (F); 0.14 (0.11–0.17) (F) & 0.15 (0.13–0.16) (M) for SD Rat; 0.4 (0.29–0.55) for Cynomolgus Monkey (M/F)
+k12 = 0.021; 	# (3.1 × 10−10 to 3.8 × 104) for CD1 Mouse (F); 0.35 (0.058–52) for C57Bl/6 Mouse (F); 0.098 (0.039–0.27) (F) & 0.028 (0.0096–0.08) (M) for SD Rat; 0.0011 (2.4 × 10−10 to 3.5 × 104) for Cynomolgus Monkey (M/F)
+Rv2v1 = 1.07;	# (0.26–5.84) for CD1 Mouse (F); 53 (11–97) for C57Bl/6 Mouse (F); 9.2 (3.4–28) (F) & 8.4 (3.1–23) (M) for SD Rat; 0.98 (0.25–3.8) for Cynomolgus Monkey (M/F)
+Vfilc = 9.7e-04; 	#  (3.34 × 10−9 to 7.21) for CD1 Mouse (F); 7.6 × 10−5 (2.7 × 10−10 to 6.4) for C57Bl/6 Mouse (F); 2.6 × 10−5 (2.9 × 10−10 to 28) (F) & 0.0082 (1.3 × 10−8 to 7.6) (M) for SD Rat; 0.0021 (3.3 × 10−9 to 6.9) for Cynomolgus Monkey (M/F)
+Tmc = 4.91;			# (1.75–2.96) for CD1 Mouse (F); 2.7 (0.95–22) for C57Bl/6 Mouse (F); 1.1 (0.25–9.6) (F) & 190 (5.5–50 000) (M) for SD Rat; 3.9 (0.65–9700) for Cynomolgus Monkey (M/F)
+KT = 0.037;			# (0.0057–0.17) for CD1 Mouse (F); 0.12 (0.033–0.24) for C57Bl/6 Mouse (F); 1.1 (0.27–4.5) (F) & 0.092 (3.4 × 10−4 to 1.6) (M) for SD Rat; 0.043 (4.3 × 10−5 to 0.29) for Cynomolgus Monkey (M/F)
+Free = 0.011;
+
+#Qfilc;	# Fraction of flow through the filtrate compartment (1/hr)
+#k12;	# Rate of flow from the central to the deep tissue compartments (1/hr)
+#Rv2v1;	# Ratio of the volume of the second compartment to the first
+#ka;		# 1st order absorption rate constant (1/hr)
+#Vcc; 	# Fraction of volume of the central compartment (L/kg)
+#Vfilc;  # Fraction of volume of the filtrate compartment (L)
+#Tmc;	# Constant of Michaelis-Menten kinetics (M/hr)
+#KT;		# Half-maximum concentration from the filtrate back into the central compartment (M)
+#Free;	# Free fraction of PFOA in the central compartment;
+
+# Scaled parameters
+# -----------------
+# Model Parameters computed by scaling from the above. The following parameters are calculated from 
+#the above values in the Scale section before the start of each simulation.
+# They are left uninitialized here.
+
+Qd;		# = 0 Flow between the central and second compartments(1/hr)
+k21;	# Rate of flow from the deep tissue to the central compartments (1/hr)
+Qfil;	# Flow through the filtrate compartment(L/hr)
+Vc ; 	# Volume of the central compartment (L)
+Vt; 	# Volume of the deep tissue compartment (L)
+Vfil;  	# Volume of the filtrate compartment (L)
+Tm;		# Maximum rate of the saturable resorption from the filtrate back into the central compartment
+#kDose;
+
+# Statistical model parameters
+# -----------------
+	
+Initialize {
+#	BW = 1;		# Body weight (kg)
+	# use measured value of > 0, otherwise use 0.03 for mouse, 
+	#	0.3 for rat, 60 for female human, 70 for male human
+	#BW = (Species == 3 ? 0.02 : (Species == 2 ? 0.2 : (Male == 0 ? 60.0 : 70.0)));
+# Cardiac Output a(L/hr/kg^0.74) 
+	#Qcc = (Species == 3 ? 8.68 : (Species == 2 ? 12.39 : 19.8 ));	# Mouse, Rat, Human (default)
+	Vc = Vcc * BW;
+	k21 = k12/Rv2v1;
+	Vt = k12 / k21 * Vc;
+	Vfil = Vfilc * BW;
+	Qd = k12 * Vc;
+	Tm = Tmc * BW;
+	Qfil = Qfilc * Qcc * BW74;
+	};
+
+Dynamics {
+	kDose = Dose * BW/TChng;
+	# Rate of amount change in the gut (mg/h)
+ 	dt(A_gut) = kDose-ka*A_gut;
+	# Rate of amount change in the central compartment (mg/h) 
+	Ccentral = A_central/Vc;
+	C_deep = A_deep/Vt;
+	C_fil = A_fil/Vfil;
+	dt(A_central) = ka*A_gut - Qd*Free*Ccentral - Qfil*Free*Ccentral + Tm*C_fil/(KT + C_fil) + Qd*C_deep;
+	# Rate of amount change in the deep tissue compartment (mg/h)
+	dt(A_deep) = Qd*Free*Ccentral - Qd*C_deep;
+	# Rate of amount change in the filtrate compartment (mg/h)
+ 	dt(A_fil) = Qfil*Free*Ccentral - Tm*C_fil/(KT + C_fil) - Qfil*C_fil;
+	dt(A_urine) = Qfil*C_fil;
+	#***Dose Metrics***
+#AUC of PFOA in arterial blood	(mg-hr/L)
+	dt(AUC) = A_central/Vc;	
+	};
+
+CalcOutputs { 
+	Ccentral = A_central/Vc; #Free*
+	A_total = A_central + A_deep + A_fil + A_gut + A_urine;
+	C_deep = A_deep/Vt;
+	C_fil = A_fil/Vfil;
+	};
+End.
