@@ -1,0 +1,80 @@
+#------------------------------------------------------------------------------
+# PFOA.in
+#
+# Input file for simulating a discrete-time model. 
+# Euler is used to simply define the time step for the simulation.
+#--------------------------------------------------------------------------
+Integrate(Lsodes, 1e-13, 1e-15, 1)
+MonteCarlo ("PFOA.mc.Lau.out", 1000, 27852702);
+
+Distrib(	ka	LogNormal  209.284	19.826); 
+Distrib(	Qfilc	LogNormal 0.093	2.541	); 
+Distrib(	Vcc	LogNormal 0.566	1.905	);
+Distrib(	k12	LogNormal 3.43E-03	3.93E+03	);
+Distrib(	Rv2v1	LogNormal 1.232	2.212	);
+Distrib(	Vfilc	LogNormal 1.55E-04	240.53	);
+Distrib(	Tmc	LogNormal 2.276	1.143	);
+Distrib(	KT	LogNormal 0.031	2.38	);
+Distrib(	Free	LogNormal 0.012	2.137	);
+
+Simulation {## Group 1 Strain = CD-1 (F) Dosed 1 mg/kg/day at GD-1-17
+Dose  = NDoses(  34  , 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05 );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 432, 1  # 1 to 432 hrs, every 1 hr
+	);
+}
+
+Simulation {## Group 2 Strain = CD-1 (F) Dosed at GD-1-17
+Dose  = NDoses(  34  , 3 0  3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 432, 1  # 1 to 432 hrs, every 1 hr
+	);
+}
+
+Simulation {## Group 3 Strain = CD-1 (F)
+Dose  = NDoses(  34  , 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 432 1  # 1 to 432 hrs, every 1 hr
+	);
+}
+
+Simulation {## Group 4 Strain = CD-1 (F)
+Dose  = NDoses(  34  , 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 432, 1  # 1 to 432 hrs, every 1 hr
+	);
+}
+
+Simulation {## Group 5 Strain = CD-1 (F)
+Dose  = NDoses(  34  , 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 432, 1  # 1 to 432 hrs, every 1 hr
+	);
+}
+
+Simulation {## Group 6 Strain = CD-1 (F)
+Dose  = NDoses(  34  , 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 432, 1  # 1 to 432 hrs, every 1 hr
+	);
+}
+
+END.

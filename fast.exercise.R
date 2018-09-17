@@ -598,6 +598,17 @@ y<-solve_mcsim(x, mName = mName,
                outfile.name = "setpoint.csv",
                condition = conditions)
 
+### MONTECARLO
+dist<-rep("Uniform", 21)
+generate_infile(infile.name = infile.name, 
+                outfile.name = outfile.name, 
+                parameters = factors,
+                output = output,
+                time = times, 
+                n=1000, dist = dist, q.arg = q.arg, 
+                condition = conditions) 
+
+
 #user   system  elapsed 
 #1267.084  652.133 1917.641 
 #user   system  elapsed 

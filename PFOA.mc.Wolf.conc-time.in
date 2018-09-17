@@ -1,0 +1,93 @@
+#------------------------------------------------------------------------------
+# PFOA.in
+#
+# Input file for simulating a discrete-time model. 
+# Euler is used to simply define the time step for the simulation.
+#--------------------------------------------------------------------------
+Integrate(Lsodes, 1e-13, 1e-15, 1)
+MonteCarlo ("PFOA.mc.Wolf.out", 1000, 27852702);
+
+Distrib(	ka	LogNormal  209.284	19.826	); 
+Distrib(	Qfilc	LogNormal 0.093	2.541	); 
+Distrib(	Vcc	LogNormal 0.566	1.905	);
+Distrib(	k12	LogNormal 3.43E-03	3.93E+03	);
+Distrib(	Rv2v1	LogNormal 1.232	2.212	);
+Distrib(	Vfilc	LogNormal 1.55E-04	240.53	);
+Distrib(	Tmc	LogNormal 2.276	1.143	);
+Distrib(	KT	LogNormal 0.031	2.38	);
+Distrib(	Free	LogNormal 0.012	2.137	);
+
+#-------------------------------------------------------------------------------------------------------------
+# Data from Wolf et al. (2007)
+#-------------------------------------------------------------------------------------------------------------
+Simulation {## Study 2 Group 1 Strain = CD-1 (F) Dosed at 3 mg/kg GD-1-17 ***Experiment = 7: CD1F-S2D3GD117
+Dose  = NDoses(  34  , 3 0  3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 3 0 , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+Simulation {## Study 2 Group 2 Strain = CD-1 (F) Dosed 5 mg/kg at GD-1-17 ***Experiment = 8: CD1F-S2D5GD117
+Dose  = NDoses(  34  , 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+Simulation {## Study 2 Group 3 Strain = CD-1 (F) Dosed 5 mg/kg at GD-7-17 ***Experiment = 9: CD1F-S2D5GD717
+Dose  = NDoses(  34  , 0	0	0	0	0	0	0	0	0	0	0	0	5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+Simulation {## Study 2 Group 4 Strain = CD-1 (F) Dosed 5 mg/kg at GD-10-17 ***Experiment = 10: CD1F-S2D5GD1017
+Dose  = NDoses(  34  ,	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 5 0 , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+Simulation {## Study 2 Group 5 Strain = CD-1 (F) Dosed 5 mg/kg at GD-13-17 ***Experiment = 11: CD1F-S2D5GD1317
+Dose  = NDoses(  34  , 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	5 0 5 0 5 0 5 0 5 0 , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+Simulation {## Study 2 Group 6 Strain = CD-1 (F) Dosed 5 mg/kg at GD-15-17 ***Experiment = 12: CD1F-S2D5GD1517
+Dose  = NDoses(  34  , 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	5 0 5 0 5 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+Simulation {## Study 2 Group 7 Strain = CD-1 (F) Dosed 20 mg/kg at GD-15-17 ***Experiment = 13: CD1F-S2D20GD1517
+Dose  = NDoses(  34  , 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	20 0 20 0 20 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05  );
+PrintStep(	Ccentral, 	#Inhaled concentration of Perc
+#			AUC,
+#			A_gut,
+#			A_total,
+	0, 960, 1  # 1 to 960 hrs, every 1 hr
+	);
+}
+
+END.
