@@ -1,17 +1,19 @@
 # Update the version of pksensi
-devtools::install_github("nanhung/pksensi") 
+# devtools::install_github("nanhung/pksensi") 
 library(pksensi)
+
+mName <- "PFOA"
+compile(mName)
 
 # Input
 n= 1000
-mName <- "PFOA"
 infile.name <- "PFOA_MC.in"
 outfile.name <- "PFOA.mc.Lau.out"
 parameters <- c("ka","Qfilc","Vcc","k12","Rv2v1","Vfilc","Tmc","KT","Free")  
 outputs <- c("Ccentral", "AUC", "A_gut","A_total")
 times <- seq(0.5, 432.5, 1)
 
-dist<-rep("LogNormal", 21)
+dist<-rep("LogNormal", 9)
 q.arg<-list(list(209.284,	19.826),
             list(0.093,	2.541),
             list(0.566,	1.905),

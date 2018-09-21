@@ -19,3 +19,4 @@ mcsim.*
 *.html
 *.rda
 setpoint.in
+*.c
