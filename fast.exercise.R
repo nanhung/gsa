@@ -21,7 +21,7 @@ q.arg = list(list(min = 0.5,  max = 1.5),
 # The replication and confidence interval are set to 20, 0.95, respectively.
 set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
-           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+           n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
 #times <- 10
@@ -32,7 +32,8 @@ pksim(y)
 points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 check(x)
-heat_check(x)
+heat_check(x, SI.cutoff = c(0.01,0.05,0.1,0.2))
+heat_check(x, index = "CI", CI.cutoff = c(0.01,0.05,0.1,0.2))
 plot(x) # Visualize the printed result 
 
 ##### MCSim under R (use deSolve package)
