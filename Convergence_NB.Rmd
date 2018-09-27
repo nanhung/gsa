@@ -13,7 +13,8 @@ output:
 # Import the pksensi
 library(pksensi)
 library(EnvStats) # To use "qnormTrunc"
-
+library(scatterplot3d)
+library(LSD)
 ```
 
 # Exercise: Flip-Flop Kinetics (Analytical approach)
@@ -25,10 +26,7 @@ FFPK <- function(parameters, times, dose = 320){
   CONC <- A*exp(- parameters[2] * times) - A*exp(- parameters[1] * times)
   return(CONC)
 }
-
-FFPK <- pksensi:::FFPK
 ```
-
 
 ## Uniform distribution
 
@@ -40,13 +38,21 @@ q1.arg = list(list(min = 0.5,  max = 1.5),
 
 # The replication and confidence interval are set to 20, 0.95, respectively.
 set.seed(1234)
-x1<-rfast99(factors=c("KA","KE","V"),
-           n = 400, q = q1, q.arg = q1.arg, rep = 20, conf = 0.95)
+rep <- 20
+conf <- 0.95
+n <- 400
+x1<-rfast99(factors=c("KA","KE","V"), n = n, q = q1, q.arg = q1.arg, rep = rep, conf = conf)
+hist(x1$a[,,"KA"])
+hist(x1$a[,,"KE"])
+hist(x1$a[,,"V"])
+```
 
+```{r message = FALSE}
 # Parameter space for each parameter across replication
 plot(x1$a[,1,"KA"], x1$a[,2,"KA"])
 plot(x1$a[,1,"KE"], x1$a[,2,"KE"])
 plot(x1$a[,1,"V"], x1$a[,2,"V"])
+scatterplot3d(x1$a[,1:3,"KA"])
 ```
 
 
@@ -60,7 +66,7 @@ pksim(y1)
 ```{r message = FALSE}
 check(x1, SI = 0.05, CI = 0.01)
 heat_check(x1)
-heat_check(x1, index = "CI", CI.cutoff = c(0.01,0.05))
+heat_check(x1, index = "CI", CI.cutoff = c(0.01, 0.05))
 plot(x1) # Visualize the printed result 
 ```
 
@@ -72,6 +78,7 @@ plot(x1$a[,1,"V"], y1[,1,1,])
 plot(x1$a[,,"KA"], x1$a[,,"KE"])
 plot(x1$a[,,"KA"], x1$a[,,"V"])
 plot(x1$a[,,"KE"], x1$a[,,"V"])
+scatterplot3d(x1$a[,1,1:3])
 ```
 
 ## Truncated normal distribution
@@ -91,13 +98,18 @@ q2.arg = list(list(mean = mu_KA, sd = sd_KA, min = 0.5,  max = 1.5),
              list(mean = mu_V, sd = mu_V, min = 20, max = 60))
 
 set.seed(1234)
-x2<-rfast99(factors=c("KA","KE","V"),
-           n = 400, q = q2, q.arg = q2.arg, rep = 20, conf = 0.95)
+x2<-rfast99(factors=c("KA","KE","V"), n = 400, q = q2, q.arg = q2.arg, rep = 20, conf = 0.95)
+hist(x2$a[,,"KA"])
+hist(x2$a[,,"KE"])
+hist(x2$a[,,"V"])
+```
 
+```{r message = FALSE}
 # Parameter space for each parameter across replication
 plot(x2$a[,1,"KA"], x2$a[,2,"KA"])
 plot(x2$a[,1,"KE"], x2$a[,2,"KE"])
 plot(x2$a[,1,"V"], x2$a[,2,"V"])
+scatterplot3d(x2$a[,1:3,"KA"])
 ```
 
 
@@ -123,4 +135,13 @@ plot(x2$a[,1,"V"], y2[,1,1,])
 plot(x2$a[,,"KA"], x2$a[,,"KE"])
 plot(x2$a[,,"KA"], x2$a[,,"V"])
 plot(x2$a[,,"KE"], x2$a[,,"V"])
+scatterplot3d(x2$a[,1,1:3])
+```
+
+
+
+```{r message = FALSE}
+# Compare by heatscatter
+heatscatter(x1$a[,1,"KA"], x1$a[,1,"KE"], add.contour=T, nlevels=3)
+heatscatter(x2$a[,1,"KA"], x2$a[,1,"KE"], add.contour=T, nlevels=3)
 ```

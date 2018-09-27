@@ -2,6 +2,7 @@
 # rm(list=ls())
 library(pksensi)
 library(httk)
+library(EnvStats)
 
 ## Flip-Flop Kinetics ####
 FFPK <- function(parameters, times, dose = 320){
@@ -21,20 +22,72 @@ q.arg = list(list(min = 0.5,  max = 1.5),
 # The replication and confidence interval are set to 20, 0.95, respectively.
 set.seed(1234)
 x<-rfast99(factors=c("KA","KE","V"),
-           n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+
+plot(x$a[,,"KA"])
+plot(x$a[,,"KE"])
+plot(x$a[,,"V"])
+
+plot(x$a[,,"KA"], x$a[,,"KE"])
+plot(x$a[,,"KA"], x$a[,,"V"])
+plot(x$a[,,"KE"], x$a[,,"V"])
+
+mean(x$a[,,"KA"]); sd(x$a[,,"KA"])
+mean(x$a[,,"KE"]); sd(x$a[,,"KE"])
+mean(x$a[,,"V"]); sd(x$a[,,"V"])
+
 
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
 #times <- 10
-y<-solve_fun(x, model = FFPK, times = times, output = "output")
+y<-solve_fun(x, model = FFPK, time = times, output = "output")
 tell2(x,y)
 x # print the time-dependent output of sensitivity index and convergence index to the console 
+
+plot(x$a[,1,"KA"], y[,1,1,]) # rep = 1; time = 0.25
+plot(x$a[,1,"KE"], y[,1,1,])
+plot(x$a[,1,"V"], y[,1,1,])
+
 pksim(y)
-points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
+#points(Theoph$Time, Theoph$conc, col=Theoph$Subject, pch=19)
 
 check(x)
 heat_check(x, SI.cutoff = c(0.01,0.05,0.1,0.2))
 heat_check(x, index = "CI", CI.cutoff = c(0.01,0.05,0.1,0.2))
 plot(x) # Visualize the printed result 
+
+####
+q = "qnormTrunc"
+q.arg = list(list(mean = 1, sd = 0.29, min = 0.5,  max = 1.5), 
+             list(mean = 0.16, sd = 0.08, min = 0.02, max = 0.3),
+             list(mean = 40, sd = 11.55, min = 20, max = 60))
+set.seed(1234)
+x<-rfast99(factors=c("KA","KE","V"),
+           n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+
+plot(x$a[,,"KA"])
+plot(x$a[,,"KE"])
+plot(x$a[,,"V"])
+
+plot(x$a[,,"KA"], x$a[,,"KE"])
+plot(x$a[,,"KA"], x$a[,,"V"])
+plot(x$a[,,"KE"], x$a[,,"V"])
+
+times <- seq(from = 0.25, to = 24.25, by = 0.5)
+y<-solve_fun(x, model = FFPK, time = times, output = "output")
+tell2(x,y)
+x
+
+plot(x$a[,1,"KA"], y[,1,1,]) # rep = 1; time = 0.25
+plot(x$a[,1,"KE"], y[,1,1,])
+plot(x$a[,1,"V"], y[,1,1,])
+
+pksim(y)
+
+check(x)
+heat_check(x, SI.cutoff = c(0.01,0.05,0.1,0.2))
+heat_check(x, index = "CI", CI.cutoff = c(0.01,0.05,0.1,0.2))
+plot(x) # Visualize the printed result 
+
 
 ##### MCSim under R (use deSolve package)
 # pros: Don't need to create in file
