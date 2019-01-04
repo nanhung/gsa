@@ -4,13 +4,6 @@ library(pksensi)
 library(httk)
 library(EnvStats)
 
-## Flip-Flop Kinetics ####
-FFPK <- function(parameters, times, dose = 320){
-  A <- (dose * parameters[1])/( parameters[3]*( parameters[1]- parameters[2]))
-  CONC <- A*exp(- parameters[2] * times) - A*exp(- parameters[1] * times)
-  return(CONC)
-}
-
 FFPK <- pksensi:::FFPK
 
 # Define parameter distribution
@@ -98,7 +91,7 @@ plot(x) # Visualize the printed result
 
 # Compile the code
 mName = "pbtk1comp"
-compile(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
+compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
@@ -115,7 +108,7 @@ q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
              list(min = params$kelim * LL, max = params$kelim * UL), 
              list(min = params$kgutabs * LL, max = params$kgutabs * UL))
 
-x<-rfast99(factors = c("vdist", "ke", "kgutabs"), 
+x<-rfast99(params = c("vdist", "ke", "kgutabs"), 
            n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
 # Use pksensi::solve_fun to solve ode
@@ -123,10 +116,10 @@ times <- seq(from = 0.01, to = 24.01, by = 1)
 #times <- 1
 
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", 
+y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms1comp", 
              initState = initState, outnames = Outputs1comp,
              dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
-             output = "Ccompartment")
+             vars = "Ccompartment")
 
 tell2(x,y)
 check(x)
@@ -161,7 +154,7 @@ points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 ####
 
 mName = "3compPBPKmodel"
-compile(mName, app = "R", version = "6.0.1", use_model_file = F) # For windows
+compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # For windows
 source(paste0(mName, "_inits.R"))
 
 # Basic check
@@ -223,13 +216,13 @@ factors <- c("BW","CLmetabolismc","kgutabs",
              "Ratioblood2plasma")
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 2048, q = q, q.arg = q.arg)
+x<-rfast99(params = factors, n = 2048, q = q, q.arg = q.arg)
 
 #times <- c(0.01, seq(from = 0.5, to = 12.5, by = 1))
 times <- seq(from = 0.01, to = 8.01, by = 0.2)
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp", initState = initState, outnames = outnames,
+y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms3comp", initState = initState, outnames = outnames,
              dllname = mName, func = "derivs", initfunc = "initmod", 
-             output = "Crest")
+             vars = "Crest")
 tell2(x,y)
 plot(x, cut.off = 0.05);
 check(x)
