@@ -15,15 +15,17 @@ FFPK <- pksensi:::FFPK
 
 # Define parameter distribution
 q = "qunif"
-q.arg = list(list(min = 0.5,  max = 1.5), 
+q.arg = list(list(min = 0.6,  max = 1),
+             list(min = 0.5,  max = 1.5), 
              list(min = 0.02, max = 0.3),
              list(min = 20, max = 60))
 
 # The replication and confidence interval are set to 20, 0.95, respectively.
 set.seed(1234)
-x<-rfast99(factors=c("KA","KE","V"),
+x<-rfast99(param=c("F","KA","KE","V"),
            n = 400, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
 
+plot(x$a[,,"F"])
 plot(x$a[,,"KA"])
 plot(x$a[,,"KE"])
 plot(x$a[,,"V"])
@@ -39,11 +41,12 @@ mean(x$a[,,"V"]); sd(x$a[,,"V"])
 
 times <- seq(from = 0.25, to = 24.25, by = 0.5)
 #times <- 10
-y<-solve_fun(x, model = FFPK, time = times, output = "output")
+y<-solve_fun(x, model = FFPK, time = times, vars = "output")
 tell2(x,y)
 x # print the time-dependent output of sensitivity index and convergence index to the console 
 
-plot(x$a[,1,"KA"], y[,1,1,]) # rep = 1; time = 0.25
+plot(x$a[,1,"F"], y[,1,1,]) # rep = 1; time = 0.25
+plot(x$a[,1,"KA"], y[,1,1,]) 
 plot(x$a[,1,"KE"], y[,1,1,])
 plot(x$a[,1,"V"], y[,1,1,])
 
