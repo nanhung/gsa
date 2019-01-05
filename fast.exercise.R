@@ -1,6 +1,5 @@
 # devtools::install_github("nanhung/pksensi")
 # rm(list=ls())
-library(pksensi)
 library(httk)
 library(EnvStats)
 
@@ -90,6 +89,7 @@ plot(x) # Visualize the printed result
 # cons: Slower than in pure MCSim
 
 # Compile the code
+pbtk1comp.c()
 mName = "pbtk1comp"
 compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
 source(paste0(mName, "_inits.R"))
@@ -105,8 +105,8 @@ LL <- 0.5 # use 50% variation in this case
 UL <- 1.5
 q = "qunif"
 q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
-             list(min = params$kelim * LL, max = params$kelim * UL), 
-             list(min = params$kgutabs * LL, max = params$kgutabs * UL))
+             list(min = params$kelim / 24 * LL, max = params$kelim / 24 * UL), # time unit from /hr to /d
+             list(min = params$kgutabs / 24 * LL, max = params$kgutabs / 24 * UL)) # time unit from /hr to /d
 
 x<-rfast99(params = c("vdist", "ke", "kgutabs"), 
            n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
