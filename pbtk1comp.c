@@ -70,10 +70,6 @@ void getParms_1comp (double *inParms, double *out, int *nout) {
     parms[i] = inParms[i];
   }
 
-
-  kgutabs = kgutabs * 24 ;
-  ke = ke * 24 ;
-
   for (i = 0; i < *nout; i++) {
     out[i] = parms[i];
   }

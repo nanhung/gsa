@@ -1,7 +1,9 @@
 # devtools::install_github("nanhung/pksensi")
 # rm(list=ls())
+library(pksensi)
 library(httk)
 library(EnvStats)
+library(deSolve)
 
 FFPK <- pksensi:::FFPK
 
@@ -89,7 +91,7 @@ plot(x) # Visualize the printed result
 # cons: Slower than in pure MCSim
 
 # Compile the code
-pbtk1comp.c()
+#pbtk1comp.c()
 mName = "pbtk1comp"
 compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
 source(paste0(mName, "_inits.R"))
@@ -105,8 +107,8 @@ LL <- 0.5 # use 50% variation in this case
 UL <- 1.5
 q = "qunif"
 q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
-             list(min = params$kelim / 24 * LL, max = params$kelim / 24 * UL), # time unit from /hr to /d
-             list(min = params$kgutabs / 24 * LL, max = params$kgutabs / 24 * UL)) # time unit from /hr to /d
+             list(min = params$kelim * LL, max = params$kelim * UL), # time unit from /hr to /d
+             list(min = params$kgutabs * LL, max = params$kgutabs * UL)) # time unit from /hr to /d
 
 x<-rfast99(params = c("vdist", "ke", "kgutabs"), 
            n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
@@ -114,6 +116,12 @@ x<-rfast99(params = c("vdist", "ke", "kgutabs"),
 # Use pksensi::solve_fun to solve ode
 times <- seq(from = 0.01, to = 24.01, by = 1)
 #times <- 1
+
+y <- ode(initState, times, func = "derivs1comp", parms = c(vdist = .7435018, ke = .2788996, kgutabs = 2.18), 
+         dllname = mName, initfunc = "initmod1comp", nout = 1, outnames = Outputs1comp)
+
+plot(y)
+
 
 # Use external function initParms = initparms1comp
 y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms1comp", 
@@ -150,6 +158,69 @@ heat_check(x)
 #### log scale ####
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+
+
+
+
+
+mName = "1cpt"
+compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
+source(paste0(mName, "_inits.R"))
+
+# Define time and parameters and initial state
+
+parameters <- c(vdist = .7435018, ke = .2788996, kgutabs = 2.18)
+initState <- c(Agutlumen = 10, Acompartment = 0, Ametabolized = 0, AUC = 0)
+
+# Parameter uncertainty
+params <- httk::parameterize_1comp(chem.name = "theophylline")
+LL <- 0.5 # use 50% variation in this case
+UL <- 1.5
+q = "qunif"
+q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
+             list(min = params$kelim * LL, max = params$kelim * UL), # time unit from /hr to /d
+             list(min = params$kgutabs * LL, max = params$kgutabs * UL)) # time unit from /hr to /d
+
+x<-rfast99(params = c("vdist", "ke", "kgutabs"), 
+           n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+
+# Use pksensi::solve_fun to solve ode
+times <- seq(from = 0.01, to = 24.01, by = 1)
+#times <- 1
+
+
+y <- ode(initState, times, func = "derivs", parms = c(vdist = .7435018, ke = .2788996, kgutabs = 2.18),
+         dllname = mName, 
+         initfunc = "initmod", nout = 1, outnames = "Ccompartment")
+
+plot(y)
+
+# Use external function initParms = initparms1comp
+y<-solve_fun(x, times, params = parameters, initParmsfun = "initParms", 
+             initState = initState, outnames = Outputs,
+             dllname = mName, func = "derivs", initfunc = "initmod", 
+             vars = "Ccompartment")
+
+tell2(x,y)
+check(x)
+plot(x)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ####
 
