@@ -196,10 +196,7 @@ y <- ode(initState, times, func = "derivs", parms = c(vdist = .7435018, ke = .27
 plot(y)
 
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, params = parameters, initParmsfun = "initParms", 
-             initState = initState, outnames = Outputs,
-             dllname = mName, func = "derivs", initfunc = "initmod", 
-             vars = "Ccompartment")
+y<-solve_fun(x, times, params = parameters, initState = initState, outnames = Outputs, dllname = mName)
 
 tell2(x,y)
 check(x)
