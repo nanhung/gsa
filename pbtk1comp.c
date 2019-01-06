@@ -52,7 +52,7 @@ static double parms[3];
 
 
 /*----- Initializers */
-void initmod1comp (void (* odeparms)(int *, double *))
+void initmod (void (* odeparms)(int *, double *))
 {
   int N=3;
   odeparms(&N, parms);
@@ -61,7 +61,7 @@ void initmod1comp (void (* odeparms)(int *, double *))
 
 
 
-void getParms_1comp (double *inParms, double *out, int *nout) {
+void getParms (double *inParms, double *out, int *nout) {
 /*----- Model scaling */
 
   int i;
@@ -76,7 +76,7 @@ void getParms_1comp (double *inParms, double *out, int *nout) {
   }
 /*----- Dynamics section */
 
-void derivs1comp (int *neq, double *pdTime, double *y, double *ydot, double *yout, int *ip)
+void derivs (int *neq, double *pdTime, double *y, double *ydot, double *yout, int *ip)
 {
 
   yout[ID_Ccompartment] = y[ID_Acompartment] / vdist ;

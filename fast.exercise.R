@@ -97,8 +97,8 @@ compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
-parameters <- initparms1comp()
-initState <- initState1comp(parms=parameters)
+parameters <- initparms()
+initState <- initState(parms=parameters)
 initState["Agutlumen"] <- 10
 
 # Parameter uncertainty
@@ -117,16 +117,16 @@ x<-rfast99(params = c("vdist", "ke", "kgutabs"),
 times <- seq(from = 0.01, to = 24.01, by = 1)
 #times <- 1
 
-y <- ode(initState, times, func = "derivs1comp", parms = c(vdist = .7435018, ke = .2788996, kgutabs = 2.18), 
-         dllname = mName, initfunc = "initmod1comp", nout = 1, outnames = Outputs)
+y <- ode(initState, times, func = "derivs", parms = c(vdist = .7435018, ke = .2788996, kgutabs = 2.18), 
+         dllname = mName, initfunc = "initmod", nout = 1, outnames = Outputs)
 
 plot(y)
 
 
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms1comp", 
+y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms", 
              initState = initState, outnames = Outputs,
-             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
+             dllname = mName, func = "derivs", initfunc = "initmod", 
              vars = "Ccompartment")
 
 tell2(x,y)
