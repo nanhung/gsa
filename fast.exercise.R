@@ -118,14 +118,14 @@ times <- seq(from = 0.01, to = 24.01, by = 1)
 #times <- 1
 
 y <- ode(initState, times, func = "derivs1comp", parms = c(vdist = .7435018, ke = .2788996, kgutabs = 2.18), 
-         dllname = mName, initfunc = "initmod1comp", nout = 1, outnames = Outputs1comp)
+         dllname = mName, initfunc = "initmod1comp", nout = 1, outnames = Outputs)
 
 plot(y)
 
 
 # Use external function initParms = initparms1comp
 y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms1comp", 
-             initState = initState, outnames = Outputs1comp,
+             initState = initState, outnames = Outputs,
              dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
              vars = "Ccompartment")
 
