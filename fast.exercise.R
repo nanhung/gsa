@@ -1,9 +1,6 @@
 # devtools::install_github("nanhung/pksensi")
 # rm(list=ls())
 library(pksensi)
-library(httk)
-library(EnvStats)
-library(deSolve)
 
 FFPK <- pksensi:::FFPK
 
@@ -91,42 +88,41 @@ plot(x) # Visualize the printed result
 # cons: Slower than in pure MCSim
 
 # Compile the code
-#pbtk1comp.c()
+pbtk1cpt.model()
 mName = "pbtk1cpt"
-compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
+compile_model(mName, app = "R", version = "6.0.1") # Windows
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
-parameters <- initParms()
-initStates <- initStates(parms=parameters)
-initStates["Agutlumen"] <- 10
+parms <- initParms()
+parms["vdist"] <- 0.74
+parms["ke"] <- 0.28
+parms["kgutabs"] <- 2.18
+initState <- initStates(parms=parms)
+initState["Agutlument"] <- 10
 
 # Parameter uncertainty
-params <- httk::parameterize_1comp(chem.name = "theophylline")
 LL <- 0.5 # use 50% variation in this case
 UL <- 1.5
 q = "qunif"
-q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
-             list(min = params$kelim * LL, max = params$kelim * UL), # time unit from /hr to /d
-             list(min = params$kgutabs * LL, max = params$kgutabs * UL)) # time unit from /hr to /d
+q.arg = list(list(min = parms["vdist"] * LL, max = parms["vdist"] * UL),
+             list(min = parms["ke"] * LL, max = parms["ke"] * UL), # time unit from /hr to /d
+             list(min = parms["kgutabs"] * LL, max = parms["kgutabs"] * UL)) # time unit from /hr to /d
 
-x<-rfast99(params = c("vdist", "ke", "kgutabs"), 
-           n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+x<-rfast99(params = names(parms), n = 200, q = q, q.arg = q.arg, rep = 20)
 
 # Use pksensi::solve_fun to solve ode
 times <- seq(from = 0.01, to = 24.01, by = 1)
 #times <- 1
 
-y <- ode(initState, times, func = "derivs", parms = c(vdist = .7435018, ke = .2788996, kgutabs = 2.18), 
+y <- deSolve::ode(initState, times, func = "derivs", parms = parms, 
          dllname = mName, initfunc = "initmod", nout = 1, outnames = Outputs)
 
 plot(y)
 
 
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, params = parameters, 
-             initState = initState, outnames = Outputs,
-             dllname = mName)
+y<-solve_fun(x, times, params = parms, initState = initState, outnames = Outputs, dllname = mName)
 
 tell2(x,y)
 check(x)
