@@ -92,14 +92,14 @@ plot(x) # Visualize the printed result
 
 # Compile the code
 #pbtk1comp.c()
-mName = "pbtk1comp"
+mName = "pbtk1cpt"
 compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
-parameters <- initparms()
-initState <- initState(parms=parameters)
-initState["Agutlumen"] <- 10
+parameters <- initParms()
+initStates <- initStates(parms=parameters)
+initStates["Agutlumen"] <- 10
 
 # Parameter uncertainty
 params <- httk::parameterize_1comp(chem.name = "theophylline")
@@ -124,10 +124,9 @@ plot(y)
 
 
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms", 
+y<-solve_fun(x, times, params = parameters, 
              initState = initState, outnames = Outputs,
-             dllname = mName, func = "derivs", initfunc = "initmod", 
-             vars = "Ccompartment")
+             dllname = mName)
 
 tell2(x,y)
 check(x)
