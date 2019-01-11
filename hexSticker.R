@@ -15,7 +15,7 @@ x <- rfast99(params = params, n = 200, q = q, q.arg = q.arg, rep = 20)
 time <- seq(from = 0.25, to = 12.25, by = 0.5)
 y <- solve_fun(x, model = FFPK, time = time, vars = "output")
 
-col_bg <- "#DCDCDC"  
+col_bg <- "#ECECEC"  
 col_border <- "#800000"
 col_text <- "#800000"    ##  carrara
 
