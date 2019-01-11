@@ -5,7 +5,7 @@ q <- "qunif"
 q.arg <- list(list(min = 0.6, max = 0.8),
               list(min = 0.5, max = 0.8),
               list(min = 0.1, max = 0.3),
-              list(min = 20, max = 25))
+              list(min = 15, max = 20))
 
 params <- c("F","KA","KE","V")
 
@@ -21,10 +21,11 @@ col_text <- "#800000"    ##  carrara
 
 
 sticker(expression(pksim(y, legend =F, bty="n", frame.plot=TRUE, axes=F)),
-        package="pksensi", p_y = 1.4, 
-        p_size=9, s_y= 0.6, s_x= 0.75, s_width=2.2, s_height=1.6,
-        h_fill = col_bg, h_color = col_border, p_color = col_text,
+        package="pksensi", p_family = "Aller_BdIt",
+        p_y = 1.4, p_size=9, p_color = col_text,
+        s_y= 0.6, s_x= 0.75, s_width=2.2, s_height=1.6,
+        h_fill = col_bg, h_color = col_border, h_size = 1.8,
         u_color = col_border,
-        filename="pksensi.png")
+        filename="logo.png")
 
 
