@@ -89,7 +89,7 @@ plot(x) # Visualize the printed result
 # cons: Slower than in pure MCSim
 
 # Compile the code
-pbtk1cpt.model()
+pbtk1cpt_model()
 mName <- "pbtk1cpt"
 compile_model(mName, app = "R", version = "6.0.1") # Windows
 source(paste0(mName, "_inits.R"))
@@ -154,6 +154,33 @@ heat_check(x)
 #### log scale ####
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
+
+
+#
+system.time(y<-solve_fun(x, times, params = parms, initState = initState, 
+                         outnames = Outputs, dllname = mName))
+
+compile_model(mName, app = "mcsim")
+infile.name <- "setpoint.in"
+outfile.name <- "setpoint.csv"
+conditions <- c("Agutlument = 10")
+generate_infile(infile.name = infile.name, 
+                outfile.name = outfile.name, 
+                params = c("vdist", "ke", "kgutabs"),
+                vars = Outputs,
+                time = times, 
+                condition = conditions) 
+system.time(y.mcsim<-solve_mcsim(x, mName = mName, 
+                                 infile.name = "setpoint.in", 
+                                 params = c("vdist", "ke", "kgutabs"),
+                                 vars = Outputs,
+                                 time = times,
+                                 outfile.name = "setpoint.out",
+                                 condition = conditions))
+
+tell2(x, y.mcsim)
+check(x)
+plot(x)
 
 
 ####
@@ -600,7 +627,7 @@ q.arg<- list(list(-1.5, 2, -3.5, 0.5),
 
 times <- seq(from = 0.1, to = 12.1, by = 0.2)
 set.seed(1234)
-x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg) 
+x<-rfast99(params = factors, n = 4096, q = q, q.arg = q.arg) 
 
 y<-solve_fun(x, times, params = parameters, initState = initState, 
              outnames = outnames, dllname = mName, initParmsfun = "initParms",
@@ -614,7 +641,7 @@ heat_check(x, vars = "lnCPL_APAP_mcgL")
 ################
 #
 mName <- "APAP_PBPK_thera"
-compile(mName, use_model_file = T, version = "6.0.1", app = "mcsim")
+compile_model(mName, use_model_file = T, version = "6.0.1", app = "mcsim")
 
 factors <- c("lnTg", "lnTp",
              "lnCYP_Km","lnCYP_VmaxC",
@@ -623,10 +650,10 @@ factors <- c("lnTg", "lnTp",
              "lnKm_AG","lnVmax_AG","lnKm_AS","lnVmax_AS",
              "lnkGA_syn","lnkPAPS_syn",
              "lnCLC_APAP","lnCLC_AG","lnCLC_AS")
-q <- c("qnormTrunc","qnormTrunc","qnormTrunc","qunif",
-       "qnormTrunc","qnormTrunc","qnormTrunc","qunif",
-       "qnormTrunc","qnormTrunc","qnormTrunc","qunif",
-       "qnormTrunc","qunif","qnormTrunc","qunif",
+q <- c("qtri","qtri","qtri","qunif",
+       "qtri","qtri","qtri","qunif",
+       "qtri","qtri","qtri","qunif",
+       "qtri","qunif","qtri","qunif",
        "qunif","qunif","qunif","qunif","qunif")
 
 #Nominal value
@@ -642,9 +669,9 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-r = 2.0
+r = 1.5
 
-q.arg <-list(list(Tg, Tg-r, Tg+r),
+q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(Tp-r, Tp+r, Tp),
              list(CYP_Km-r, CYP_Km+r, CYP_Km),
              list(-2., 5.),
@@ -693,7 +720,7 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg) 
+x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg, replicate = 10) 
 
 #####
 #y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
@@ -717,7 +744,6 @@ generate_infile(infile.name = infile.name,
                 condition = conditions) 
 y2<-solve_mcsim(x, mName = mName, 
                infile.name = "setpoint.in", 
-               setpoint.name = "setpoint.dat",
                params = factors,
                vars = output,
                time = times,
@@ -725,6 +751,25 @@ y2<-solve_mcsim(x, mName = mName,
                condition = conditions)
 
 tell2(x, y2)
+
+png(file="plot_dynamic.png",width=3200,height=2800,res=300)
+plot(x)
+dev.off()
+
+png(file="plot_uncertainty.png",width=3000,height=1200,res=300)
+par(mfrow = c(1,3))
+pksim(y2, vars = 1, main = "lnCPL_APAP_mcgL")
+pksim(y2, vars = 2, legend = F, main = "lnCPL_AG_mcgL")
+pksim(y2, vars = 3, legend = F, main = "lnCPL_AS_mcgL")
+dev.off()
+
+png(file="heatmap_sensitivity.png",width=3600,height=3000,res=300)
+heat_check(x)
+dev.off()
+
+png(file="heatmap_convergence.png",width=3600,height=3000,res=300)
+heat_check(x, index = "CI") + ggplot2::scale_fill_grey(start = .9, end = .0) # need to add function to warn rep = 1 
+dev.off()
 
 ### MONTECARLO
 dist<-rep("Uniform", 21)
