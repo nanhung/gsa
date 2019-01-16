@@ -20,3 +20,4 @@ mcsim.*
 *.rda
 setpoint.in
 *.c
+*.history
