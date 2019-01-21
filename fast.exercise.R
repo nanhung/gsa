@@ -728,27 +728,22 @@ x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg, replicate = 10)
 #             func = "derivs", initfunc = "initmod", output = output, method = "lsode",
 #             initforc="initforc", forcings=Forcings1)
 
-infile.name <- "setpoint.in"
-outfile.name <- "setpoint.csv"
 conditions <- c("mgkg_flag = 0",
                 "OralExp_APAP = NDoses(2, 1, 0, 0, 0.75)",
                 "OralDur_APAP = 0.75",
                 "OralDose_APAP_mg = 1000.0",
                 "IVExp_APAP = 0.",
                 "IVDose_APAP_mg = 0.")
-generate_infile(infile.name = infile.name, 
-                outfile.name = outfile.name, 
-                params = factors,
+generate_infile(params = factors,
                 vars = output,
                 time = times, 
                 condition = conditions) 
 y2<-solve_mcsim(x, mName = mName, 
-               infile.name = "setpoint.in", 
                params = factors,
                vars = output,
                time = times,
-               outfile.name = "setpoint.csv",
-               condition = conditions)
+               condition = conditions,
+               generate.infile = F)
 
 tell2(x, y2)
 
