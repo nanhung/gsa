@@ -747,6 +747,9 @@ y2<-solve_mcsim(x, mName = mName,
 
 tell2(x, y2)
 
+heat_check(x)
+heat_check(x, order = "interaction")
+
 png(file="plot_dynamic.png",width=3200,height=2800,res=300)
 plot(x)
 dev.off()
