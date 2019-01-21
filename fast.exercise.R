@@ -671,28 +671,6 @@ Km_AS <- log(2.29e4)
 
 r = 1.5
 
-q.arg <-list(list(Tg-r, Tg+r, Tg),
-             list(Tp-r, Tp+r, Tp),
-             list(CYP_Km-r, CYP_Km+r, CYP_Km),
-             list(-2., 5.),
-             list(SULT_Km_apap-r, SULT_Km_apap+r, SULT_Km_apap),
-             list(SULT_Ki-r, SULT_Ki+r, SULT_Ki),
-             list(SULT_Km_paps-r, SULT_Km_paps+r, SULT_Km_paps),
-             list(0, 10), #U(0.15)
-             list(UGT_Km-r, UGT_Km+r, UGT_Km),
-             list(UGT_Ki-r, UGT_Ki+r, UGT_Ki),
-             list(UGT_Km_GA-r, UGT_Km_GA+r, UGT_Km_GA),
-             list(0, 10), #U(0.15)
-             list(Km_AG-r, Km_AG+r, Km_AG),
-             list(7., 15),
-             list(Km_AS-r, Km_AS+r, Km_AS),
-             list(7., 15),
-             list(0., 13),
-             list(0., 13),
-             list(-6., 1),
-             list(-6., 1),
-             list(-6., 1))
-
 q.arg<- list(list(-1.5, 2, -3.5, 0.5),
              list(-3.4, 2, -5.4, -1.4),
              list(4.9, 2, 2.9, 6.9),
@@ -715,12 +693,34 @@ q.arg<- list(list(-1.5, 2, -3.5, 0.5),
              list(-6., 1),
              list(-6., 1))
 
+q.arg <-list(list(Tg-r, Tg+r, Tg),
+             list(Tp-r, Tp+r, Tp),
+             list(CYP_Km-r, CYP_Km+r, CYP_Km),
+             list(-2., 5.),
+             list(SULT_Km_apap-r, SULT_Km_apap+r, SULT_Km_apap),
+             list(SULT_Ki-r, SULT_Ki+r, SULT_Ki),
+             list(SULT_Km_paps-r, SULT_Km_paps+r, SULT_Km_paps),
+             list(0, 10), #U(0.15)
+             list(UGT_Km-r, UGT_Km+r, UGT_Km),
+             list(UGT_Ki-r, UGT_Ki+r, UGT_Ki),
+             list(UGT_Km_GA-r, UGT_Km_GA+r, UGT_Km_GA),
+             list(0, 10), #U(0.15)
+             list(Km_AG-r, Km_AG+r, Km_AG),
+             list(7., 15),
+             list(Km_AS-r, Km_AS+r, Km_AS),
+             list(7., 15),
+             list(0., 13),
+             list(0., 13),
+             list(-6., 1),
+             list(-6., 1),
+             list(-6., 1))
+
 times <- seq(from = 0.01, to = 12.01, by = 0.4)
 output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg, replicate = 10) 
+x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg, replicate = 1) 
 
 #####
 #y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
