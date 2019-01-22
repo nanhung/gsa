@@ -308,8 +308,8 @@ Kpuu_liver = 1; lnKpuu_liver  = log(1.0);
 V_central = 1.0; 
 V_periph  = 1.0; 
 
-# Volumes (L/kg)
-lnV_central = log(0.3);
+# Volumes (L)
+lnV_central = log(1000);
 
 # Transfer rate constants between central and peripheral compartments (1/h)
 Kc2p; lnKc2p = log(0.1);
@@ -474,7 +474,7 @@ Initialize {
   Kpuu_cecum = exp(lnKpuu_cecum); 
   Kpuu_colon = exp(lnKpuu_colon); 
   Kpuu_liver = exp(lnKpuu_liver); 
-  V_central = exp(lnV_central)*BDM;
+  V_central = exp(lnV_central);
   Kc2p = exp(lnKc2p);
   Kp2c = exp(lnKp2c);
   V_periph = V_central*Kc2p/Kp2c; 
