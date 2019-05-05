@@ -3,12 +3,10 @@
 library(pksensi)
 
 mName <- "PFOA"
-compile(mName)
+compile_model(mName)
 
 # Input
-n= 1000
-infile.name <- "PFOA_MC.in"
-outfile.name <- "PFOA.mc.Lau.out"
+n <- 1000
 parameters <- c("ka","Qfilc","Vcc","k12","Rv2v1","Vfilc","Tmc","KT","Free")  
 outputs <- c("Ccentral", "AUC", "A_gut","A_total")
 times <- seq(0.5, 432.5, 1)
@@ -29,22 +27,14 @@ conditions <- c("## Group 1 Strain = CD-1 (F) Dosed 1 mg/kg/day at GD-1-17",
                 "Dose  = NDoses(  34  , 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0  , 0 0.05 24 24.05 48 48.05 72 72.05 96	96.05	120	120.05	144	144.05	168	168.05	192	192.05	216	216.05	240	240.05	264	264.05	288	288.05	312	312.05	336	336.05	360	360.05	384	384.05 )")
 
 # Generate input file "PFOA_MC.in"
-set.seed(1111)
-generate_infile(infile.name = infile.name, rtol = 1e-13, atol = 1e-15,
-                outfile.name = outfile.name, 
-                parameters = parameters,
-                output = outputs,
-                time = times, 
-                n=n, dist = dist, q.arg = q.arg, 
-                condition = conditions) 
+generate_infile(rtol = 1e-13, atol = 1e-15, 
+                params = parameters, vars = outputs, time = times, 
+                n = n, dist = dist, q.arg = q.arg, condition = conditions) 
 
 # Solve MCSim to "PFOA.mc.Lau.out"
-y<-solve_mcsim(n=n,
-               mName = "PFOA",
-               infile.name = infile.name,
-               outfile.name = outfile.name, 
-               parameters = parameters,
-               output = outputs,
+set.seed(2222)
+y<-solve_mcsim(mName = "PFOA", params = parameters, rtol = 1e-13, atol = 1e-15,
+               vars = outputs, n = n, dist = dist, q.arg = q.arg, condition = conditions,
                time = times)
 
 # Plot
