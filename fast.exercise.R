@@ -1,15 +1,7 @@
 # devtools::install_github("nanhung/pksensi")
 # rm(list=ls())
 library(pksensi)
-library(httk)
 library(EnvStats)
-
-## Flip-Flop Kinetics ####
-FFPK <- function(parameters, times, dose = 320){
-  A <- (dose * parameters[1])/( parameters[3]*( parameters[1]- parameters[2]))
-  CONC <- A*exp(- parameters[2] * times) - A*exp(- parameters[1] * times)
-  return(CONC)
-}
 
 FFPK <- pksensi:::FFPK
 
@@ -97,36 +89,41 @@ plot(x) # Visualize the printed result
 # cons: Slower than in pure MCSim
 
 # Compile the code
-mName = "pbtk1comp"
-compile(mName, app = "R", version = "6.0.1", use_model_file = F) # Windows
+pbtk1cpt_model()
+mName <- "pbtk1cpt"
+compile_model(mName, app = "R", version = "6.0.1") # Windows
 source(paste0(mName, "_inits.R"))
 
 # Define time and parameters and initial state
-parameters <- initparms1comp()
-initState <- initState1comp(parms=parameters)
-initState["Agutlumen"] <- 10
+parms <- initParms()
+parms["vdist"] <- 0.74
+parms["ke"] <- 0.28
+parms["kgutabs"] <- 2.18
+initState <- initStates(parms=parms)
+initState["Agutlument"] <- 10
 
 # Parameter uncertainty
-params <- httk::parameterize_1comp(chem.name = "theophylline")
 LL <- 0.5 # use 50% variation in this case
 UL <- 1.5
-q = "qunif"
-q.arg = list(list(min = params$Vdist * LL, max = params$Vdist * UL),
-             list(min = params$kelim * LL, max = params$kelim * UL), 
-             list(min = params$kgutabs * LL, max = params$kgutabs * UL))
+q <- "qunif"
+q.arg <- list(list(min = parms["vdist"] * LL, max = parms["vdist"] * UL),
+             list(min = parms["ke"] * LL, max = parms["ke"] * UL), # time unit from /hr to /d
+             list(min = parms["kgutabs"] * LL, max = parms["kgutabs"] * UL)) # time unit from /hr to /d
 
-x<-rfast99(factors = c("vdist", "ke", "kgutabs"), 
-           n = 200, q = q, q.arg = q.arg, rep = 20, conf = 0.95)
+x<-rfast99(params = names(parms), n = 200, q = q, q.arg = q.arg, rep = 20)
 
 # Use pksensi::solve_fun to solve ode
 times <- seq(from = 0.01, to = 24.01, by = 1)
 #times <- 1
 
+y <- deSolve::ode(initState, times, func = "derivs", parms = parms, 
+         dllname = mName, initfunc = "initmod", nout = 1, outnames = Outputs)
+
+plot(y)
+
+
 # Use external function initParms = initparms1comp
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms1comp", 
-             initState = initState, outnames = Outputs1comp,
-             dllname = mName, func = "derivs1comp", initfunc = "initmod1comp", 
-             output = "Ccompartment")
+y<-solve_fun(x, times, params = parms, initState = initState, outnames = Outputs, dllname = mName)
 
 tell2(x,y)
 check(x)
@@ -158,10 +155,38 @@ heat_check(x)
 pksim(y, log = T)
 points(Theoph$Time, log(Theoph$conc), col=Theoph$Subject, pch=19)
 
+
+#
+system.time(y<-solve_fun(x, times, params = parms, initState = initState, 
+                         outnames = Outputs, dllname = mName))
+
+compile_model(mName, app = "mcsim")
+infile.name <- "setpoint.in"
+outfile.name <- "setpoint.csv"
+conditions <- c("Agutlument = 10")
+generate_infile(infile.name = infile.name, 
+                outfile.name = outfile.name, 
+                params = c("vdist", "ke", "kgutabs"),
+                vars = Outputs,
+                time = times, 
+                condition = conditions) 
+system.time(y.mcsim<-solve_mcsim(x, mName = mName, 
+                                 infile.name = "setpoint.in", 
+                                 params = c("vdist", "ke", "kgutabs"),
+                                 vars = Outputs,
+                                 time = times,
+                                 outfile.name = "setpoint.out",
+                                 condition = conditions))
+
+tell2(x, y.mcsim)
+check(x)
+plot(x)
+
+
 ####
 
 mName = "3compPBPKmodel"
-compile(mName, app = "R", version = "6.0.1", use_model_file = F) # For windows
+compile_model(mName, app = "R", version = "6.0.1", use_model_file = F) # For windows
 source(paste0(mName, "_inits.R"))
 
 # Basic check
@@ -223,13 +248,13 @@ factors <- c("BW","CLmetabolismc","kgutabs",
              "Ratioblood2plasma")
 
 set.seed(1234)
-x<-rfast99(factors = factors, n = 2048, q = q, q.arg = q.arg)
+x<-rfast99(params = factors, n = 2048, q = q, q.arg = q.arg)
 
 #times <- c(0.01, seq(from = 0.5, to = 12.5, by = 1))
 times <- seq(from = 0.01, to = 8.01, by = 0.2)
-y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initparms3comp", initState = initState, outnames = outnames,
+y<-solve_fun(x, times, params = parameters, initParmsfun = "initparms3comp", initState = initState, outnames = outnames,
              dllname = mName, func = "derivs", initfunc = "initmod", 
-             output = "Crest")
+             vars = "Crest")
 tell2(x,y)
 plot(x, cut.off = 0.05);
 check(x)
@@ -258,7 +283,7 @@ for (i in 2:7) {
 ### End
 
 mName <- "ACAT_like"
-compile(mName, use_model_file = T, app = "R", version="6.0.1") # For windows
+compile_model(mName, app = "R", version="6.0.1") # For windows
 
 # source(paste0(mName, "_inits.R")) for windows
 # dyn.load(paste0(mName, .Platform$dynlib.ext))
@@ -412,13 +437,15 @@ factors <- c("Peff","Ratio_BP",
 times <- seq(from = 0.01, to = 8.01, by = 0.4)
 outnames <- Outputs
 
-x<-rfast99(factors = factors, n = 2000, q = q, q.arg = q.arg) 
+x<-rfast99(params = factors, n = 2000, q = q, q.arg = q.arg) 
 
 newState <- c(A_stom_lu = 1)
 initState <- initStates(newStates=newState)
-y<-solve_fun(x, times, parameters = parameters, initState = initState, 
-             outnames = outnames, dllname = mName, initParmsfun = "initParms",
-             func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood")
+
+system.time(y<-solve_fun(x, times, params = parameters, initState = initState, 
+                         outnames = outnames, dllname = mName, initParmsfun = "initParms",
+                         func = "derivs", initfunc = "initmod", lnparam = T, output = "C_blood"))
+
 
 pksim(y)
 tell2(x,y)
@@ -428,7 +455,7 @@ tell2(x,y)
 plot(x)
 
 dev.off()
-heat_check(x, index = "SI", order = T) + 
+heat_check(x, index = "SI", order = T, vars = "C_blood") + 
   ggplot2::scale_fill_grey(start = .9, end = .0)
 
 png(file="figS3.png",width=3200,height=2800,res=300)
@@ -493,7 +520,7 @@ eFA.APAP.mcsim.df[2, ncol(eFAST.APAP.df):ncol(eFA.APAP.mcsim.df)]
 
 #
 mName <- "APAP_PBPK_thera"
-compile(mName, use_model_file = T, version = "6.0.1", app = "R")
+compile_model(mName, version = "6.0.1", app = "R")
 
 newParms <- c(mgkg_flag = 0,
               OralDose_APAP_mg = 1000, # Dose
@@ -532,43 +559,90 @@ parameters["ODose_APAP"]
 parameters["kPAPS_syn"]
 
 ### Define Exposure
-mag <- 2 # Set input
-period <- 1e10
-inittime <- 0 # Exposure start from 0
-exposuretime <- 0.75
+#mag <- 2 # Set input
+#period <- 1e10
+#inittime <- 0 # Exposure start from 0
+#exposuretime <- 0.75
 
 # The output time points
-times <- seq(from = 0, to = 12, by = 0.2) # NEED ZERO!
+#times <- seq(from = 0, to = 12, by = 0.2) # NEED ZERO!
 
-mintime <- min(times)
-maxtime <- max(times)
+#mintime <- min(times)
+#maxtime <- max(times)
 
 # Define exposure scenarios: exposure and non-exposure
-nperiods <- 1
-col1 <- c(inittime, exposuretime)
-OralExp <- cbind(col1, rep(c(mag,0), length(col1)/2))
+#nperiods <- 1
+#col1 <- c(inittime, exposuretime)
+#OralExp <- cbind(col1, rep(c(mag,0), length(col1)/2))
 
-IV <- 0 
-IVExp <- rbind(c(min(times), IV), c(max(times) + 1, 0))
-IVExp
+#IV <- 0 
+#IVExp <- rbind(c(min(times), IV), c(max(times) + 1, 0))
+#IVExp
 
 # The matrix of periodic exposure
-Forcings1 <- list(OralExp, IVExp)
-y<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, 
-                nout=length(outnames), dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
-                rtol = 1e-08, atol = 1e-12,
-                initforc="initforc",
-                forcings=Forcings1) #
+#Forcings1 <- list(OralExp, IVExp)
+#y1<-deSolve::ode(initState, times, parms = parameters, outnames = outnames, 
+#                nout=length(outnames), dllname = mName, func = "derivs", initfunc = "initmod", method = "lsode", 
+#                rtol = 1e-08, atol = 1e-12,
+#                initforc="initforc",
+#                forcings=Forcings1) #
 
 #y[,"AST_Oral_APAP"]
-y[,"lnCPL_AS_mcgL"]
+#y1[,"lnCPL_AS_mcgL"]
 
+factors <- c("lnTg", "lnTp",
+             "lnCYP_Km","lnCYP_VmaxC",
+             "lnSULT_Km_apap","lnSULT_Ki","lnSULT_Km_paps","lnSULT_VmaxC",
+             "lnUGT_Km","lnUGT_Ki","lnUGT_Km_GA","lnUGT_VmaxC",
+             "lnKm_AG","lnVmax_AG","lnKm_AS","lnVmax_AS",
+             "lnkGA_syn","lnkPAPS_syn",
+             "lnCLC_APAP","lnCLC_AG","lnCLC_AS")
+q <- c("qnormTrunc","qnormTrunc","qnormTrunc","qunif",
+       "qnormTrunc","qnormTrunc","qnormTrunc","qunif",
+       "qnormTrunc","qnormTrunc","qnormTrunc","qunif",
+       "qnormTrunc","qunif","qnormTrunc","qunif",
+       "qunif","qunif","qunif","qunif","qunif")
+
+q.arg<- list(list(-1.5, 2, -3.5, 0.5),
+             list(-3.4, 2, -5.4, -1.4),
+             list(4.9, 2, 2.9, 6.9),
+             list(-2., 5.),
+             list(5.7, 2, 3.7, 7.7),
+             list(6.3, 2, 4.3, 8.3),
+             list(-0.69, 2, -2.69, 1.31),
+             list(0, 10),
+             list(8.7, 2, 6.7, 10.7),
+             list(10.97, 2, 8.97, 12.97),
+             list(-0.69, 2, -2.69, 1.3),
+             list(0, 10),
+             list(9.9, 2, 7.9, 11.9),
+             list(7., 15),
+             list(10, 2, 8, 12),
+             list(7., 15),
+             list(0., 13),
+             list(0., 13),
+             list(-6., 1),
+             list(-6., 1),
+             list(-6., 1))
+
+times <- seq(from = 0.1, to = 12.1, by = 0.2)
+set.seed(1234)
+x<-rfast99(params = factors, n = 4096, q = q, q.arg = q.arg) 
+
+y<-solve_fun(x, times, params = parameters, initState = initState, 
+             outnames = outnames, dllname = mName, initParmsfun = "initParms",
+             func = "derivs", initfunc = "initmod")
+tell2(x,y)
+dimnames(y)
+y[,,,"lnCPL_APAP_mcgL"]
+
+heat_check(x, vars = "lnCPL_APAP_mcgL")
 
 ################
 #
 mName <- "APAP_PBPK_thera"
-compile(mName, use_model_file = T, version = "6.0.1", app = "mcsim")
-library(EnvStats)
+compile_model(mName, use_model_file = T, version = "6.0.1", app = "mcsim")
+
 factors <- c("lnTg", "lnTp",
              "lnCYP_Km","lnCYP_VmaxC",
              "lnSULT_Km_apap","lnSULT_Ki","lnSULT_Km_paps","lnSULT_VmaxC",
@@ -595,7 +669,29 @@ UGT_Km_GA <-log(0.5)
 Km_AG <- log(1.99e4)
 Km_AS <- log(2.29e4)
 
-r = 2.0
+r = 1.5
+
+q.arg<- list(list(-1.5, 2, -3.5, 0.5),
+             list(-3.4, 2, -5.4, -1.4),
+             list(4.9, 2, 2.9, 6.9),
+             list(-2., 5.),
+             list(5.7, 2, 3.7, 7.7),
+             list(6.3, 2, 4.3, 8.3),
+             list(-0.69, 2, -2.69, 1.31),
+             list(0, 10),
+             list(8.7, 2, 6.7, 10.7),
+             list(10.97, 2, 8.97, 12.97),
+             list(-0.69, 2, -2.69, 1.3),
+             list(0, 10),
+             list(9.9, 2, 7.9, 11.9),
+             list(7., 15),
+             list(10, 2, 8, 12),
+             list(7., 15),
+             list(0., 13),
+             list(0., 13),
+             list(-6., 1),
+             list(-6., 1),
+             list(-6., 1))
 
 q.arg <-list(list(Tg-r, Tg+r, Tg),
              list(Tp-r, Tp+r, Tp),
@@ -624,7 +720,7 @@ output <- c("lnCPL_APAP_mcgL", "lnCPL_AG_mcgL", "lnCPL_AS_mcgL")
 
 set.seed(1234)
 #x<-rfast99(factors = factors, n = 4000, q = q, q.arg = q.arg) 
-x<-rfast99(factors = factors, n = 1024, q = q, q.arg = q.arg) 
+x<-rfast99(params = factors, n = 1024, q = q, q.arg = q.arg, replicate = 1) 
 
 #####
 #y<-solve_fun(x, times, parameters = parameters, initParmsfun = "initParms", 
@@ -632,28 +728,46 @@ x<-rfast99(factors = factors, n = 1024, q = q, q.arg = q.arg)
 #             func = "derivs", initfunc = "initmod", output = output, method = "lsode",
 #             initforc="initforc", forcings=Forcings1)
 
-infile.name <- "setpoint.in"
-outfile.name <- "setpoint.csv"
 conditions <- c("mgkg_flag = 0",
                 "OralExp_APAP = NDoses(2, 1, 0, 0, 0.75)",
                 "OralDur_APAP = 0.75",
                 "OralDose_APAP_mg = 1000.0",
                 "IVExp_APAP = 0.",
                 "IVDose_APAP_mg = 0.")
-generate_infile(infile.name = infile.name, 
-                outfile.name = outfile.name, 
-                parameters = factors,
-                output = output,
+generate_infile(params = factors,
+                vars = output,
                 time = times, 
                 condition = conditions) 
-y<-solve_mcsim(x, mName = mName, 
-               infile.name = "setpoint.in", 
-               setpoint.name = "setpoint.dat",
-               parameters = factors,
-               output = output,
+y2<-solve_mcsim(x, mName = mName, 
+               params = factors,
+               vars = output,
                time = times,
-               outfile.name = "setpoint.csv",
-               condition = conditions)
+               condition = conditions,
+               generate.infile = F)
+
+tell2(x, y2)
+
+heat_check(x)
+heat_check(x, order = "interaction")
+
+png(file="plot_dynamic.png",width=3200,height=2800,res=300)
+plot(x)
+dev.off()
+
+png(file="plot_uncertainty.png",width=3000,height=1200,res=300)
+par(mfrow = c(1,3))
+pksim(y2, vars = 1, main = "lnCPL_APAP_mcgL")
+pksim(y2, vars = 2, legend = F, main = "lnCPL_AG_mcgL")
+pksim(y2, vars = 3, legend = F, main = "lnCPL_AS_mcgL")
+dev.off()
+
+png(file="heatmap_sensitivity.png",width=3600,height=3000,res=300)
+heat_check(x)
+dev.off()
+
+png(file="heatmap_convergence.png",width=3600,height=3000,res=300)
+heat_check(x, index = "CI") + ggplot2::scale_fill_grey(start = .9, end = .0) # need to add function to warn rep = 1 
+dev.off()
 
 ### MONTECARLO
 dist<-rep("Uniform", 21)

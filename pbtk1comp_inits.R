@@ -1,4 +1,4 @@
-initparms1comp <- function(newParms = NULL){
+initparms <- function(newParms = NULL){
   parms <- c(
     vdist = 0,
     ke = 0,
@@ -10,7 +10,7 @@ initparms1comp <- function(newParms = NULL){
     }
   }
   if (!is.null(newParms)) parms[names(newParms)] <- newParms
-  out <- .C("getParms_1comp",
+  out <- .C("getParms",
             as.double(parms),
             out=double(length(parms)),
             as.integer(length(parms)))$out
@@ -18,12 +18,12 @@ initparms1comp <- function(newParms = NULL){
   out
 }
 
-Outputs1comp <- c(
+Outputs <- c(
   "Ccompartment"
 )
 
 
-initState1comp <- function(parms, newState = NULL) {
+initState <- function(parms, newState = NULL) {
   Y <- c(
     Agutlumen = 0.0,
     Acompartment = 0.0,
